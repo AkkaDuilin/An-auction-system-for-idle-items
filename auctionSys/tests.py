@@ -1,21 +1,43 @@
-# 在 Django shell 中导入模型
-from products.models import ProductType, ProductInfo
+from user_part.models import Userinfo
+from django.db.models import Count
+from collections import Counter
 
-# 创建一个产品类型对象
-type1 = ProductType.objects.create(type_name='电子产品')
+def test_output_userinfo():
+    users = Userinfo.objects.all()
+    for user in users:
+        print(f"User ID: {user.id}")
+        print(f"Username: {user.user_name}")
+        print(f"Password: {user.user_pwd}")
+        print(f"Email: {user.user_email}")
+        print(f"Real Name: {user.user_rman}")
+        print(f"Address: {user.user_address}")
+        print(f"Mobile Number: {user.user_mnumber}")
+        print(f"Phone Number: {user.user_pnumber}")
+        print("------------")
 
-# 创建一个产品对象，并关联到产品类型
-product1 = ProductInfo.objects.create(
-    product_name='iPhone 12', 
-    product_price=6999, 
-    product_click=100, 
-    product_unit='台', 
-    product_abstract='苹果的最新款手机', 
-    product_stock=50, 
-    product_content='<p>这是 iPhone 12 的详细介绍</p>', 
-    product_type=type1
-)
+def delete_duplicate_users():
+    # 获取重复项的用户名和数量
+    duplicates = Userinfo.objects.values('user_name').annotate(count=Count('user_name')).filter(count__gt=1)
 
-# 打印创建的产品对象
-print(product1)
+    # 删除重复项
+    for duplicate in duplicates:
+        users_to_delete = Userinfo.objects.filter(user_name=duplicate['user_name'])
+        users_to_delete.exclude(id=users_to_delete.first().id).delete()
 
+
+def find_user():
+   
+    user = Userinfo.objects.get(user_name=user_name)
+    if user:
+        print(f"User ID: {user.id}")
+        print(f"Username: {user.user_name}")
+        print(f"Password: {user.user_pwd}")
+        print(f"Email: {user.user_email}")
+        print(f"Real Name: {user.user_rman}")
+        print(f"Address: {user.user_address}")
+        print(f"Mobile Number: {user.user_mnumber}")
+        print(f"Phone Number: {user.user_pnumber}")
+        print("------------")
+
+#delete_duplicate_users()
+test_output_userinfo()

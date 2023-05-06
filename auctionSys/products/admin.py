@@ -13,5 +13,4 @@ class ProductInfoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ProductType, ProductTypeAdmin)
-admin.site.register(ProductInfo, ProductInfoAdmin)
 
