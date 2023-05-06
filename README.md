@@ -28,3 +28,8 @@ Logout视图处理GET请求以注销用户。它清除会话并注销用户，�
 - 用户订单详情
 
 ## products
+
+
+# git
+- **严格遵顼** main发布完整程序 Dev_env前后端合并测试 Backend分支后端开发 Frontend前端开发
+- 非发布情况禁止修改main分支！！！
