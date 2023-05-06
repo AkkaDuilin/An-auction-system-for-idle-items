@@ -10,13 +10,13 @@ An auction system for idle items web based on Django Bootstrap
 - 用户信息模块提供了用户注册、登录、找回密码等功能。用户可以通过注册功能创建账号并登录，也可以通过找回密码功能重设密码。
 - 模块调用 user_part
 ### Database
-user_name：用户名称，最大长度为20个字符。
-user_pwd：用户密码，最大长度为40个字符。
-user_email：用户邮箱，最大长度为40个字符。
-user_rman：用户真实姓名，最大长度为20个字符，默认为空字符串。
-user_address：用户地址，最大长度为100个字符，默认为空字符串。
-user_mnumber：用户手机号码，最大长度为6个字符，默认为空字符串。
-user_pnumber：用户电话号码，最大长度为11个字符，默认为空字符串。
+- user_name：用户名称，最大长度为20个字符。
+- user_pwd：用户密码，最大长度为40个字符。
+- user_email：用户邮箱，最大长度为40个字符。
+- user_rman：用户真实姓名，最大长度为20个字符，默认为空字符串。
+- user_address：用户地址，最大长度为100个字符，默认为空字符串。
+- user_mnumber：用户手机号码，最大长度为6个字符，默认为空字符串。
+- user_pnumber：用户电话号码，最大长度为11个字符，默认为空字符串。
 ### views.py
 定义了三个视图：RegisterView、LoginView和Logout。
 RegisterView处理GET和POST请求，显示注册表单并将新用户数据保存到数据库。
