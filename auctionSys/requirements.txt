@@ -1,0 +1,13 @@
+certifi         2022.12.7
+Django          2.0.4
+django-haystack 2.8.1
+django-tinymce  2.7.0
+itsdangerous    0.24
+jieba           0.39
+Pillow          9.5.0
+PyMySQL         0.8.0
+pytz            2018.4
+setuptools      65.6.3
+wheel           0.38.4
+Whoosh          2.7.4
+wincertstore    0.2
