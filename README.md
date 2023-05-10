@@ -29,21 +29,21 @@ Logout视图处理GET请求以注销用户。它清除会话并注销用户，�
 
 ## products
 
-#Frontend
-  ##login
+# Frontend
+  ## login
   用于用户登录，用户输入user_name和user_pwd,点击登录到loginView中处理请求并判断用户名和密码是否正确，登录成功后跳转到mainpage
 ,同时此页面还提供一个注册链接和remember选项。
-  ##register
+  ## register
   用于用户的注册，有用户名输入，密码，确认密码，邮箱，同意使用协议选项，以上信息填写完后进入注册
-  ##mainpage.html
+  ## mainpage.html
   用户登录后的主页，可以通过顶部的导航栏去往其他页面。商品在主页中进行浏览。
-  ##user_information
+  ## user_information
   用于管理用户个人信息
-  ##commodity_information
+  ## commodity_information
   产品信息详情页
-  ##orders
+  ## orders
   管理用户的订单
-  ##add_commodity
+  ## add_commodity
   用于用户添加拍品，用户添加拍品的各种信息
   ##commodity_manager
   个人拍品管理
