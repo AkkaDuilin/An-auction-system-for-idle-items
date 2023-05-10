@@ -162,7 +162,6 @@ JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）
 - 非发布情况禁止修改main分支！！！
 
 # ToDo
-
 ## 四月
 确定需求和功能规格：
 与团队讨论并明确需求和功能规格。
@@ -199,3 +198,40 @@ JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）
 进行功能测试和Bug修复。
 确保各模块之间的协同工作正常。
 
+# FAQ
+## 数据库迁移和使用问题
+### 如何进行数据库迁移？
+
+在终端中运行python manage.py makemigrations命令生成迁移文件。
+运行python manage.py migrate命令将迁移应用到数据库中。
+### 如何创建超级用户（管理员账号）？
+
+在终端中运行python manage.py createsuperuser命令。
+按照提示输入用户名、邮箱和密码来创建超级用户。
+### 如何使用Django的ORM进行数据库操作？
+
+- 在Django的模型类中定义数据库表的结构和字段。
+- 使用模型类的API进行数据库的增删改查操作，如Model.objects.create()、Model.objects.filter()等。
+### 关于user_part中user和Django中预定义的user模块问题
+- Django中，有两个与用户相关的模块：user和auth
+- 可以选择使用自定义的Userinfo模型或使用Django的User模型来管理用户信息。
+- 本项目选择使用自定义的user类
+
+## 项目问题
+### 如何启动Django项目？
+- 在终端中进入项目根目录。
+- 运行python manage.py runserver命令启动开发服务器。
+### 项目结构问题
+- 项目根目录（包含manage.py和项目配置文件等）
+- 应用目录（每个应用包含模型、视图、URL配置等）
+- 静态文件目录（存放CSS、JavaScript、图像等）
+- 模板目录（存放HTML模板文件）
+## 代码规范问题
+> 遵循代码命名规范，对象_说明  eg: user_login
+
+## Git协同开发问题
+> 使用版本控制工具Git进行代码管理
+
+> **严格遵顼** main发布完整程序 Dev_env前后端合并测试 Backend分支后端开发 Frontend前端开发
+
+> 非必要不修改main分支！！！
