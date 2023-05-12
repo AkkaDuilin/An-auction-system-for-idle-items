@@ -30,6 +30,7 @@ Logout视图处理GET请求以注销用户。它清除会话并注销用户，�
 - [ ] 邮件验证模块
 - [ ] 如何实现使用@user_login 装饰器装饰继承View类的子类的get()函数 会报错object has no attribute 'session'
 - [ ] 订单分页显示 order() 和 order_page() 测试
+- [ ] 订单只显示买方订单信息 是否需要卖方信息？
 
 ## products
 - 管理产品信息

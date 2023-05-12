@@ -181,7 +181,7 @@ class OrderView(View):
     def order(request):
         '''显示用户订单页'''
         user_id = request.session['user_id']
-        orders = OrderInfo.objects.filter(Q(order_user_id=user_id)|Q(order_seller_id=user_id)).order_by('-order_date')
+        orders = OrderInfo.objects.filter(order_user_id=user_id).order_by('-order_date')
         # paginator 分页类 每页显示2个订单信息 
         # 在前端中使用 for each in paginator.page_range 调用每一页的页号
         paginator = Paginator(orders, 2)
@@ -197,7 +197,7 @@ class OrderView(View):
     @user_login
     def order_page(request, page):
         user_id = request.session['user_id']
-        orders = OrderInfo.objects.filter(Q(order_user_id=user_id)|Q(order_seller_id=user_id)).order_by('-order_date')
+        orders = OrderInfo.objects.filter(order_user_id=user_id).order_by('-order_date')
         print(orders)
         paginator = Paginator(orders, 2)
         page = paginator.page(int(page))
