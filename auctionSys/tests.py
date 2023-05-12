@@ -24,7 +24,6 @@ def delete_duplicate_users():
         users_to_delete = Userinfo.objects.filter(user_name=duplicate['user_name'])
         users_to_delete.exclude(id=users_to_delete.first().id).delete()
 
-
 def find_user():
    
     user = Userinfo.objects.get(user_name=user_name)
@@ -39,5 +38,5 @@ def find_user():
         print(f"Phone Number: {user.user_pnumber}")
         print("------------")
 
-#delete_duplicate_users()
+delete_duplicate_users()
 test_output_userinfo()

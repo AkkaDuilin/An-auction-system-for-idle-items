@@ -12,6 +12,7 @@ from itsdangerous import TimedSerializer  as Serializer
 from django.contrib.auth import authenticate,logout
 from django.conf import settings
 from django.urls import reverse
+from django.contrib import messages
 import re
 
 class RegisterView(View):
@@ -144,3 +145,76 @@ class Logout(View):
         request.session.flush()
         logout(request)
         return redirect('/')
+
+
+class UserInfoView(View):
+    '''用户中心-详情页'''
+    def get(self, request):
+        '''显示用户详情页'''
+        if 'user_id' not in request.session:
+            # 如果未登录，则弹出提示框并重定向到登录页面
+            messages.error(request, '请先登录')
+            return redirect('/')  
+
+        user_email = Userinfo.objects.get(id=request.session['user_id']).user_email
+        view_products = request.COOKIES.get('view_products', '')
+        # 这里get的view_products 对应最近浏览的记录 在products view.py detail 中实现
+        # 可以阉割
+        view_list = []
+        if view_products:
+            view_products = view_products.split(',')
+            for each in view_products:
+                view_list.append(ProductInfo.objects.get(pk=int(each)))
+        context = {'title':'个人信息',
+                'user_name':request.session['user_name'],
+                'user_email':user_email,
+                'view_list':view_list}
+        # 发送一个request 给user_center html界面并传递context内容 
+        return render(request, 'user/user_center_info.html', context)
+        #return render(request, 'user/user_center_info.html', {'page': 'user'})
+
+
+class OrderView(View):
+    '''用户中心-订单页'''
+    def get(self, request):
+        '''显示用户订单页'''
+        if 'user_id' not in request.session:
+            # 如果未登录，则弹出提示框并重定向到登录页面
+            messages.error(request, '请先登录')
+            return redirect('/') 
+        user_id = request.session['user_id']
+        orders = OrderInfo.objects.filter(order_user_id=user_id).order_by('-order_date')
+        # paginator 分页类 每页显示2个订单信息 
+        # 在前端中使用 for each in paginator.page_range 调用每一页的页号
+        paginator = Paginator(orders, 2)
+        page = paginator.page(1)
+        context = {'title':'全部订单',
+                'orders':orders,
+                'paginator': paginator,
+                'page': page}
+        return render(request, 'user/user_center_order.html', context)
+        #return render(request, 'user/user_center_order.html', {'page': 'order'})
+
+
+class SiteView(View):
+    '''用户中心-地址页'''
+    
+    def get(self, request):
+        '''显示用户地址页'''
+        if 'user_id' not in request.session:
+            # 如果未登录，则弹出提示框并重定向到登录页面
+            messages.error(request, '请先登录')
+            return redirect('/') 
+        user = Userinfo.objects.get(id=request.session['user_id'])
+        if request.method == "POST":
+            post_datas = request.POST
+            user.user_rman = post_datas['r_man']
+            user.user_address = post_datas['address']
+            user.user_mnumber = post_datas['mnumber']
+            user.user_pnumber = post_datas['pnumber']
+            user.save()
+        context = {'title':'收货地址', 'user':user}
+        return render(request, 'user/user_center_site.html', context)
+        #return render(request, 'user/user_center_site.html', {'page': 'address'})
+
+
