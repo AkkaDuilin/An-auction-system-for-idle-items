@@ -15,3 +15,4 @@ class OrderDetailInfo(models.Model):
     order = models.ForeignKey(OrderInfo, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     count = models.IntegerField()
+    order_seller = models.ForeignKey('user_part.UserInfo', on_delete=models.CASCADE)

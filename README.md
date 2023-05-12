@@ -9,6 +9,7 @@ An auction system for idle items web based on Django Bootstrap
 ## user_part
 - 用户信息模块提供了用户注册、登录、找回密码等功能。用户可以通过注册功能创建账号并登录，也可以通过找回密码功能重设密码。
 - 模块调用 user_part
+- decorator.py 中定义了一个login() 引用作user_login() 实现用户是否登录的判断 
 ### Database
 - user_name：用户名称，最大长度为20个字符。
 - user_pwd：用户密码，最大长度为40个字符。
@@ -23,9 +24,12 @@ RegisterView处理GET和POST请求，显示注册表单并将新用户数据保�
 LoginView处理GET和POST请求，显示登录表单并对用户进行身份验证。
 Logout视图处理GET请求以注销用户。它清除会话并注销用户，然后将用户重定向到主页。
 ### Todo
-- 用户主页模块
-- 忘记密码模块
-- 用户订单详情
+- [x] 用户主页模块
+- [ ] 忘记密码模块
+- [x] 用户订单详情
+- [ ] 邮件验证模块
+- [ ] 如何实现使用@user_login 装饰器装饰继承View类的子类的get()函数 会报错object has no attribute 'session'
+- [ ] 订单分页显示 order() 和 order_page() 测试
 
 ## products
 - 管理产品信息
@@ -73,12 +77,15 @@ id：产品的ID。
 返回：
 渲染后的产品详情模板（'product/detail.html'）。
 
+
+
 ## order
 ### Database
 #### OrderInfo
 
 order_id：订单ID，最大长度为20个字符，作为主键。
-order_user：与'user_part.UserInfo'模型建立外键关系，表示订单所属用户。
+order_user：与'user_part.UserInfo'模型建立外键关系，表示订单买家用户。
+order_seller: 与'user_part.UserInfo'模型建立外键关系，表示订单卖家用户。
 order_date：订单日期时间，使用DateTimeField字段，自动记录当前时间。
 is_Pay：布尔字段，表示订单是否已支付，默认为False。
 total_price：订单总价，使用DecimalField字段，最多8位数字，2位小数。
