@@ -83,7 +83,7 @@ def find_user():
 def find_products():
     all_products = ProductInfo.objects.all()
     for product in all_products:
-        print(f"Product: {product.product_name}")
+        print(f"Product: {product.id}")
 
 def find_order():
     print(2333)
@@ -157,6 +157,6 @@ def test_order_creation():
 # test_output_userinfo()
 # test_user_creation()
 # test_product_creation()
-# find_products()
+find_products()
 # test_order_creation()
 # find_order()
