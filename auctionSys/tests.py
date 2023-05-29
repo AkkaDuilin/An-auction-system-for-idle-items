@@ -157,6 +157,7 @@ def test_order_creation():
 # test_output_userinfo()
 # test_user_creation()
 # test_product_creation()
-find_products()
+# find_products()
 # test_order_creation()
 # find_order()
+test_output_userinfo()
