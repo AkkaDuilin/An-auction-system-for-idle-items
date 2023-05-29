@@ -1,6 +1,7 @@
 from django.conf.urls import url
-from . import views
+from .views import *
 urlpatterns = [
-    url(r'^$', views.index)
-
+    url(r'^$', Index.index),
+    url(r'^list(\d+)_(\d+)_(\d+)/$', Index.pro_list),
+    url(r'^(\d+)/$', Index.detail)
 ]
