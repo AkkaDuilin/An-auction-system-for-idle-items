@@ -1,34 +1,96 @@
-<form action="/user/register" method="post">
-	{% csrf_token %}
-<ul>
-	<li>
-		<label>用户名:</label>
-		<input type="text" name="user_name" id="user_name">
-		<span class="error_tip">提示信息</span>
-	</li>                    
-	<li>
-		<label>密码:</label>
-		<input type="password" name="pwd" id="pwd">
-		<span class="error_tip">提示信息</span>
-	</li>
-	<li>
-		<label>确认密码:</label>
-		<input type="password" name="cpwd" id="cpwd">
-		<span class="error_tip">提示信息</span>
-	</li>
-	<li>
-		<label>邮箱:</label>
-		<input type="text" name="email" id="email">
-		<span class="error_tip">提示信息</span>
-	</li>
-	<li class="agreement">
-		<input type="checkbox" name="allow" id="allow" checked="checked">
-		<label>同意使用协议</label>
-		<span class="error_tip2">提示信息</span>
-	</li>
-	<li class="reg_sub">
-		<input type="submit" value="注 册" name="">
-	</li>
-</ul>
-	{{ errmsg }}
-</form>
+{% extends 'base.html' %}
+{% block style%}
+<style>
+			body {
+				background-image: url("https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF");
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+		</style>
+{% endblock style%}
+{% block script %}
+ $("#login").click(function(){
+    $.get('/user/login/', function(data) {
+        });
+  });
+{% endblock script %}
+{% block main %}
+<div class="container">
+
+			<div style="height: 200px; width: 100%;"></div>
+			<!--占位-->
+
+			<div class="row">
+				<div class="col-md-5"></div>
+				<div class="col-md-6">
+					<div class="col-md-2"></div>
+					<div class="col-md-5">
+						<span>
+							<font size="4px" color="">用户注册</font>
+						</span>
+					</div>
+					<div class="col-md-5 text-right">
+						<a href="help"><span>
+								<font size="4px" color="blue">帮助</font>
+							</span></a>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-md-6 col-md-push-5">
+
+					<form role="form" class="form-horizontal" action="/user/register/" method="post">
+
+						<div class="form-group">
+							<label for="name" class="col-md-2 control-label">用户名</label>
+							<div class="col-md-10">
+								<input type="text" class="form-control" id="user_name"  name="user_name" placeholder="请输入用户名">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="pwd1" class="col-md-2 control-label">密码</label>
+							<div class="col-md-10">
+								<input type="password" class="form-control" id="pwd" name="pwd" placeholder="请输入密码">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="pwd2" class="col-md-2 control-label">确认密码</label>
+							<div class="col-md-10">
+								<input type="password" class="form-control" name="cpwd" id="cpwd" placeholder="请输入密码">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="email" class="col-md-2 control-label">邮箱</label>
+							<div class="col-md-10">
+								<input type="text" class="form-control" name="email" id="email" placeholder="请输入邮箱">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-md-2">
+								<input type="checkbox" class="form-control" name="allow" id="allow" checked="checked">
+							</div>
+							<label for="email" class="col-md-2 control-label">同意使用协议</label>
+						</div>
+
+						<div class="form-group" style="height: 15px; width: 100%;"></div>
+
+						<div class="col-md-10 col-md-push-2">
+							<button type="submit" class="btn btn-primary  btn-block">提交</button>
+						</div>
+							{{ errmsg }}
+					</form>
+					<div class="row">
+						<div class="col-md-6 col-md-push-4 text-center">
+							<a href="/user/login" id="login"><span style="color: antiquewhite;"> 已有账户？点击登录</span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock main %}
