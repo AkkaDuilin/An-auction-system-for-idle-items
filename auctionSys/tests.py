@@ -3,6 +3,7 @@ from django.db.models import Count
 from collections import Counter
 
 def test_output_userinfo():
+    # 输出所有用户
     print(23333)
     users = Userinfo.objects.all()
     for user in users:
@@ -27,6 +28,7 @@ def delete_duplicate_users(TestCase):
 
 
 def UserinfoTestCase():
+    # 创建用户测试
     user = Userinfo.objects.create(
         user_name='testuser',
         user_pwd='testpassword',
@@ -35,20 +37,7 @@ def UserinfoTestCase():
     print(f'Created user: {user.user_name}, {user.user_email}')
 
 
-def find_user():
-   
-    user = Userinfo.objects.get(user_name=user_name)
-    if user:
-        print(f"User ID: {user.id}")
-        print(f"Username: {user.user_name}")
-        print(f"Password: {user.user_pwd}")
-        print(f"Email: {user.user_email}")
-        print(f"Real Name: {user.user_rman}")
-        print(f"Address: {user.user_address}")
-        print(f"Mobile Number: {user.user_mnumber}")
-        print(f"Phone Number: {user.user_pnumber}")
-        print("------------")
 
 #delete_duplicate_users()
-#test_output_userinfo()
+test_output_userinfo()
 #UserinfoTestCase()

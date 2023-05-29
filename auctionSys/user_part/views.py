@@ -67,7 +67,7 @@ class RegisterView(View):
         # send_register_active_email.delay(user_email, user_name, token)
 
         # 5、返回应答
-        return redirect('/user/login')
+        return redirect('/user/login/')
 
 # class ActiveView(View):
 #     '''邮件认证处理'''
