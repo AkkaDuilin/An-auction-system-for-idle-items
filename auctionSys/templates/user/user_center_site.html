@@ -1,56 +1,198 @@
 {% extends 'base.html' %}
+{% block style %} 
+<style>
+			.navbar-default .navbar-nav>.active>a,
+			.navbar-default .navbar-nav>.active>a:focus,
+			.navbar-default .navbar-nav>.active>a:hover {
+				background-color: blue;
+				color: white;
+			}
 
-{% block body %}
-	<div class="search_bar clearfix">
-		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
-		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
-		<div class="search_con fr">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
-	</div>
+			.container1 {
+				width: 100%;
+				height: 90vh;
+			}
 
-	<div class="main_con clearfix">
-		<div class="left_menu_con clearfix">
-			<h3>用户中心</h3>
-			<ul>
-				<li><a href="/user/info/">· 个人信息</a></li>
-				<li><a href="/user/order/">· 全部订单</a></li>
-				<li><a href="/user/site/" class="active">· 收货地址</a></li>
-			</ul>
-		</div>
-		<div class="right_content clearfix">
-				<h3 class="common_title2">收货地址</h3>
-				<div class="site_con">
-					<dl>
-						<dt>当前地址：</dt>
-						<dd>{{ user.user_address }} （{{ user.user_rman }} 收） {{ user.user_pnumber }}</dd>
-					</dl>					
+			.left-column {
+				width: 30%;
+				height: 100%;
+				background-color: #aaffff;
+				float: left;
+			}
+
+			.right-column {
+				width: 70%;
+				height: 100%;
+				background-color: white;
+				float: left;
+			}
+			.lable1
+			{}
+			.lable2
+			{}
+</style>
+{% endblock style %}
+{% block script %} 
+	<script type="text/javascript">
+	$(document).ready(function(){
+	  $("div#container1").hide();
+	  $("#show").click(function(){
+	    $("div#container2").hide();
+		$("#show").hide();
+		$("div#container1").show();
+	    });
+		$("#hide").click(function(){
+		  $("div#container2").show();
+		  $("#show").show();
+		  $("div#container1").hide();
+		  });
+	});
+	</script>
+{% endblock script %}
+{% block main %}
+<div class="container1">
+			<nav class="navbar navbar-default" style="background-color: #ffa75e;" role="navigation">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">拍卖网站</a>
+					</div>
+					<div>
+						<ul class="nav navbar-nav">
+							<li><a href="mainpage.html">主页</a></li>
+							<li><a href="#">个人订单</a></li>
+							<li><a href="#">联系客服</a></li>
+							<li><a href="#">我的拍品</a></li>
+							<li class="dropdown active">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									个人信息
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="/user/info/">我的资料</a></li>
+									<li><a href="/user/order/">我的订单</a></li>
+									<li><a href="#">支付设置</a></li>
+									<li><a href="/user/site/">收货地址</a></li>
+									<li><a href="#">安全设置</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</div>
-				<h3 class="common_title2">编辑地址</h3>
-				<div class="site_con">
-					<form action="/user/site/" method="POST">
-						{% csrf_token %}
-						<div class="form_group">
-							<label>收件人：</label>
-							<input type="text" name="r_man">
+			</nav>
+			<div class="left-column">
+				<div style="height: 10px;width: 100%;"></div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="#"><button type="button" class="btn-link btn-lg">个人信息</button></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="#"><button type="button" class="btn-link btn-lg">身份验证</button></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="#"><button type="button" class="btn-link btn-lg">支付设置</button></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="#"><button type="button" class="btn-link btn-lg">
+								<p class="text-success">收货地址</p>
+							</button></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="#"><button type="button" class="btn-link btn-lg">安全设置</button></a>
+					</div>
+				</div>
+			</div>
+			<div class="right-column container">
+				<div id="container2">
+					<div class="row">
+						<p class="lead" id="reinfo">&nbsp;&nbsp;&nbsp;&nbsp;您当前的收货信息</p>
+					</div>
+					<div class="row">
+						<label for="addr" class="col-md-2 control-label col-md-push-1 lable1">
+							<p class="text-left">
+							<h4>收货地址:</h4>
+							</p>
+						</label>
+						<div class="col-md-10 col-md-push-1">
+							<p id="addr">
+							<h4>{{user.user_address}}</h4>
+							</p>
 						</div>
-						<div class="form_group form_group2">
-							<label>详细地址：</label>
-							<textarea class="site_area" name="address"></textarea>
+					</div>
+					<div class="row">
+						<label for="rman" class="col-md-2 control-label col-md-push-1 lable1">
+							<p class="text-left">
+							<h4>收货人:</h4>
+							</p>
+						</label>
+						<div class="col-md-10 col-md-push-1">
+							<p id="rman">
+							<h4>{{ user.user_rman }}</h4>
+							</p>
 						</div>
-						<div class="form_group">
-							<label>邮编：</label>
-							<input type="text" name="mnumber">
+					</div>
+					<div class="row">
+						<label for="pnumber" class="col-md-2 control-label col-md-push-1 lable1">
+							<p class="text-left">
+							<h4>联系电话:</h4>
+							</p>
+						</label>
+						<div class="col-md-10 col-md-push-1">
+							<p id="pnumber">
+							<h4>{{ user.user_pnumber }}</h4>
+							</p>
 						</div>
-						<div class="form_group">
-							<label>手机：</label>
-							<input type="text" name="pnumber">
+					</div>
+				</div>
+				<div id="container1">
+					<div class="row">
+						<p class="lead" id="chinfo">&nbsp;&nbsp;&nbsp;&nbsp;修改您的收货信息</p>
+					</div>
+					<form role="form" class="form-horizontal" action="/user/site/" method="POST">
+					       <div class="form-group" style="height: 20px; width: 100%;"></div>
+						<div class="form-group">
+							<label for="caddr" class="col-md-2 control-label lable2">收货地址:</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" id="caddr" value="{{user.user_address}}">
+							</div>
 						</div>
-
-						<input type="submit" value="提交" class="info_submit">
+					      <div class="form-group" style="height: 20px; width: 100%;"></div>
+						<div class="form-group">
+							<label for="crman" class="col-md-2 control-label lable2">收货人:</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" id="crman" value="{{ user.user_rman }}">
+							</div>
+						</div>
+					     <div class="form-group" style="height: 20px; width: 100%;"></div>
+						<div class="form-group">
+							<label for="cpnumber" class="col-md-2 control-label lable2">联系电话:</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" id="cpnumber" value="{{ user.user_pnumber }}">
+							</div>
+						</div>
+					
+						<div class="form-group" style="height: 25px; width: 100%;"></div>
+					
+						<div class="col-md-5 col-md-push-2">
+							<button type="submit" class="btn btn-primary  btn-block" id="hide">提交</button>
+						</div>
 					</form>
 				</div>
+				<div style="height: 350px;"></div>
+				<div class="row">
+					<div class="col-md-2 col-md-push-8">
+						<a href="#"><button type="button" class="btn-primary btn-lg" id="show">修改</button></a>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-{% endblock body %}
+		</div>
+
+{% endblock main %}
