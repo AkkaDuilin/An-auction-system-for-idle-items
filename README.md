@@ -49,7 +49,6 @@ is_Delete：布尔字段，表示该产品信息是否已删除。
 product_click：产品点击次数，使用IntegerField字段，默认为0。
 product_unit：产品单位，最大长度为20个字符。
 product_abstract：产品摘要，最大长度为120个字符。
-product_stock：产品库存数量，使用IntegerField字段。
 product_content：产品内容，使用HTMLField字段，可用于存储富文本内容。
 product_type：产品类型，使用ForeignKey字段与ProductType模型建立一对多关系。
 str()：返回产品信息的字符串表示形式。
@@ -125,7 +124,7 @@ id：订单ID。
 ## carts
 ### Database
 #### CartInfo
-user: 与user_part.Userinfo模型建立外键关系，表示购物车所属的用户。
+user: 与user_part.UserInfo模型建立外键关系，表示购物车所属的用户。
 product: 与products.ProductInfo模型建立外键关系，表示购物车中的产品。
 count: 产品数量，使用IntegerField字段。
 
@@ -222,7 +221,7 @@ JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）
 - 使用模型类的API进行数据库的增删改查操作，如Model.objects.create()、Model.objects.filter()等。
 ### 关于user_part中user和Django中预定义的user模块问题
 - Django中，有两个与用户相关的模块：user和auth
-- 可以选择使用自定义的Userinfo模型或使用Django的User模型来管理用户信息。
+- 可以选择使用自定义的UserInfo模型或使用Django的User模型来管理用户信息。
 - 本项目选择使用自定义的user类
 
 ## 项目问题
