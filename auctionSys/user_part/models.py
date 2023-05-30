@@ -5,7 +5,7 @@ from django.conf import settings as d_set
 SECRET_KEY = d_set.SECRET_KEY
 
 
-class Userinfo(models.Model):
+class UserInfo(models.Model):
     user_name = models.CharField(max_length=20)
     user_pwd = models.CharField(max_length=40)
     user_email = models.CharField(max_length=40)
@@ -25,7 +25,7 @@ class Userinfo(models.Model):
             data = s.loads(token.encode('utf-8'))
         except:
             return False
-        user = Userinfo.objects.filter(id=data.get('reset')).first()
+        user = UserInfo.objects.filter(id=data.get('reset')).first()
         if not user:
             return False
         user.user_pwd = new_password

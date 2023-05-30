@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
-from .models import Userinfo
+from .models import UserInfo
 from products.models import ProductInfo
 from order.models import OrderInfo
 from hashlib import sha1
 from .decorator import login as user_login
 from django.views.generic import View
-from itsdangerous import TimedSerializer  as Serializer
+from itsdangerous import TimedSerializer as Serializer
 from django.contrib.auth import authenticate,logout
 from django.conf import settings
 from django.urls import reverse
@@ -35,7 +35,7 @@ class RegisterView(View):
 
         # 校验user_name在数据库中是否存在
         try:
-            user = Userinfo.objects.get(user_name=user_name)
+            user = UserInfo.objects.get(user_name=user_name)
         except Exception as e:
             user = None
         if user:
@@ -52,7 +52,7 @@ class RegisterView(View):
             return render(request, 'user/register.html', {'errmsg': '请同意协议'})
 
         # 3、保存进数据库
-        user = Userinfo()
+        user = UserInfo()
         user.user_name = user_name
         user.user_pwd = user_pwd
         user.user_email = user_email
@@ -82,7 +82,7 @@ class RegisterView(View):
 #             user_id = res['confirm']
 
 #             # 修改数据库
-#             user = Userinfo.objects.get(id=user_id)
+#             user = UserInfo.objects.get(id=user_id)
 #             user.is_active = 1
 #             user.save()
 
@@ -119,7 +119,7 @@ class LoginView(View):
         ##  3、业务处理
         ##  校验数据库
         #user = authenticate(username=username, password=password)
-        user = Userinfo.objects.get(user_name=user_name)
+        user = UserInfo.objects.get(user_name=user_name)
         print(user)
         if user_pwd == user.user_pwd:
             print("login right")
@@ -152,7 +152,7 @@ class UserInfoView(View):
     '''用户中心-详情页'''
     @user_login
     def info(request):
-        user_email = Userinfo.objects.get(id=request.session['user_id']).user_email
+        user_email = UserInfo.objects.get(id=request.session['user_id']).user_email
         view_products = request.COOKIES.get('view_products', '')
         # 这里get的view_products 对应最近浏览的记录 在products view.py detail 中实现
         # 可以阉割
@@ -214,7 +214,7 @@ class SiteView(View):
     def site(request):
         '''显示用户地址页'''
          
-        user = Userinfo.objects.get(id=request.session['user_id'])
+        user = UserInfo.objects.get(id=request.session['user_id'])
         if request.method == "POST":
             post_datas = request.POST
             user.user_rman = post_datas['r_man']
