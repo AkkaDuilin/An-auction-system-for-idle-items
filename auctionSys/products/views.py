@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import View
 from .models import ProductType, ProductInfo
+from auctions.models import AuctionInfo
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -65,3 +66,43 @@ class Index(View):
             view_products = product_id
         res.set_cookie('view_products', view_products)
         return res
+
+# 商品发布类
+class Publish(View):
+    def Create_pub(request):
+        if request.method == 'POST':
+            product_name = request.POST.get('product_name')
+            product_img = request.FILES.get('product_img')
+            product_price = request.POST.get('product_price')
+            product_unit = request.POST.get('product_unit')
+            product_abstract = request.POST.get('product_abstract')
+            product_content = request.POST.get('product_content')
+            product_type_id = request.POST.get('product_type')
+
+            # 数据完整性校验
+            if not product_name or not product_price or not product_unit or not product_abstract or not product_content or not product_type_id:
+                error_message = "请填写所有必填字段"
+                return render(request, 'product/create.html', {'error_message': error_message})
+
+            # 其他数据校验
+            try:
+                product_price = float(product_price)
+                if product_price <= 0:
+                    raise ValueError("商品价格必须大于0")
+            except ValueError:
+                error_message = "商品价格格式不正确"
+                return render(request, 'product/create.html', {'error_message': error_message})
+
+            # 创建商品
+            product = ProductInfo.objects.create(
+                product_name=product_name,
+                product_img=product_img,
+                product_price=product_price,
+                product_unit=product_unit,
+                product_abstract=product_abstract,
+                product_content=product_content,
+                product_type_id=product_type_id
+            )
+            return render(request, 'auction/create.html', product_id=product.id)
+        return render(request, 'product/create.html')
+

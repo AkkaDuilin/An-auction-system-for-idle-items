@@ -18,7 +18,6 @@ class ProductInfo(models.Model):
     product_click = models.IntegerField(default=0)
     product_unit = models.CharField(max_length=20)
     product_abstract = models.CharField(max_length=120)
-    product_stock = models.IntegerField()
     product_content = HTMLField()
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
 
