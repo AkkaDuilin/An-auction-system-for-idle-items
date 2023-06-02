@@ -55,3 +55,5 @@ Logout视图处理GET请求以注销用户。它清除会话并注销用户，�
 - 非发布情况禁止修改main分支！！！
 # 2023/5/29更新
 更改login.html，register.html,base.html,user_center.html
+# 2023/5/30更新
+更新user_center_info.html，user_center_site.html,浏览记录建议从user_center_info.html分出单独写个界面
