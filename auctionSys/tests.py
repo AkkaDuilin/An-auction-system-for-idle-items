@@ -219,7 +219,7 @@ def create_test_auctions():
     user1 = UserInfo.objects.get(id=1)  # 假设存在ID为1的用户
     product1 = ProductInfo.objects.get(id=1)  # 假设存在ID为1的产品
 
-    # 创建五个测试数据
+    # 创建测试数据
     auction1 = AuctionInfo.objects.create(
         auction_id='A002',
         auction_seller=user1,

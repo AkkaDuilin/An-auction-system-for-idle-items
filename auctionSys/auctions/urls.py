@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from .views import *
 urlpatterns = [
-    url(r'^$', Index.index),
-    url(r'^list(\d+)_(\d+)_(\d+)/$', Index.pro_list),
-    url(r'^(\d+)/$', Index.detail)
+    url(r'^/auction/(?P<auction_id>\d+)/$', AuctionDetail.as_view(), name='auction-detail'),
+    url(r'^/create/auctions_create',AuctionCreate.as_view())
 ]

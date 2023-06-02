@@ -24,7 +24,7 @@ class AuctionCreate(View):
             bid_count=bid_count,
         )
 
-        return redirect('/')
+        return render(request, 'auction/create.html')
 
 
 class AuctionDetail(View):
