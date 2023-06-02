@@ -11,9 +11,28 @@ class Index(View):
      
 
     def index(request):
+        type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
+        type_ids = []
+
+        for type_name in type_names:
+            product_type = ProductType.objects.get(type_name=type_name)
+            type_ids.append(product_type.id)
+
+        hot_products = {}
+        latest_products = {}
+        # 返回两个字典，键为Typeid 值为检索出的列表
+        for type_id in type_ids:
+            hot_products[type_id] = list(ProductInfo.objects.filter(product_type_id=type_id).order_by('-product_click')[:4])
+            latest_products[type_id] = list(ProductInfo.objects.filter(product_type_id=type_id).order_by('-id')[:4])
+
+        context = {
+            'title': '首页',
+            'hot_products': hot_products,
+            'latest_products': latest_products,
+        }
+        return render(request, 'product/index.html', context)
 
 
-        return render(request, 'product/index.html')
         #return HttpResponse("this is product index page")
 
 
