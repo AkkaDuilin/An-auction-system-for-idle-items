@@ -29,6 +29,7 @@
 				</div>
 			</div>
 		</nav>
+		<div style="height: 10px;"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 input-group">
@@ -68,7 +69,12 @@
 						<tr class="{{each.states}}">
 							<td>{{order_date}}</td>
 							<td>{{order_name}}</td>
-							<td>{{ is_Pay}}</td>
+							<td>
+							{% if each.is_pay==true %}
+							<td>已支付</td>
+							{% else %}
+							<td><a href="/pay/{{each.product_id}}/">点击支付</a></td>
+							{% end if %}
 							<td>{{total_price}}</td>
 							<td>{{address}}</td>
 							<td>deal_states</td>

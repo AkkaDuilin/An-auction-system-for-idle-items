@@ -122,9 +122,14 @@
 				<div class="col-md-4">
 					<div class="row">
 						<div class="col-md-8">
-							<a href="/{{ each.id }}/" class="thumbnail">
-								<img decoding="async"
-									src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF">
+							<a href="/{{ each.id }}/">
+								{% if product.product_img %}
+								    {% with product_img=product.product_img.first %}
+								        {% if product_img %}
+								            <img src="{{ product_img.url }}" class="thumbnail" decoding="async">
+								        {% endif %}
+								    {% endwith %}
+								{% endif %}
 							</a>
 						</div>
 						<div class="col-md-4">
@@ -152,7 +157,7 @@
 			<div class="col-md-4 col-md-push-4">
 				{% if page.has_previous %}
 				<a href="/list{{ product_type.id }}_{{ page.previous_page_number }}_{{ sort }}/"
-					class="btn-primary"><span class="	glyphicon glyphicon-arrow-left"></span></a>
+					class="btn-primary"><span class="	glyphicon glyphicon-arrow-left">上一页</span></a>
 				{% endif %}
 				{% if page.number==1 %}
 				<a href="#" class="active btn-primary">{{ each }}</a>
@@ -182,7 +187,7 @@
 				{% endif %}
 				{% if page.has_next %}
 				<a href="/list{{ product_type.id }}_{{ page.next_page_number }}_{{ sort }}/"
-					class="btn-primary"><span class="glyphicon glyphicon-arrow-right"></span></a>
+					class="btn-primary"><span class="glyphicon glyphicon-arrow-right">下一页</span></a>
 				{% endif %}
 			</div>
 		</div>
@@ -190,20 +195,11 @@
 </div>
 {% block script1 %}
 <script type="text/javascript">
-			$('.add_goods').click(function(){
-				//判断是否登录，若未登录则先提示登录
-				if($('.login_btn').text().indexOf('登录') >= 0){
-					alert('请先登录后再进行购买！');
-					location.href = '/user/login';
-					return;
-				}
-		
-				//ajax
-				product_id = $(this).attr('id')
-				$.get('/cart/add' + product_id +'_1/', function (data){
-					$('#show_count').text(data.count);
-				});
-			})
-		</script>
+	$('.add_goods').click(function(){
+		product_id = $(this).attr('id')
+		$.get('/cart/add' + product_id +'_1/', function (data){
+		});
+	})
+</script>
 {% endblock script1 %}
 {% endblock main %}

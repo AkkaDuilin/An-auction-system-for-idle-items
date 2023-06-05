@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>user_information</title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<style>
+			.navbar-default .navbar-nav>.active>a,
+			.navbar-default .navbar-nav>.active>a:focus,
+			.navbar-default .navbar-nav>.active>a:hover {
+				background-color: blue;
+				color: white;
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#product_img').on('change', function(e) {
+					var img={{}}
+					var files = e.target.files; // 获取选中的文件列表
+					for (var i = 0; i < files.length; i++) {
+						var file = files[i];
+						var reader = new FileReader();
+						$('#show_i').empty();
+						reader.onload = function(event) {
+							var imageUrl = event.target.result;
+
+							// 创建新的 img 元素
+							var imageElement = $('<img>');
+
+							// 设置图片属性
+							imageElement.attr('src', imageUrl);
+							imageElement.attr('alt', 'Image');
+							imageElement.attr('decoding', 'async');
+							imageElement.attr('class', 'img-thumbnail');
+							imageElement.attr('class', 'col-md-4');
+							// 将图片添加到容器中
+							$('#show_i').append(imageElement);
+						};
+
+						// 读取文件数据
+						reader.readAsDataURL(file);
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" style="background-color: #ffa75e;" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">拍卖网站</a>
+				</div>
+				<div>
+					<ul class="nav navbar-nav">
+						<li><a href="mainpage.html">主页</a></li>
+						<li><a href="#">个人订单</a></li>
+						<li><a href="#">联系客服</a></li>
+						<li class="active"><a href="#">我的拍品</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								个人信息
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">我的资料</a></li>
+								<li><a href="#">身份验证</a></li>
+								<li><a href="#">支付设置</a></li>
+								<li><a href="#">收货地址</a></li>
+								<li><a href="#">安全设置</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container" id="container2">
+			<div class="row">
+				<div class="col-md-6 col-md-push-3">
+					<form role="form" method="post" action="/create/" method="post">
+						<div class="form-group row">
+							<label for="product_name" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍品名称:</p>
+							</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" id="product_name" value="{{product_name}}">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="product_abstract" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍品摘要:</p>
+							</label>
+							<div class="col-md-9">
+								<textarea class="form-control" rows="4" aria-valuetext="{{product_abstract}}"
+									id="product_abstract"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="InputFile" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">商品图片:</p>
+							</label>
+							<div class="col-md-9">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<input type="file" class="custom-file-input" id="product_img" accept="image/*"
+											multiple>
+									</div>
+									<div class="panel-body">
+										<div class="row" id="show_i">
+											{% if product.product_img %}
+											    {% for img in product.product_img %}
+											        <img class="img-thumbnail col-md-4" decoding="async" src="{{ img.url }}" alt="Product Image">
+											    {% endfor %}
+											{% endif %}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="product_unit" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍品数量:</p>
+							</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" id="product_unit" value="{{product_unit}}">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="product_price" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">设置价格:</p>
+							</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" id="product_price" value="{{product_price}}">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="product_content" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍品详述:</p>
+							</label>
+							<div class="col-md-9">
+								<textarea class="form-control" rows="6" aria-valuetext="{{product_content}}"
+									id="product_content"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="commodity_s" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍品类型:</p>
+							</label>
+							<div class="col-md-9">
+								<select name="product_type" id="product_type" style="height: 35px;width: 60px;">
+									<option value="1" {% if product.product_type == 1 %}selected{% endif %}>type1</option>
+									<option value="2" {% if product.product_type == 2 %}selected{% endif %}>type2</option>
+									<option value="3" {% if product.product_type == 3 %}selected{% endif %}>type3</option>
+									<option value="4" {% if product.product_type == 4 %}selected{% endif %}>type4</option>
+									<option value="5" {% if product.product_type == 5 %}selected{% endif %}>type5</option>
+									<option value="6" {% if product.product_type == 6 %}selected{% endif %}>type6</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="product_time" class="col-md-3 control-label">
+								<p class="text-right" style="font-size: 18px;">拍卖时间:</p>
+							</label>
+							<div class="col-md-9">
+								<input type="datetime-local" name="datetime" id="datetimePicker" value="{{ product_time }}">
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary  btn-block">提交</button>
+					</form>
+					{{error_message}}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
