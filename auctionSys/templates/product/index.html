@@ -60,35 +60,35 @@
 				<div class="row">
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="colth">
-							<a href="/listX_1_1/">
+							<a href="/list6_1_1/">
 								<font style="color: black;">服装</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="watch">
-							<a href="/listX_1_1/">
+							<a href="/list3_1_1/">
 								<font style="color: black;">手表</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="food">
-							<a href="/listX_1_1/">
+							<a href="/list6_1_1/">
 								<font style="color: black;">食品</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="phone">
-							<a href="/listX_1_1/">
+							<a href="/list3_1_1/">
 								<font style="color: black;">手机</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="computer">
-							<a href="/listX_1_1/">
+							<a href="/list3_1_1/">
 								<font style="color: black;">电脑</font>
 							</a>
 						</button>
@@ -104,7 +104,7 @@
 			<span class="glyphicon glyphicon-shopping-cart " style="font-size: 25px;"></span>
 		</div>
 		<div class="col-md-6 col-md-push-1">
-			<a class="btn" href="/listX_1_1/">二手车</a>/<a class="btn" href="/listX_1_1/">自行车</a>
+			<a class="btn" href="/list2_1_1/">二手车</a>/<a class="btn" href="/list2_1_1/">自行车</a>
 		</div>
 	</div>
 	<div class="row">
@@ -112,8 +112,8 @@
 			<span class="glyphicon glyphicon-phone " style="font-size: 25px;"></span>
 		</div>
 		<div class="col-md-6 col-md-push-1">
-			<a class="btn" href="/listX_1_1/">手机</a>/<a class="btn" href="/listX_1_1/">电脑</a>/<a class="btn"
-				href="/listX_1_1/">游戏机</a>
+			<a class="btn" href="/list3_1_1/">手机</a>/<a class="btn" href="/list3_1_1/">电脑</a>/<a class="btn"
+				href="/list3_1_1/">游戏机</a>
 		</div>
 	</div>
 	<div class="row">
@@ -121,8 +121,8 @@
 			<span class="glyphicon glyphicon-search " style="font-size: 25px;"></span>
 		</div>
 		<div class="col-md-6 col-md-push-1">
-			<a class="btn" href="/listX_1_1/">键盘</a>/<a class="btn" href="/listX_1_1/">鼠标</a>/<a class="btn"
-				href="/listX_1_1/">外设</a>
+			<a class="btn" href="/list4_1_1/">键盘</a>/<a class="btn" href="/list4_1_1/">鼠标</a>/<a class="btn"
+				href="/list4_1_1/">外设</a>
 		</div>
 	</div>
 	<div class="row">
@@ -130,7 +130,7 @@
 			<span class="glyphicon glyphicon-map-marker " style="font-size: 25px;"></span>
 		</div>
 		<div class="col-md-6 col-md-push-1">
-			<a class="btn" href="/listX_1_1/">本地拍品</a>
+			<a class="btn" href="/list5_1_1/">本地拍品</a>
 		</div>
 	</div>
 	<div class="row">
@@ -138,7 +138,7 @@
 			<span class="glyphicon glyphicon-pencil " style="font-size: 25px;"></span>
 		</div>
 		<div class="col-md-6 col-md-push-1">
-			<a class="btn" href="/listX_1_1/">其他</a>
+			<a class="btn" href="/list6_1_1/">其他</a>
 		</div>
 	</div>
 </div>
@@ -182,9 +182,9 @@
 	<div class="col-md-4">
 		<div class="row">
 			<div class="col-md-8">
-				<a href="/{{ each.id }}/">
-					{% if product.product_img %}
-					{% with product_img=product.product_img.first %}
+				<a href="/{{ each.product_id }}/">
+					{% if each.product_img %}
+					{% with product_img=each.product_img.first %}
 					{% if product_img %}
 					<img src="{{ product_img.url }}" class="thumbnail" decoding="async">
 					{% endif %}
@@ -195,15 +195,16 @@
 			<div class="col-md-4">
 				<div class="row">
 					<div class="col-md-12">
-						<h5><a href="/{{ each.id }}/">{{ each.product_name }}</a></h5>
+						<h5><a href="/{{ each.product_id }}/">{{ each.product_name }}</a></h5>
 					</div>
 				</div>
+				<div class="row">商品简介：<br>
+				<p>each.product_abstract</p></div>
 				<div class="row">
 					<div class="col-md-12">
 						<span><span class="prize">￥{{ each.product_price }}</span></span>
 						<br>
-						<span class="unit">{{ each.product_unit }}</span><br>
-						<a href="javascript:;" class="add_goods" id="{{ each.id }}" title="预约拍卖">预约拍卖</a>
+						<a href="javascript:;" class="add_goods" id="{{ each.product_id }}" title="预约拍卖">预约拍卖</a>
 					</div>
 				</div>
 			</div>
@@ -213,12 +214,12 @@
 	<div class="row">
 		<div class="col-md-2 col-md-push-5">
 			{% if page.has_previous %}
-			<a href="/list{{ product_type.id }}_{{ page.previous_page_number }}_{{ sort }}/" class="btn-primary"><span
+			<a href="/list{{ product_type }}_{{ page.previous_page_number }}_{{ sort }}/" class="btn-primary"><span
 					class="	glyphicon glyphicon-arrow-left">上一页</span></a>
 			{% endif %}
 
 			{% if page.has_next %}
-			<a href="/list{{ product_type.id }}_{{ page.next_page_number }}_{{ sort }}/" class="btn-primary"><span
+			<a href="/list{{ product_type }}_{{ page.next_page_number }}_{{ sort }}/" class="btn-primary"><span
 					class="glyphicon glyphicon-arrow-right">下一页</span></a>
 			{% endif %}
 		</div>

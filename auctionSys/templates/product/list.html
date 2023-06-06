@@ -123,8 +123,8 @@
 					<div class="row">
 						<div class="col-md-8">
 							<a href="/{{ each.id }}/">
-								{% if product.product_img %}
-								    {% with product_img=product.product_img.first %}
+								{% if each.product_img %}
+								    {% with product_img=each.product_img.first %}
 								        {% if product_img %}
 								            <img src="{{ product_img.url }}" class="thumbnail" decoding="async">
 								        {% endif %}
@@ -135,15 +135,16 @@
 						<div class="col-md-4">
 							<div class="row">
 								<div class="col-md-12">
-									<h5><a href="/{{ each.id }}/">{{ each.product_name }}</a></h5>
+									<h5><a href="/{{ each.product_id }}/">{{ each.product_name }}</a></h5>
 								</div>
 							</div>
+							<div class="row">商品简介：<br>
+							<p>each.product_abstract</p></div>
 							<div class="row">
 								<div class="col-md-12">
 									<span><span class="prize">￥{{ each.product_price }}</span></span>
 									<br>
-									<span class="unit">{{ each.product_unit }}</span><br>
-									<a href="javascript:;" class="add_goods" id="{{ each.id }}"
+									<a href="javascript:;" class="add_goods" id="{{each.product_id}}"
 										title="预约拍卖">预约拍卖</a>
 								</div>
 							</div>
@@ -156,13 +157,13 @@
 		<div class="row">
 			<div class="col-md-4 col-md-push-4">
 				{% if page.has_previous %}
-				<a href="/list{{ product_type.id }}_{{ page.previous_page_number }}_{{ sort }}/"
+				<a href="/list{{ product_type }}_{{ page.previous_page_number }}_{{ sort }}/"
 					class="btn-primary"><span class="	glyphicon glyphicon-arrow-left">上一页</span></a>
 				{% endif %}
 				{% if page.number==1 %}
 				<a href="#" class="active btn-primary">{{ each }}</a>
 				{% else %}
-				<a href="/list{{ product_type.id }}_1_{{ sort }}/" class="btn-primary">{{ each }}</a>
+				<a href="/list{{ product_type }}_1_{{ sort }}/" class="btn-primary">{{ each }}</a>
 				{% endif %}
 	
 				{% if page.number==2 %}
@@ -178,15 +179,15 @@
 				{% endfor %}
 	
 				{% if page.number==paginator.num_pages-1 %}
-				<a href="/list{{ product_type.id }}_{{paginator.num_pages}}_{{ sort }}/"
+				<a href="/list{{ product_type }}_{{paginator.num_pages}}_{{ sort }}/"
 					class="btn-primary">{{ paginator.num_pages }}</a>
 				{% else if page.number!=paginator.num_pages%}
 				<a href="#" class="btn-primary">...</a>
-				<a href="/list{{ product_type.id }}_{{paginator.num_pages}}_{{ sort }}/"
+				<a href="/list{{ product_type}}_{{paginator.num_pages}}_{{ sort }}/"
 					class="btn-primary">{{ paginator.num_pages }}</a>
 				{% endif %}
 				{% if page.has_next %}
-				<a href="/list{{ product_type.id }}_{{ page.next_page_number }}_{{ sort }}/"
+				<a href="/list{{ product_type}}_{{ page.next_page_number }}_{{ sort }}/"
 					class="btn-primary"><span class="glyphicon glyphicon-arrow-right">下一页</span></a>
 				{% endif %}
 			</div>

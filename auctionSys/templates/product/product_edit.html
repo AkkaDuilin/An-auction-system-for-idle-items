@@ -149,12 +149,12 @@
 							</label>
 							<div class="col-md-9">
 								<select name="product_type" id="product_type" style="height: 35px;width: 60px;">
-									<option value="1" {% if product.product_type == 1 %}selected{% endif %}>type1</option>
-									<option value="2" {% if product.product_type == 2 %}selected{% endif %}>type2</option>
-									<option value="3" {% if product.product_type == 3 %}selected{% endif %}>type3</option>
-									<option value="4" {% if product.product_type == 4 %}selected{% endif %}>type4</option>
-									<option value="5" {% if product.product_type == 5 %}selected{% endif %}>type5</option>
-									<option value="6" {% if product.product_type == 6 %}selected{% endif %}>type6</option>
+									<option value="1" {% if product.product_type == 1 %}selected{% endif %}>书籍</option>
+									<option value="2" {% if product.product_type == 2 %}selected{% endif %}>交通工具</option>
+									<option value="3" {% if product.product_type == 3 %}selected{% endif %}>电子设备</option>
+									<option value="4" {% if product.product_type == 4 %}selected{% endif %}>电子外设</option>
+									<option value="5" {% if product.product_type == 5 %}selected{% endif %}>本地拍品</option>
+									<option value="6" {% if product.product_type == 6 %}selected{% endif %}>其他</option>
 								</select>
 							</div>
 						</div>
@@ -163,7 +163,7 @@
 								<p class="text-right" style="font-size: 18px;">拍卖时间:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="datetime-local" name="datetime" id="datetimePicker" value="{{ product_time }}">
+								<input type="datetime-local" name="datetime" id="datetimePicker" value="{{ auction.auction_time }}">
 							</div>
 						</div>
 						<button type="submit" class="btn btn-primary  btn-block">提交</button>
