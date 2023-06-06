@@ -114,9 +114,9 @@ def test_user_creation():
 
 def create_test_products():
     # 创建六种类型数据
-    type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
-    for type_name in type_names:
-        ProductType.objects.create(type_name=type_name)
+    # type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
+    # for type_name in type_names:
+    #     ProductType.objects.create(type_name=type_name)
 
     # 创建十个产品信息
     products_data = [
@@ -294,6 +294,6 @@ def test_print_highest():
 # test_output_UserInfo()
 # create_test_products()
 # create_test_auctions()
-print_auctions()
+# print_auctions()
 # test_add_bidder()
 # test_print_highest()

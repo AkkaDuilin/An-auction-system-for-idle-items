@@ -83,6 +83,7 @@ class Index(View):
             view_products = ','.join(products_list)
         else:
             view_products = product_id
+        # 携带cookie的渲染HTML响应
         res.set_cookie('view_products', view_products)
         return res
 
