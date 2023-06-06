@@ -5,7 +5,13 @@ An auction system for idle items web based on Django Bootstrap
 - Sqlite
   - 在auctionSys 中配置
   - 开发测试使用
+- MySQL 
+  - 实际部署
+  - 云部署 (Todo)
+
 # Models
+- auctions 内继承 products 产品信息
+- order 内继承 auctions 拍卖信息
 ## user_part
 - 用户信息模块提供了用户注册、登录、找回密码等功能。用户可以通过注册功能创建账号并登录，也可以通过找回密码功能重设密码。
 - 模块调用 user_part
@@ -15,7 +21,7 @@ user_name: 字符串字段，最大长度为20，表示用户的用户名。
 user_pwd: 字符串字段，最大长度为40，表示用户的密码。
 user_email: 字符串字段，最大长度为40，表示用户的电子邮件。
 user_rman: 字符串字段，最大长度为20，默认为空字符串，表示用户的真实姓名。
-user_address: 字符串字段，最大长度为100，默认为空字符串，表示用户的收获地址。
+user_address: 字符串字段，最大长度为100，默认为空字符串，表示用户的收货地址。
 user_mnumber: 字符串字段，最大长度为6，默认为空字符串，表示用户的邮编。
 user_pnumber: 字符串字段，最大长度为11，默认为空字符串，表示用户的收货电话号码。
 ### views.py
@@ -76,7 +82,6 @@ id：产品的ID。
 渲染后的产品详情模板（'product/detail.html'）。
 
 
-
 ## order
 ### Database
 #### OrderInfo
@@ -88,11 +93,13 @@ total_price: 十进制字段，最大位数为8，小数位为2，表示订单�
 address: 字符串字段，最大长度为140，表示订单的送货地址。
 
 
-#### OrderDetailInfo
+order_id: 字符串字段，最大长度为20，作为主键，表示订单的唯一标识。
+order_user: 外键字段，关联到UserInfo模型，表示下订单的用户。
+order_date: DateTime字段，自动设置为当前时间，表示订单的创建日期。
+is_Pay: 布尔字段，默认为False，表示订单是否已支付。
+total_price: 十进制字段，最大位数为8，小数位为2，表示订单的总价格。
+address: 字符串字段，最大长度为140，表示订单的送货地址。
 
-products: 外键字段，关联到ProductInfo模型，表示订单中的产品。
-order: 外键字段，关联到OrderInfo模型，表示所属的订单。
-auction: 外键字段，关联到AuctionInfo模型，表示所属的拍卖活动。
 
 ### views.py
 #### order(request)
@@ -118,53 +125,19 @@ id：订单ID。
 返回：
 重定向到用户订单页面。
 
-## carts
-### Database
-#### CartInfo
-user: 与user_part.UserInfo模型建立外键关系，表示购物车所属的用户。
-product: 与products.ProductInfo模型建立外键关系，表示购物车中的产品。
-count: 产品数量，使用IntegerField字段。
+## auctions
+### Bidder
 
-### view.py
-#### cart(request)：
-功能：处理购物车页面的逻辑，获取当前用户的购物车信息，渲染购物车页面模板。
-参数：
-request：Django的请求对象。
-返回：
-渲染后的购物车页面模板（'cart.html'）。
-#### add(request, id, num)：
-功能：处理商品添加到购物车的逻辑，将商品添加到用户的购物车中。
-参数：
-request：Django的请求对象。
-id：商品ID。
-num：添加数量。
-返回：
-JSON格式的响应，包含购物车中商品的总数量（count）。
-#### count_judge(request)：
-功能：获取购物车中商品的数量。
-参数：
-request：Django的请求对象。
-返回：
-JSON格式的响应，包含购物车中商品的总数量（count）。
-#### edit(request, id, num)：
-功能：修改购物车中商品的数量。
-参数：
-request：Django的请求对象。
-id：购物车项ID。
-num：修改后的数量。
-返回：
-JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）。
-#### delete(request, id)：
-功能：从购物车中删除指定的商品。
-参数：
-request：Django的请求对象。
-id：购物车项ID。
-返回：
-JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）。
+user: 外键字段，关联到UserInfo模型，表示出价者的用户。
+bid_amount: 十进制字段，最大位数为8，小数位为2，表示出价金额。
 
+### BidderList
 
-## AuctionInfo
-### Database
+bidders: 多对多字段，关联到Bidder模型，表示出价者的列表。
+get_highest_bidder(): 方法，返回最高出价者的对象。
+get_all_bidders(): 方法，返回所有出价者的对象列表。
+
+### AuctionInfo
 auction_id: 字符串字段，最大长度为20，作为主键，表示拍卖活动的唯一标识。
 auction_seller: 外键字段，关联到UserInfo模型，表示拍卖活动的卖家。
 auction_date: DateTime字段，自动设置为当前时间，表示拍卖活动的创建日期。
@@ -174,9 +147,13 @@ starting_price: 十进制字段，最大位数为8，小数位为2，表示拍�
 description: 文本字段，用于描述拍卖活动。
 product: 外键字段，关联到ProductInfo模型，表示拍卖的产品。
 current_bid: 十进制字段，最大位数为7，小数位为2，可为空，表示当前的最高出价。
-bid_count: 整数字段，默认为0，表示出价次数。
 winning_bidder: 外键字段，关联到Bidder模型，可为空，表示获胜出价者。
 bidder_list: 外键字段，关联到BidderList模型，可为空，表示出价者列表。
+
+
+# 创建订单功能模块实现
+- 当用户创建新的auctions时开始一个计时任务 在时间到达auction_final_date 时自动创建一个这个auction对应的order
+- 通过使用 django-APScheduler 实现
 
 # git
 - **严格遵顼** main发布完整程序 Dev_env前后端合并测试 Backend分支后端开发 Frontend前端开发

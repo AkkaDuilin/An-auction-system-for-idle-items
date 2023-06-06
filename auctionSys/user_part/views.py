@@ -170,9 +170,6 @@ class UserInfoView(View):
 
 
 
-
-
-
 class OrderView(View):
     '''用户中心-订单页'''
 
