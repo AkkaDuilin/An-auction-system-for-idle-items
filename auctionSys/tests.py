@@ -1,6 +1,6 @@
 from user_part.models import UserInfo
 from products.models import ProductInfo, ProductType
-from order.models import OrderInfo, OrderDetailInfo
+from order.models import OrderInfo
 from auctions.models import AuctionInfo,Bidder,BidderList
 from django.db.models import Count
 from collections import Counter
@@ -94,9 +94,7 @@ def find_order():
     for order in all_order:
         print(f"order: {order.order_id}")
 
-    all_order = OrderDetailInfo.objects.all()
-    for order in all_order:
-        print(f"order: {order.order.order_id}")
+
 
 def delete_mod(ModelName):
     records = ModelName.objects.all()
@@ -114,9 +112,9 @@ def test_user_creation():
 
 def create_test_products():
     # 创建六种类型数据
-    type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
-    for type_name in type_names:
-        ProductType.objects.create(type_name=type_name)
+    # type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
+    # for type_name in type_names:
+    #     ProductType.objects.create(type_name=type_name)
 
     # 创建十个产品信息
     products_data = [
@@ -219,7 +217,7 @@ def create_test_auctions():
     user1 = UserInfo.objects.get(id=1)  # 假设存在ID为1的用户
     product1 = ProductInfo.objects.get(id=1)  # 假设存在ID为1的产品
 
-    # 创建五个测试数据
+    # 创建测试数据
     auction1 = AuctionInfo.objects.create(
         auction_id='A002',
         auction_seller=user1,
@@ -294,6 +292,6 @@ def test_print_highest():
 # test_output_UserInfo()
 # create_test_products()
 # create_test_auctions()
-print_auctions()
+# print_auctions()
 # test_add_bidder()
 # test_print_highest()

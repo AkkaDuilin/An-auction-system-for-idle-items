@@ -8,12 +8,29 @@ from django.core.paginator import Paginator
 
 
 class Index(View):
-     
-
     def index(request):
+        type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
+        type_ids = []
+
+        for type_name in type_names:
+            product_type = ProductType.objects.get(type_name=type_name)
+            type_ids.append(product_type.id)
+
+        hot_products = {}
+        latest_products = {}
+        # 返回两个字典，键为Typeid 值为检索出的列表
+        for type_id in type_ids:
+            hot_products[type_id] = list(ProductInfo.objects.filter(product_type_id=type_id).order_by('-product_click')[:4])
+            latest_products[type_id] = list(ProductInfo.objects.filter(product_type_id=type_id).order_by('-id')[:4])
+
+        context = {
+            'title': '首页',
+            'hot_products': hot_products,
+            'latest_products': latest_products,
+        }
+        return render(request, 'product/index.html', context)
 
 
-        return render(request, 'product/index.html')
         #return HttpResponse("this is product index page")
 
 
@@ -64,45 +81,46 @@ class Index(View):
             view_products = ','.join(products_list)
         else:
             view_products = product_id
+        # 携带cookie的渲染HTML响应
         res.set_cookie('view_products', view_products)
         return res
 
-# 商品发布类
-class Publish(View):
-    def Create_pub(request):
-        if request.method == 'POST':
-            product_name = request.POST.get('product_name')
-            product_img = request.FILES.get('product_img')
-            product_price = request.POST.get('product_price')
-            product_unit = request.POST.get('product_unit')
-            product_abstract = request.POST.get('product_abstract')
-            product_content = request.POST.get('product_content')
-            product_type_id = request.POST.get('product_type')
+# # 商品发布类 已迁移至auction中
+# class Publish(View):
+#     def Create_pub(request):
+#         if request.method == 'POST':
+#             product_name = request.POST.get('product_name')
+#             product_img = request.FILES.get('product_img')
+#             product_price = request.POST.get('product_price')
+#             product_unit = request.POST.get('product_unit')
+#             product_abstract = request.POST.get('product_abstract')
+#             product_content = request.POST.get('product_content')
+#             product_type_id = request.POST.get('product_type')
 
-            # 数据完整性校验
-            if not product_name or not product_price or not product_unit or not product_abstract or not product_content or not product_type_id:
-                error_message = "请填写所有必填字段"
-                return render(request, 'product/create.html', {'error_message': error_message})
+#             # 数据完整性校验
+#             if not product_name or not product_price or not product_unit or not product_abstract or not product_content or not product_type_id:
+#                 error_message = "请填写所有必填字段"
+#                 return render(request, 'product/create.html', {'error_message': error_message})
 
-            # 其他数据校验
-            try:
-                product_price = float(product_price)
-                if product_price <= 0:
-                    raise ValueError("商品价格必须大于0")
-            except ValueError:
-                error_message = "商品价格格式不正确"
-                return render(request, 'product/create.html', {'error_message': error_message})
+#             # 其他数据校验
+#             try:
+#                 product_price = float(product_price)
+#                 if product_price <= 0:
+#                     raise ValueError("商品价格必须大于0")
+#             except ValueError:
+#                 error_message = "商品价格格式不正确"
+#                 return render(request, 'product/create.html', {'error_message': error_message})
 
-            # 创建商品
-            product = ProductInfo.objects.create(
-                product_name=product_name,
-                product_img=product_img,
-                product_price=product_price,
-                product_unit=product_unit,
-                product_abstract=product_abstract,
-                product_content=product_content,
-                product_type_id=product_type_id
-            )
-            return render(request, 'auction/create.html', product_id=product.id)
-        return render(request, 'product/create.html')
+#             # 创建商品
+#             product = ProductInfo.objects.create(
+#                 product_name=product_name,
+#                 product_img=product_img,
+#                 product_price=product_price,
+#                 product_unit=product_unit,
+#                 product_abstract=product_abstract,
+#                 product_content=product_content,
+#                 product_type_id=product_type_id
+#             )
+#             return render(request, 'auction/create.html', product_id=product.id)
+#         return render(request, 'product/create.html')
 

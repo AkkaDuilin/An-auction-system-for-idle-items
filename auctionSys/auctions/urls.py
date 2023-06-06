@@ -1,7 +1,9 @@
 from django.conf.urls import url
 from .views import *
 urlpatterns = [
-    url(r'^$', Index.index),
-    url(r'^list(\d+)_(\d+)_(\d+)/$', Index.pro_list),
-    url(r'^(\d+)/$', Index.detail)
+    url(r'^/auction/(?P<auction_id>\d+)/$', AuctionDetail.as_view(), name='auction-detail'),
+    url(r'^/auction/(?P<auction_id>\d+)/bid/$',AuctionBid.as_view(),name='auction-bid'),
+    url(r'^/auction/(?P<auction_id>\d+)/deposit/$',AuctionDepositPayment.as_view(),name='auction-deposit'),
+    url(r'^/create/$',AuctionCreate.as_view(),name='auction-create')
+    
 ]

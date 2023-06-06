@@ -3,11 +3,22 @@ from tinymce.models import HTMLField
 
 
 class ProductType(models.Model):
-    type_name = models.CharField(max_length=20)
-    is_Delete = models.BooleanField(default=False)
+    TYPE_CHOICES = (
+        (1, '书籍'),
+        (2, '交通工具'),
+        (3, '电子设备'),
+        (4, '电子外设'),
+        (5, '本地拍品'),
+        (6, '其他'),
+    )
 
-    def __str__(self):
-        return self.type_name
+    type_name = models.IntegerField(choices=TYPE_CHOICES)
+    # 返回类型名称
+    def get_type_name(self):
+        for choice in self.TYPE_CHOICES:
+            if choice[0] == self.type_name:
+                return choice[1]
+        return ''
 
 
 class ProductInfo(models.Model):
