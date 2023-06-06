@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{tittle}}</title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">拍卖网站</a>
+				</div>
+				<div>
+					<ul class="nav navbar-nav">
+						<li><a href="#">主页</a></li>
+						<li class="active"><a href="#">预约拍品</a></li>
+						<li><a href="#">联系客服</a></li>
+						<li><a href="#">我的拍品</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								个人信息
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/user/info/">我的资料</a></li>
+								<li><a href="/user/order/">我的订单</a></li>
+								<li><a href="#">支付设置</a></li>
+								<li><a href="/user/site/">收货地址</a></li>
+								<li><a href="#">安全设置</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div style="height: 10px;width: 100%;"></div>
+
+		<div class="container">
+			<div class="row">
+				<table class="table">
+					<thead>
+						<tr class="danger">
+							<th>
+								商品名称
+							</th>
+							<th>
+								拍卖时间
+							</th>
+							<th>
+								起拍价
+							</th>
+							<th>
+								拍卖状态
+							</th>
+							<th>
+
+							</th>
+							<th>
+
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for each in carts %}
+						<tr>
+							<td><a href="/auction_id">{{auction_name}}</a>{</td>
+							<td>{{auction_time}}</td>
+							<td>{{starting_price}}</td>
+							<td>{{auction_states}}</td>
+							<td>
+								<button class="btn-danger" name="{{acution_id}}" id="del">删除</button>
+							</td>
+							<td>
+								<button class="btn-primary" id="detail" name="{{acution_id}}">前往拍卖</button>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$('#del').click(function() {
+				//判断是否登录，若未登录则先提示登录
+				if ($('.login_btn').text().indexOf('登录') >= 0) {
+					alert('请先登录！');
+					location.href = '/user/login';
+					return;
+				}
+				auction_id = $(this).attr('name')
+				$.get('/cart/delete' + auction_id, function(data) {});
+			})
+			$('#detail').click(function() {
+				//判断是否登录，若未登录则先提示登录
+				if ($('.login_btn').text().indexOf('登录') >= 0) {
+					alert('请先登录！');
+					location.href = '/user/login';
+					return;
+				}
+				auction_id = $(this).attr('name')
+				$.get(auction_id, function(data) {});
+			})
+		</script>
+	</body>
+</html>
