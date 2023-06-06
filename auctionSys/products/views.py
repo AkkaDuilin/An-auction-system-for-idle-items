@@ -35,7 +35,7 @@ class Index(View):
                 'sort':sort,
                 'paginator':paginator,
                 'page':page}
-        return render(request, 'product/list.html')
+        return render(request, 'product/list.html',context)
 
     # 正则表达式传参
     def detail(request, id):

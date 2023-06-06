@@ -11,13 +11,13 @@ An auction system for idle items web based on Django Bootstrap
 - 模块调用 user_part
 - decorator.py 中定义了一个login() 引用作user_login() 实现用户是否登录的判断 
 ### Database
-- user_name：用户名称，最大长度为20个字符。
-- user_pwd：用户密码，最大长度为40个字符。
-- user_email：用户邮箱，最大长度为40个字符。
-- user_rman：收货用户姓名，最大长度为20个字符，默认为空字符串。
-- user_address：收货地址，最大长度为100个字符，默认为空字符串。
-- user_mnumber：发货邮编，最大长度为6个字符，默认为空字符串。
-- user_pnumber：收货电话号码，最大长度为11个字符，默认为空字符串。
+user_name: 字符串字段，最大长度为20，表示用户的用户名。
+user_pwd: 字符串字段，最大长度为40，表示用户的密码。
+user_email: 字符串字段，最大长度为40，表示用户的电子邮件。
+user_rman: 字符串字段，最大长度为20，默认为空字符串，表示用户的真实姓名。
+user_address: 字符串字段，最大长度为100，默认为空字符串，表示用户的收获地址。
+user_mnumber: 字符串字段，最大长度为6，默认为空字符串，表示用户的邮编。
+user_pnumber: 字符串字段，最大长度为11，默认为空字符串，表示用户的收货电话号码。
 ### views.py
 定义了三个视图：RegisterView、LoginView和Logout。
 RegisterView处理GET和POST请求，显示注册表单并将新用户数据保存到数据库。
@@ -38,20 +38,18 @@ Logout视图处理GET请求以注销用户。它清除会话并注销用户，�
 
 ### Database
 #### ProductType模型：
-type_name：产品类型名称，最大长度为20个字符。
-is_Delete：布尔字段，表示该产品类型是否已删除。
-str()：返回产品类型的字符串表示形式。
+type_name: 字符串字段，最大长度为20，表示产品类型的名称。
+is_Delete: 布尔字段，默认为False，表示该产品类型是否已删除。
 #### ProductInfo模型：
-product_name：产品名称，最大长度为30个字符。
-product_img：产品图片，使用ImageField字段存储上传的图片文件。
-product_price：产品价格，使用DecimalField字段，最多6位数字，2位小数。
-is_Delete：布尔字段，表示该产品信息是否已删除。
-product_click：产品点击次数，使用IntegerField字段，默认为0。
-product_unit：产品单位，最大长度为20个字符。
-product_abstract：产品摘要，最大长度为120个字符。
-product_content：产品内容，使用HTMLField字段，可用于存储富文本内容。
-product_type：产品类型，使用ForeignKey字段与ProductType模型建立一对多关系。
-str()：返回产品信息的字符串表示形式。
+product_name: 字符串字段，最大长度为30，表示产品的名称。
+product_img: 图片字段，用于上传产品图像，存储在指定的product_img目录中。
+product_price: 十进制字段，最大位数为6，小数位为2，表示产品的价格。
+is_Delete: 布尔字段，默认为False，表示该产品是否已删除。
+product_click: 整数字段，默认为0，表示产品的点击次数。
+product_unit: 字符串字段，最大长度为20，表示产品的单位。
+product_abstract: 字符串字段，最大长度为120，表示产品的摘要。
+product_content: HTML字段，用于存储产品的详细内容。
+product_type: 外键字段，关联到ProductType模型，表示产品所属的类型。
 
 ### view.py
 #### index(request)
@@ -82,20 +80,19 @@ id：产品的ID。
 ## order
 ### Database
 #### OrderInfo
+order_id: 字符串字段，最大长度为20，作为主键，表示订单的唯一标识。
+order_user: 外键字段，关联到UserInfo模型，表示下订单的用户。
+order_date: DateTime字段，自动设置为当前时间，表示订单的创建日期。
+is_Pay: 布尔字段，默认为False，表示订单是否已支付。
+total_price: 十进制字段，最大位数为8，小数位为2，表示订单的总价格。
+address: 字符串字段，最大长度为140，表示订单的送货地址。
 
-order_id：订单ID，最大长度为20个字符，作为主键。
-order_user：与'user_part.UserInfo'模型建立外键关系，表示订单买家用户。
-order_seller: 与'user_part.UserInfo'模型建立外键关系，表示订单卖家用户。
-order_date：订单日期时间，使用DateTimeField字段，自动记录当前时间。
-is_Pay：布尔字段，表示订单是否已支付，默认为False。
-total_price：订单总价，使用DecimalField字段，最多8位数字，2位小数。
-address：订单送货地址，最大长度为140个字符。
+
 #### OrderDetailInfo
 
-products：与'products.ProductInfo'模型建立外键关系，表示订单中的产品。
-order：与OrderInfo模型建立外键关系，表示订单信息。
-price：产品单价，使用DecimalField字段，最多7位数字，2位小数。
-count：产品数量，使用IntegerField字段。
+products: 外键字段，关联到ProductInfo模型，表示订单中的产品。
+order: 外键字段，关联到OrderInfo模型，表示所属的订单。
+auction: 外键字段，关联到AuctionInfo模型，表示所属的拍卖活动。
 
 ### views.py
 #### order(request)
@@ -164,6 +161,23 @@ request：Django的请求对象。
 id：购物车项ID。
 返回：
 JSON格式的响应，包含操作结果（ok：1表示成功，0表示失败）。
+
+
+## AuctionInfo
+### Database
+auction_id: 字符串字段，最大长度为20，作为主键，表示拍卖活动的唯一标识。
+auction_seller: 外键字段，关联到UserInfo模型，表示拍卖活动的卖家。
+auction_date: DateTime字段，自动设置为当前时间，表示拍卖活动的创建日期。
+auction_final_date: DateTime字段，表示拍卖活动的结束日期。
+is_Active: 布尔字段，默认为True，表示拍卖活动是否仍在进行中。
+starting_price: 十进制字段，最大位数为8，小数位为2，表示拍卖活动的起始价格。
+description: 文本字段，用于描述拍卖活动。
+product: 外键字段，关联到ProductInfo模型，表示拍卖的产品。
+current_bid: 十进制字段，最大位数为7，小数位为2，可为空，表示当前的最高出价。
+bid_count: 整数字段，默认为0，表示出价次数。
+winning_bidder: 外键字段，关联到Bidder模型，可为空，表示获胜出价者。
+bidder_list: 外键字段，关联到BidderList模型，可为空，表示出价者列表。
+
 # git
 - **严格遵顼** main发布完整程序 Dev_env前后端合并测试 Backend分支后端开发 Frontend前端开发
 - 非发布情况禁止修改main分支！！！

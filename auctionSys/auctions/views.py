@@ -47,6 +47,8 @@ class AuctionDetail(View):
 
         return render(request, 'auction/detail.html', context)
 
+
+
 class AuctionBid(View):
     
     def post(self, request, auction_id):
