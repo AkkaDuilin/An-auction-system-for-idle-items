@@ -33,7 +33,7 @@ class OrderCreate(View):
         context = {
             'order': order,
         }
-        # 需要修改
+        # Todo
         return render(request, 'order/detail.html', context)
 
 class OrderPayment(View):
@@ -60,10 +60,7 @@ class OrderDetail(View):
     @user_login
     def get(self, request, order_id):
         order = get_object_or_404(OrderInfo, order_id=order_id)
-        
-
         context = {
             'order': order,
         }
-
         return render(request, 'order/detail.html', context)

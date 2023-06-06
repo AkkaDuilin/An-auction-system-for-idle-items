@@ -13,6 +13,7 @@ class UserInfo(models.Model):
     user_address = models.CharField(max_length=100, default='')
     user_mnumber = models.CharField(max_length=6, default='')
     user_pnumber = models.CharField(max_length=11, default='')
+    deposit_balance = models.IntegerField(default=0)
 
     def generate_reset_token(self, expiration=3600):
         s = Serializer(SECRET_KEY, expiration)

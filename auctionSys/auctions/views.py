@@ -12,6 +12,7 @@ class AuctionCreate(View):
             'product': product
         }
         return render(request, 'auction/create.html', context)
+        
     @user_login
     def post(self, request):
         

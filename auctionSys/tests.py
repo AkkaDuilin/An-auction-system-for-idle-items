@@ -1,6 +1,6 @@
 from user_part.models import UserInfo
 from products.models import ProductInfo, ProductType
-from order.models import OrderInfo, OrderDetailInfo
+from order.models import OrderInfo
 from auctions.models import AuctionInfo,Bidder,BidderList
 from django.db.models import Count
 from collections import Counter
@@ -94,9 +94,7 @@ def find_order():
     for order in all_order:
         print(f"order: {order.order_id}")
 
-    all_order = OrderDetailInfo.objects.all()
-    for order in all_order:
-        print(f"order: {order.order.order_id}")
+
 
 def delete_mod(ModelName):
     records = ModelName.objects.all()

@@ -4,7 +4,8 @@ from products.models import ProductInfo
 
 class Bidder(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
-    bid_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    bid_amount = models.DecimalField(max_digits=8, decimal_places=2,null=True)
+    if_pay_deposit = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.user_name} - {self.bid_amount}"
@@ -48,8 +49,6 @@ class AuctionInfo(models.Model):
     winning_bidder = models.ForeignKey(Bidder, on_delete=models.CASCADE, null=True, blank=True)
     # bidder_list 可以使用两个方法获取最高出价者和出价者数量
     bidder_list = models.ForeignKey(BidderList, on_delete=models.CASCADE, null=True, blank=True)
-    
-    
     # 每次保存模型时，auction_final_date 将会被自动设置为 auction_date 加三个小时的时间。
     def save(self, *args, **kwargs):
         self.auction_final_date = self.auction_date + timedelta(hours=3)
