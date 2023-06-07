@@ -29,9 +29,9 @@
 								<li><a href="#">拍品发货</a></li>
 							</ul>
 						</li>
-						<li class="active"><a href="#">我的预约</a></li>
+						<li><a href="#">我的预约</a></li>
 						<li><a href="#">联系客服</a></li>
-						<li class="dropdown active">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								个人信息
 								<b class="caret"></b>
@@ -74,6 +74,9 @@
                             <th>
                                 买家邮编
                             </th>
+                            <th>
+                                快递单号
+                            </th>
 						</tr>
 					</thead>
 					<tbody>
@@ -92,7 +95,16 @@
 							<td>{{each.userinfo.name}}</td>
                             <td>{{each.userinfo.pnumber}}</td>
 							<td>{{each.userinfo.address}}</td>
-							<td>{{each.seller.mnumber}}</td>
+							<td>{{each.userinfo.mnumber}}</td>
+                            <td><button class="btn-primary" id="fill">填写快递单号</button>
+                                <div id="deliver_number">
+                                    <div>
+                                        <input type="text" class="form-control" id="number" name="number"
+                                            placeholder="请输入快递单号">
+                                    </div>
+                                    <button id="submit">提交</button>
+                                </div>
+                                <p id="info"></p></td>
 						</tr>
 						{% endfor %}
 					</tbody>

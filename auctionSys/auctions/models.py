@@ -2,6 +2,8 @@ from datetime import timedelta
 from django.db import models
 from user_part.models import UserInfo
 from products.models import ProductInfo
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class Bidder(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
@@ -20,6 +22,7 @@ class BidderList(models.Model):
         else:
             return None
     def get_bidders_count(self):
+         
          return self.bidders.count()
     def get_all_bidders(self):
         return self.bidders.all()
@@ -34,7 +37,7 @@ class BidderList(models.Model):
 class AuctionInfo(models.Model):
     # 以下字段为拍卖信息
     auction_seller = models.ForeignKey(UserInfo, on_delete=models.CASCADE)  
-    auction_date = models.DateTimeField(auto_now=True)
+    auction_date = models.DateTimeField()
     auction_final_date = models.DateTimeField()   
     AUCTION_STATUS_CHOICES = (
         (1, '未开始'),
@@ -44,7 +47,7 @@ class AuctionInfo(models.Model):
     auction_status = models.IntegerField(choices=AUCTION_STATUS_CHOICES, default=1)
     starting_price = models.DecimalField(max_digits=8, decimal_places=2)
     product = models.ForeignKey(ProductInfo, on_delete=models.CASCADE)
-    deposit_amount = models.DecimalField(max_digits=8, decimal_places=2) 
+    deposit_amount = models.DecimalField(max_digits=8, decimal_places=2,null=True) 
     # 以下字段为参加拍卖者列表信息 
     current_bid = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     winning_bidder = models.ForeignKey(Bidder, on_delete=models.CASCADE, null=True, blank=True)
@@ -58,10 +61,14 @@ class AuctionInfo(models.Model):
         return auctions
     
     def save(self, *args, **kwargs):
-        self.auction_final_date = self.auction_date + timedelta(hours=3)
-        self.deposit_amount = self.starting_price * 0.1
-        self.bid_count = self.bidder_list.get_bidders_count()
+        self.auction_final_date = self.auction_date + timedelta(days=3)
+        
+        # self.bid_count = self.bidder_list.get_bidders_count()
         super().save(*args, **kwargs)
+
+@receiver(pre_save, sender=AuctionInfo)
+def calculate_deposit_amount(sender, instance, **kwargs):
+    instance.deposit_amount = float(instance.starting_price) * 0.1
     
 
 

@@ -17,7 +17,6 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#product_img').on('change', function(e) {
-					var img={{auction.product.product_img}}
 					var files = e.target.files; // 获取选中的文件列表
 					for (var i = 0; i < files.length; i++) {
 						var file = files[i];
@@ -87,22 +86,22 @@
 		<div class="container" id="container2">
 			<div class="row">
 				<div class="col-md-6 col-md-push-3">
-					<form role="form" method="post" action="/create/" method="post">
+					<form role="form" method="post" action="/auction/update{{auction.id}}/update/" method="post">
 						<div class="form-group row">
 							<label for="product_name" class="col-md-3 control-label">
 								<p class="text-right" style="font-size: 18px;">拍品名称:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_name" name="product_name" value="{{auction.product_name}}">
+								<input type="text" class="form-control" id="product_name" name="product_name" value="{{auction.product.product_name}}">
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="product_abstract" class="col-md-3 control-label">
-								<p class="text-right" style="font-size: 18px;">拍品摘要:</p>
+								<p class="text-right" style="font-size: 18px;">拍品简介:</p>
 							</label>
 							<div class="col-md-9">
-								<textarea class="form-control" rows="4" aria-valuetext="{{auction.product_abstract}}"
-									id="product_abstract" name="product_abstract"></textarea>
+								<textarea class="form-control" rows="4" 
+									id="product_abstract" name="product_abstract">{{product.product_abstract}}</textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -117,8 +116,8 @@
 									</div>
 									<div class="panel-body">
 										<div class="row" id="show_i">
-											{% if auction.product_img %}
-											    {% for img in auction.product_img %}
+											{% if auction.product.product_img %}
+											    {% for img in auction.product.product_img %}
 											        <img class="img-thumbnail col-md-4" decoding="async" src="{{ img.url }}" alt="Product Image">
 											    {% endfor %}
 											{% endif %}
@@ -132,7 +131,7 @@
 								<p class="text-right" style="font-size: 18px;">设置价格:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_price" name="product_price" value="{{auction.product_price}}">
+								<input type="text" class="form-control" id="product_price" name="product_price" value="{{auction.product.product_price}}">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -140,8 +139,8 @@
 								<p class="text-right" style="font-size: 18px;">拍品详述:</p>
 							</label>
 							<div class="col-md-9">
-								<textarea class="form-control" rows="6" aria-valuetext="{{auction_product_content}}"
-									id="product_content" name="product_content"></textarea>
+								<textarea class="form-control" rows="6"
+									id="product_content" name="product_content">{{product.product_content}}</textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -164,7 +163,7 @@
 								<p class="text-right" style="font-size: 18px;">拍卖时间:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="datetime-local" name="datetime" id="datetimePicker" value="{{ auction.auction_time }}">
+								<input type="datetime-local" name="auction_date" id="auction_date" value="{{ auction.auction_date|date:'Y-m-d' }}T{{ auction.auction_date|time:'H:i' }}">
 							</div>
 						</div>
 						<button type="submit" class="btn btn-primary  btn-block">提交</button>

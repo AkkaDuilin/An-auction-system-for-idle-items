@@ -1,6 +1,6 @@
-from datetime import timezone
+from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views import View
 from .models import AuctionInfo, BidderList, Bidder
 from products.models import ProductInfo 
@@ -48,7 +48,9 @@ class AuctionManage(View):
         if not product_name or not product_price  or not product_abstract or not product_content or not product_type:
             print("请填写所有必填字段")
             error_message = "请填写所有必填字段"
-            return redirect('/auction/manage/#')
+            # 返回原来的页面
+            # return redirect('/')
+            return render(request, 'auctions/add_commodity.html', {'error_message': error_message})
             # return render(request, 'auctions/add_commodity.html', {'error_message': error_message})
 
         # 其他数据校验
@@ -61,7 +63,7 @@ class AuctionManage(View):
             return render(request, 'auctions/add_commodity.html', {'error_message': error_message})
 
         # 创建商品
-
+        bidder_list = BidderList.objects.create()
         product = ProductInfo.objects.create(
             product_name=product_name,
             product_img=product_img,
@@ -77,17 +79,20 @@ class AuctionManage(View):
             # auction_final_date = auction_date + datetime.timedelta(days=1)
             # description=description,
             product=product,
+            bidder_list = bidder_list
             
         )
         # Url需要修改
         print("创建成功")
-        return render(request, 'auctions/add_commodity.html')
+        return render(request, '/auction/manage/')
 
 # 拍卖详情
 class AuctionDetail(View):
     @user_login
-    def get(self, request, auction_id):
+    def detail(request, auction_id):
+        print("进入拍卖详情")
         auction = get_object_or_404(AuctionInfo, id=auction_id)
+        auction.auction_date = int(auction.auction_date.timestamp())
         current_time = timezone.now()
         # 时间到时获取出价最高者并且关闭拍卖交易
         if current_time > auction.auction_final_date:
@@ -97,8 +102,14 @@ class AuctionDetail(View):
                 auction.current_bid = highest_bidder.bid_amount
                 auction.winning_bidder = highest_bidder.user
             auction.save()
-        
+        # 获取bidder_list的长度
+        if auction.bidder_list == None:
+            bidder_count = 0
+        else:
+            bidder_count = auction.bidder_list.get_bidders_count()
+        print(bidder_count)
         context = {
+            'auction_seller': auction.auction_seller,
             'auction_id': auction_id,
             'auction_date': auction.auction_date,
             'auction_final_date': auction.auction_final_date,
@@ -107,11 +118,11 @@ class AuctionDetail(View):
             'starting_price': auction.starting_price,
             'current_bid': auction.current_bid,
             'winning_bidder': auction.winning_bidder,
-
+            'bidder_count' : bidder_count,
             'current_time': current_time,
         }
 
-        res =  render(request, 'auction/detail.html', context)
+        res =  render(request, 'auctions/detail.html', context)
         viewed_auctions = request.COOKIES.get('viewed_auctions', '')
         if viewed_auctions:
             auctions_list = viewed_auctions.split(',')
@@ -161,7 +172,7 @@ class AuctionDepositPayment(View):
         else:
             error_message = "保证金余额不足"
             context = {'error_message': error_message}
-            return render(request, 'auction/detail.html', context)
+            return render(request, 'auctions/detail.html', context)
     
 class AuctionBid(View):
     @user_login
@@ -174,7 +185,7 @@ class AuctionBid(View):
         bidder_list = auction.bidder_list
         if not bidder_list.bidders.filter(user=request.user).exists():
             error_message = '请先缴纳保证金'
-            return render(request, 'auction/detail.html', {'errmsg': error_message})
+            return render(request, 'auctions/detail.html', {'errmsg': error_message})
 
         # Calculate minimum bidding increment
         initial_price = auction.current_bid
@@ -199,33 +210,40 @@ class AuctionBid(View):
                 'auction': auction,
                 'current_time': timezone.now(),
             }
-            return render(request, 'auction/detail.html', context)
+            return render(request, 'auctions/detail.html', context)
         else:
             error_message = '竞价金额不能低于最小加价幅度'
-            return render(request, 'auction/detail.html', {'errmsg': error_message})
+            return render(request, 'auctions/detail.html', {'errmsg': error_message})
 
 
 class AuctionDelete(View):
     @user_login
-    def post(self, request, auction_id):
-        auction = get_object_or_404(AuctionInfo, auction_id=auction_id)
+    def delete( request, auction_id):
+        print('删除拍品')
+        auction = get_object_or_404(AuctionInfo, id=auction_id)
         auction.delete()
-        return redirect('auctions/manage/')
+        return redirect('/auction/manage/')
 
 
 class AuctionUpdate(View):
     @user_login
-    def get(self, request, auction_id):
-        auction = get_object_or_404(AuctionInfo, auction_id=auction_id)
+    def detail(request,auction_id):
+        # auction_id = 1
+        print(request.user)
+        
+        auction = get_object_or_404(AuctionInfo, id=auction_id)
+        print(auction)
         product = auction.product
         context = {
             'auction': auction,
             'product': product
         }
-        return render(request, 'auction/update.html', context)
+        print(type(auction.auction_date))
+        return render(request, 'auctions/product_edit.html', context)
 
-    def post(self, request, auction_id):
-        auction = get_object_or_404(AuctionInfo, auction_id=auction_id)
+    def update(request, auction_id):
+        print('更新拍品')
+        auction = get_object_or_404(AuctionInfo, id=auction_id)
         product = auction.product
         
         # 获取拍卖信息的字段
@@ -239,12 +257,11 @@ class AuctionUpdate(View):
         product_price = request.POST.get('product_price')
         product_abstract = request.POST.get('product_abstract')
         product_content = request.POST.get('product_content')
-        product_type_id = request.POST.get('product_type')
+        product_type = request.POST.get('product_type')
 
         # 更新拍卖信息
-        auction.starting_price = starting_price
-        auction.description = description
-        auction.bid_count = bid_count
+        auction.starting_price = product_price
+        # auction.bid_count = bid_count
         auction.save()
 
         # 更新商品信息
@@ -253,7 +270,7 @@ class AuctionUpdate(View):
         product.product_price = product_price
         product.product_abstract = product_abstract
         product.product_content = product_content
-        product.product_type_id = product_type_id
+        product.product_type = product_type
         product.save()
 
         context = {
@@ -261,4 +278,4 @@ class AuctionUpdate(View):
             'product': product,
             'message': '拍卖信息和商品信息已成功更新'
         }
-        return render(request, 'auction/update.html', context)
+        return redirect('/auction/manage/')

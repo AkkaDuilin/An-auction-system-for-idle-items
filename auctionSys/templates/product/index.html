@@ -9,7 +9,8 @@
 	}
 </style>
 {% endblock style %}
-{% block script %} {% endblock script %}
+{% block script %} 
+{% endblock script %}
 {% block main %}
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
@@ -156,7 +157,7 @@
 			</div>
 		</div>
 		<div class="col-md-6 col-md-pull-1">
-			<div id="myCarousel" class="carousel slide">
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<!-- 轮播（Carousel）指标 -->
 				<ol class="carousel-indicators">
 					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -166,13 +167,19 @@
 				<!-- 轮播（Carousel）项目 -->
 				<div class="carousel-inner">
 					<div class="item active">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="First slide">
+						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="First slide"
+							class="img-responsive" width="560" height="350">
+						<div class="carousel-caption"></div>
 					</div>
 					<div class="item">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Second slide">
+						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Second slide"
+							class="img-responsive" width="560" height="350">
+						<div class="carousel-caption"></div>
 					</div>
 					<div class="item">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Third slide">
+						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Third slide"
+							class="img-responsive" width="560" height="350">
+						<div class="carousel-caption"></div>
 					</div>
 				</div>
 				<!-- 轮播（Carousel）导航 -->
@@ -187,68 +194,64 @@
 			</div>
 		</div>
 	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="col-md-2">今日拍品</div>
-	</div>
-	{% for each in page %}
-	<div class="col-md-4">
+	<div class="container">
 		<div class="row">
-			<div class="col-md-8">
-				<a href="/{{ each.product_id }}/">
-					{% if each.product.product_img %}
+			<div class="col-md-2">今日拍品</div>
+		</div>
+		<div class="row">
+			{% for each in auction_list %}
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-6">
+						<a href="/auction/{{ each.auction_id }}/" class="thumbnail">
+							<!-- {% if each.product.product_img %}
 					{% with product_img=each.product.product_img.first %}
 					{% if product_img %}
 					<img src="{{ product_img.url }}" class="thumbnail" decoding="async">
 					{% endif %}
 					{% endwith %}
-					{% endif %}
-				</a>
+					{% endif %} -->
+							<img decoding="async" src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF">
+						</a>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<h5 class="text-left">商品名称:<a href="/auction/{{ each.auction_id }}/">{{ each.product_name}}</a></h5>
+						</div>
+						<div class="row">商品简介：
+							<p>&nbsp;&nbsp;{{each.product_abstract}}</p>
+						</div>
+						<div class="row">
+							<span><span class="prize">￥{{ each.current_bid }}</span></span>
+							<br>
+							<a href="javascript:;" class="add_goods" id="{{ each.auction_id }}" title="预约拍卖">预约拍卖</a>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="row">
-					<div class="col-md-12">
-						<h5><a href="/{{ each.id }}/">{{ each.product.product_name }}</a></h5>
-					</div>
-				</div>
-				<div class="row">商品简介：<br>
-					<p>each.product.product_abstract</p>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<span><span class="prize">￥{{ each.product.product_price }}</span></span>
-						<br>
-						<a href="javascript:;" class="add_goods" id="{{ each.auction_id }}" title="预约拍卖">预约拍卖</a>
-					</div>
-				</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col-md-2 col-md-push-5">
+				{% if page.has_previous %}
+				<a href="/list{{ product_type }}_{{ page.previous_page_number }}_{{ sort }}/" class="btn-primary"><span
+						class="	glyphicon glyphicon-arrow-left">上一页</span></a>
+				{% endif %}
+
+				{% if page.has_next %}
+				<a href="/list{{ product_type }}_{{ page.next_page_number }}_{{ sort }}/" class="btn-primary"><span
+						class="glyphicon glyphicon-arrow-right">下一页</span></a>
+				{% endif %}
 			</div>
 		</div>
 	</div>
-
-	<div class="row">
-		<div class="col-md-2 col-md-push-5">
-			{% if page.has_previous %}
-			<a href="/list{{ product_type }}_{{ page.previous_page_number }}_{{ sort }}/" class="btn-primary"><span
-					class="	glyphicon glyphicon-arrow-left">上一页</span></a>
-			{% endif %}
-
-			{% if page.has_next %}
-			<a href="/list{{ product_type }}_{{ page.next_page_number }}_{{ sort }}/" class="btn-primary"><span
-					class="glyphicon glyphicon-arrow-right">下一页</span></a>
-			{% endif %}
-		</div>
-	</div>
-
-	{% endfor %}
-</div>
 </div>
 {% endblock main %}
-{% block script1 %} 
+{% block script1 %}
 <script type="text/javascript">
-	$('.add_goods').click(function(){
+	$('.add_goods').click(function () {
 		product_id = $(this).attr('id')
-		$.get('/cart/add' + product_id +'_1/', function (data){
+		$.get('/cart/add' + product_id + '_1/', function (data) {
 		});
 	})
 </script>

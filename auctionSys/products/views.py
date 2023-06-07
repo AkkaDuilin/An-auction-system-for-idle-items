@@ -8,9 +8,9 @@ from auctions.models import *
 from user_part.models import *
 
 class Index(View):
+    
     def get(self, request):
         type_ids = [1, 2, 3, 4, 5, 6]
-
         # product_types = ProductType.objects.filter(id__in=type_ids)
         # 筛选出auction_id最大的十五个商品
         auction_products = AuctionInfo.objects.all()[:15]
@@ -18,20 +18,21 @@ class Index(View):
         # yesterday = datetime.now().date() - timedelta(days=1)
         # auction_products = AuctionInfo.objects.filter(auction_date__gte=yesterday)
         auction_list =[]
+        
         for auction in auction_products:
-            product = ProductInfo.objects.get(pk=auction.product)
+            product = ProductInfo.objects.get(id=auction.product.id)
             auction = {
                 'auction_id': auction.id,
                 'product_name': product.product_name,
-                'img_url': product.product_image.url,
+                'img_url': product.product_img,
                 'product_abstract': product.product_abstract,
                 'auction_date' : auction.auction_date,
-                'auction_finish_date': auction.auction_finish_date,
-                'current_price': auction.current_price,
+                'auction_final_date': auction.auction_final_date,
+                'current_bid': product.product_price,
                 'auction_status': auction.auction_status,
             }
             auction_list.append(auction)
-
+            # print(auction.current_bid)
 
         context = {
             'title': '首页',

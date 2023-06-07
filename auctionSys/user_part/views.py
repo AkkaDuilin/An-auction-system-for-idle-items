@@ -161,6 +161,7 @@ class UserInfoView(View):
     '''用户中心-详情页'''
     @user_login
     def info(request):
+        print(request.user)
         user_email = UserInfo.objects.get(id=request.session['user_id']).user_email
         
         context = {'title':'个人信息',

@@ -67,6 +67,9 @@
 							<th>
 								卖家
 							</th>
+							<th>
+								快递单号
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -92,6 +95,11 @@
 							<td>未发货</td>
 							{% end if %}
 							<td>{{each.seller.name}}</td>
+							{% if each.deliver_id==NULL %}
+							<td>卖家未发货</td>
+							{% else %}
+							<td>{{each.deliver_id}}</td>
+							{% end if %}
 						</tr>
 						{% endfor %}
 					</tbody>

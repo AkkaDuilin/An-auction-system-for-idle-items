@@ -10,27 +10,32 @@
 		</script>
 		<script>
 			$(document).ready(function() {
-				var price = {{product_price}};
+				var price = {{starting_price}};
 				var result = Math.ceil(price / 10);
 				var result1 = Math.ceil(price / 50);
 				document.getElementById("result").textContent = result;
-				document.getElementById("result").textContent = result1;
+				document.getElementById("result1").textContent = result1;
 			});
 		</script>
 		<script>
 			$(document).ready(function() {
 				// 设置倒计时的目标时间，这里假设目标时间为 2023 年 12 月 31 日 23:59:59
-				var targetDate = {{auction_time}} + (60 * 60 * 60);
-				var auction_data = {{auction_time}};
+				var timestamp = {{auction_date}};
+				var targetDate = new Date(timestamp * 1000); // 将秒转换为毫秒
+				var auction_date = new Date(timestamp * 1000);
+				targetDate.setHours(targetDate.getHours() + 1);
+				var currentDate = new Date();
 				// 更新倒计时显示的函数
 				function updateCountdown() {
 					// 获取当前时间
 					var currentDate = new Date();
-					if (auction_data > currentDate) {
+					if (auction_date > currentDate) {
 						document.getElementById("countdown").textContent = "拍卖未开始";
-					} else if (currentDate > targetDate) {
+					} 
+					else if (currentDate > targetDate) {
 						document.getElementById("countdown").textContent = "拍卖已结束";
-					} else {
+					} 
+					else {
 						// 计算剩余时间（以毫秒为单位）
 						var remainingTime = targetDate.getTime() - currentDate.getTime();
 
@@ -61,7 +66,7 @@
 		</script>
 		<script type="text/javascript">
 			$(document).ready(function() {
-				var auction_data = {{auction_time}};
+				var auction_data = new Date("{{auction_date}}");
 				var currentDate = new Date();
 				if(auction_data>currentDate)
 				{
@@ -114,22 +119,27 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4">
-					<div id="myCarousel" class="carousel slide">
+					<div id="myCarousel" class="carousel slide" data-ride="carousel">
 						<!-- 轮播（Carousel）指标 -->
 						<ol class="carousel-indicators">
-							{% for image in auction.product_img %}
-							<li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}"
-								{% if forloop.first %}class="active" {% endif %}></li>
-							{% endfor %}
+							<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+							<li data-target="#myCarousel" data-slide-to="1"></li>
+							<li data-target="#myCarousel" data-slide-to="2"></li>
 						</ol>
 						<!-- 轮播（Carousel）项目 -->
 						<div class="carousel-inner">
-							{% for image in product.product_img %}
-							<div class="item">
-								<img src="{{ image.url }}" alt="Product Image" class="img-responsive" width="390"
-									height="390">
+							<div class="item active">
+								<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="First slide" class="img-responsive" width="560" height="350">
+								<div class="carousel-caption">标题 1</div>
 							</div>
-							{% endfor %}
+							<div class="item">
+								<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Second slide" class="img-responsive" width="560" height="350">
+								<div class="carousel-caption">标题 2</div>
+							</div>
+							<div class="item">
+								<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Third slide" class="img-responsive" width="560" height="350">
+								<div class="carousel-caption">标题 3</div>
+							</div>
 						</div>
 						<!-- 轮播（Carousel）导航 -->
 						<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -143,15 +153,15 @@
 					</div>
 					<div class="row">
 						<h4>商品简介</h4>
-						<p>&nbsp;&nbsp;{{product_abstract}}</p>
+						<p>&nbsp;&nbsp;{{product.product_abstract}}</p>
 					</div>
 				</div>
 				<div class="col-md-4">
-					<h4 class="row">起拍价格：{{auction_price}}</h4>
+					<h4 class="row">起拍价格：{{starting_price}}</h4>
 					{% if auction.price %}
 					<h4 class="row">当前价格：{{auction_price}}</h4>
 					{% else %}
-					<h4 class="row">当前价格：拍卖未开始</h4>
+					<h4 class="row">当前价格：</h4>
 					{% endif %}
 					<div class="row">
 						<div class="panel panel-default">
@@ -170,19 +180,19 @@
 						</div>
 					</div>
 					<div class="row">
-						{% if auction_attends==0 %}
+						{% if bidder_count == 0 %}
 						<h5 class="col-md-6">参拍人数：{{ auction_attends }}</h5>
 						{% else %}
 						<h5 class="col-md-6">当前无人参与</h5>
 						{% endif %}
-						{% if auction_reserve==0 %}
+						{% if auction_reserve == 0 %}
 						<h5 class="col-md-6">预约人数：{{ auction_reserve }}</h5>
 						{% else %}
 						<h5 class="col-md-6">当前无人预约</h5>
 						{% endif %}
-						<h5 class="col-md-6">保证金：<span id="result"></span></h5>
-						<h5 class="col-md-6">拍卖时间：{{auction_tiem}}</h5>
-						<h5 class="col-md-6">最少加价:<span id="result1"></span></h5>
+						<h5 class="col-md-6">保证金:￥<span id="result"></span></h5>
+						<h5 class="col-md-6">拍卖时间：{{current_time}}</h5>
+						<h5 class="col-md-6">最少加价:￥<span id="result1"></span></h5>
 						<h5 class="col-md-6">拍卖持续时间：60min</h5>
 						<h5 class="col-md-12">倒计时剩余时间：<span id="countdown"></span></h5>
 						<a href="javascript:;" class="add_goods col-md-6" id="{{ product.product_id }}"
@@ -199,13 +209,12 @@
 					</div>
 				</div>
 				<div class="col-md-4" style="background-color: cyan;">
-					<h4 class="row">卖家：{{auction.auction_sell}}</h4>
+					<h4 class="row">卖家：{{auction_seller.user_name}}</h4>
 					<h4 class="row">拍品详情：</h4>
-					<p>&nbsp;&nbsp;{{auction.product_content}}</p>
+					<p>&nbsp;&nbsp;{{product.product_content}}</p>
 				</div>
 			</div>
-		</div>
-
+		</div>	
 		<script type="text/javascript">
 			$('.add_goods').click(function(){
 				product_id = $(this).attr('id')
