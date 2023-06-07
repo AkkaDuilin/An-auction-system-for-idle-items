@@ -1,34 +1,42 @@
 {% extends 'base.html' %}
-{% endblock script %}
 {% block main %}
-	<nav class="navbar navbar-default" role="navigation">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="#">拍卖网站</a>
-				</div>
-				<div>
-					<ul class="nav navbar-nav">
-						<li><a href="#">主页</a></li>
-						<li class="active"><a href="#">个人订单</a></li>
-						<li><a href="#">联系客服</a></li>
-						<li><a href="#">我的拍品</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								个人信息
-								<b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="/user/info/">我的资料</a></li>
-								<li><a href="/user/order/">我的订单</a></li>
-								<li><a href="#">支付设置</a></li>
-								<li><a href="/user/site/">收货地址</a></li>
-								<li><a href="#">安全设置</a></li>
-							</ul>
-						</li>
+<nav class="navbar navbar-default" style="background-color: #ffa75e;" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">拍卖网站</a>
+		</div>
+		<div>
+			<ul class="nav navbar-nav">
+				<li><a href="/">主页</a></li>
+				<li class="active"><a href="#">个人订单</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						我的拍品
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#">拍品管理</a></li>
+						<li><a href="#">拍品发货</a></li>
 					</ul>
-				</div>
-			</div>
-		</nav>
+				</li>
+				<li><a href="#">我的预约</a></li>
+				<li><a href="#">联系客服</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						个人信息
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/user/info/">我的资料</a></li>
+						<li><a href="/user/site/">收货地址</a></li>
+						<li><a href="/user/history/">浏览记录</a></li>
+						<li><a href="/user/logout/">退出登录</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
 		<div style="height: 10px;"></div>
 		<div class="container">
 			<div class="row">
@@ -41,9 +49,6 @@
 				<table class="table">
 					<thead>
 						<tr class="danger">
-							<th>
-								订单日期
-							</th>
 							<th>
 								商品名称
 							</th>
@@ -59,25 +64,34 @@
 							<th>
 								交易状态
 							</th>
+							<th>
+								卖家
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for each in orders %}
-						<tr class="{{each.states}}"  colspan="6">
-							订单号：{{order_id}}
+						<tr  colspan="6">
+							订单号：{{each.auction_id}}
 						</tr>
-						<tr class="{{each.states}}">
-							<td>{{order_date}}</td>
-							<td>{{order_name}}</td>
+						<tr>
+							<td>{{each.product.product_name}}</td>
 							<td>
-							{% if each.is_pay==true %}
-							<td>已支付</td>
-							{% else %}
+							{% if each.order_stauts==0 %}
 							<td><a href="/pay/{{each.product_id}}/">点击支付</a></td>
+							{% else%}
+							<td>已支付</td>
 							{% end if %}
-							<td>{{total_price}}</td>
-							<td>{{address}}</td>
-							<td>deal_states</td>
+							<td>{{each.total_price}}</td>
+							<td>{{each.userinfo.address}}</td>
+							{% if each.order_stauts==2 %}
+							<td>已发货</td>
+							{% else if each.order_stauts==3 %}
+							<td>已结束</td>
+							{% else %}
+							<td>未发货</td>
+							{% end if %}
+							<td>{{each.seller.name}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>

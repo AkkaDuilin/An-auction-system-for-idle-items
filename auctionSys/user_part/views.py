@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from .models import UserInfo
 from products.models import ProductInfo
 from order.models import OrderInfo
+from auctions.models import AuctionInfo
 from hashlib import sha1
 from .decorator import login as user_login
 from django.views.generic import View
@@ -14,6 +15,9 @@ from django.conf import settings
 from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth import login,logout
+from django.views.decorators.csrf import csrf_exempt
+
 import re
 
 class RegisterView(View):
@@ -21,7 +25,7 @@ class RegisterView(View):
     def get(self, request):
         '''注册页面'''
         return render(request, 'user/register.html')
-    
+    @csrf_exempt
     def post(self, request):
         '''注册处理'''
         # 1、接收数据
@@ -93,49 +97,51 @@ class RegisterView(View):
 
 class LoginView(View):
     '''登录页面'''
-
-    def get(self, request):
-        ##  判断是否记住密码
-        if 'username' in request.COOKIES:
-            username = request.COOKIES['username']
-            checked = 'checked'
-        else:
-            username = ''
-            checked = ''
-        return render(request, 'user/login.html', {'username': username, 'checked': checked})
-
-    def post(self, request):
-        '''登录校验'''
-        ##  1、接收数据
-        user_name = request.POST.get('username')
-        user_pwd = request.POST.get('pwd')
-        remember = request.POST.get('remember')
-
-        ##  2、数据校验
-        if not all([user_name, user_pwd]):
-            ##  数据不完整
-            return render(request, 'user/login.html', {'errmsg': '用户名或密码不正确'})
-        
-        ##  3、业务处理
-        ##  校验数据库
-        #user = authenticate(username=username, password=password)
-        user = UserInfo.objects.get(user_name=user_name)
-        print(user)
-        if user_pwd == user.user_pwd:
-            print("login right")
+    @csrf_exempt
+    def login(request):
+        username = request.COOKIES.get('username', '')
+        context = {'title':'用户登录', 'username':username, 'error_pwd':0}
+        return render(request, 'user/login.html', context)
+    # def get(self, request):
+    #     ##  判断是否记住密码
+    #     if 'username' in request.COOKIES:
+    #         username = request.COOKIES['username']
+    #         checked = 'checked'
+    #     else:
+    #         username = ''
+    #         checked = ''
+    #     return render(request, 'user/login.html', {'username': username, 'checked': checked})
+    @csrf_exempt
+    def login_judge(request):
+        get_datas = request.GET['user_name']
+        count = UserInfo.objects.filter(user_name=get_datas).count()
+        return JsonResponse({'count': count})
+    @csrf_exempt
+    def login_handler(request):
+        post_datas = request.POST
+        user_name = post_datas['username']
+        user_pwd = post_datas['pwd']
+        remember = post_datas.get('remember', 0)
+        # user_obj = authenticate(username=user_name, password=user_pwd)
+        user = UserInfo.objects.filter(user_name=user_name, user_pwd=user_pwd).first()
+        # 找到用户，判断密码是否一致，若不一致
+        #user = UserInfo.objects.get(user_name=user_name)
+        if user:
+            # login(request, user_obj)
             url = request.COOKIES.get('url', '/')
-            res = HttpResponseRedirect(url)
-
-            if remember:
-                res.set_cookie('username', user_name)
-            else:
-                res.set_cookie('username', '', max_age=-1)
-
+            res = redirect("/")
+            res.set_signed_cookie("is_login","1",salt="auctionSys")
+            # if remember:
+            #     res.set_cookie('username', user_name)
+            # else:
+            #     res.set_cookie('username', '', max_age=-1)
+            request.session['is_login'] = True
             request.session['user_id'] = user.id
             request.session['user_name'] = user.user_name
-
+            print(res)
             return res
         else:
+            print("the user is not exist")
             context = {'title':'用户登录', 'username':user_name, 'userpwd':user_pwd, 'error_pwd':1}
             return render(request, 'user/login.html', context)
         
@@ -143,8 +149,11 @@ class LoginView(View):
 class Logout(View):
     def get(self, request):
         print("the user is logout")
-        request.session.flush()
-        logout(request)
+        if request.session.get('is_login', None):
+            # 清空session
+            request.session.flush()
+
+        # logout(request)
         return redirect('/')
 
 
@@ -153,21 +162,32 @@ class UserInfoView(View):
     @user_login
     def info(request):
         user_email = UserInfo.objects.get(id=request.session['user_id']).user_email
-        view_products = request.COOKIES.get('view_products', '')
-        # 这里get的view_products 对应最近浏览的记录 在products view.py detail 中实现
-        # 可以阉割
-        view_list = []
-        if view_products:
-            view_products = view_products.split(',')
-            for each in view_products:
-                view_list.append(ProductInfo.objects.get(pk=int(each)))
+        
         context = {'title':'个人信息',
                 'user_name':request.session['user_name'],
                 'user_email':user_email,
-                'view_list':view_list}
+                }
         # 发送一个request 给user_center html界面并传递context内容 
         return render(request, 'user/user_center_info.html', context)
+    
+class UserHistoryView(View):
 
+    def get(self, request):
+        
+        viewed_auctions = request.COOKIES.get('viewed_auctions', '')
+        if viewed_auctions == '':
+            return render(request, 'user/b_history.html', {'title':'用户中心-浏览记录'})
+        # 这里get的viewed_auctions 对应最近浏览的记录 在auctions view.py detail 中实现
+        # 可以阉割
+        else:
+            view_list = []
+            if viewed_auctions:
+                viewed_auctions = viewed_auctions.split(',')
+                for each in viewed_auctions:
+                    view_list.append(AuctionInfo.objects.get(auction_id=int(each)))
+            context = {'title':'用户中心-浏览记录',
+                    'view_list':view_list}
+            return render(request, 'user/b_history.html', context)
 
 
 class OrderView(View):
@@ -205,22 +225,21 @@ class OrderView(View):
         return render(request, 'user/user_center_order.html', context)
 
 
+
+
 class SiteView(View):
     '''用户中心-地址页'''
     @user_login
     def site(request):
         '''显示用户地址页'''
-         
         user = UserInfo.objects.get(id=request.session['user_id'])
-        if request.method == "POST":
-            post_datas = request.POST
-            user.user_rman = post_datas['r_man']
-            user.user_address = post_datas['address']
-            user.user_mnumber = post_datas['mnumber']
-            user.user_pnumber = post_datas['pnumber']
+        if request.method == 'POST':
+            user.user_rman = request.POST.get('rman')
+            user.user_address = request.POST.get('address')
+            user.user_mnumber = request.POST.get('mnumber')
+            user.user_pnumber = request.POST.get('pnumber')
             user.save()
         context = {'title':'收货地址', 'user':user}
         return render(request, 'user/user_center_site.html', context)
-        #return render(request, 'user/user_center_site.html', {'page': 'address'})
 
 

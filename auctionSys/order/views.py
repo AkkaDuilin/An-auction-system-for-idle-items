@@ -64,3 +64,12 @@ class OrderDetail(View):
             'order': order,
         }
         return render(request, 'order/detail.html', context)
+
+class OrderList(View):
+    @user_login
+    def get(self, request):
+        orders = OrderInfo.objects.filter(order_user=request.user)
+        context = {
+            'orders': orders,
+        }
+        return render(request, 'order/add_commodity.html', context)

@@ -18,10 +18,20 @@
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">主页</a></li>
+				<li><a href="/">主页</a></li>
 				<li><a href="#">个人订单</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						我的拍品
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="/auction/manage/">拍品管理</a></li>
+						<li><a href="#">拍品发货</a></li>
+					</ul>
+				</li>
+				<li><a href="#">我的预约</a></li>
 				<li><a href="#">联系客服</a></li>
-				<li><a href="#">我的拍品</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						个人信息
@@ -29,10 +39,9 @@
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="/user/info/">我的资料</a></li>
-						<li><a href="/user/order/">我的订单</a></li>
-						<li><a href="#">支付设置</a></li>
 						<li><a href="/user/site/">收货地址</a></li>
-						<li><a href="#">安全设置</a></li>
+						<li><a href="/user/history/">浏览记录</a></li>
+						<li><a href="/user/logout/">退出登录</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -194,6 +203,7 @@
 		</div>
 	</div>
 </div>
+{% endblock main %}
 {% block script1 %}
 <script type="text/javascript">
 	$('.add_goods').click(function(){
@@ -203,4 +213,3 @@
 	})
 </script>
 {% endblock script1 %}
-{% endblock main %}

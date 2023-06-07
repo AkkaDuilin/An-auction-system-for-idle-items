@@ -37,7 +37,7 @@
 				<div class="col-md-6 col-md-push-5">
 
 					<form role="form" class="form-horizontal" action="/user/register/" method="post">
-
+						{% csrf_token %}
 						<div class="form-group">
 							<label for="name" class="col-md-2 control-label">用户名</label>
 							<div class="col-md-10">
@@ -67,10 +67,10 @@
 						</div>
 
 						<div class="form-group">
-							<div class="col-md-2">
+							<div class="col-md-2 col-md-push-2">
 								<input type="checkbox" class="form-control" name="allow" id="allow" checked="checked">
 							</div>
-							<label for="email" class="col-md-2 control-label">同意使用协议</label>
+							<label for="email" class="col-md-2 control-label col-md-pus">同意使用协议</label>
 						</div>
 
 						<div class="form-group" style="height: 15px; width: 100%;"></div>

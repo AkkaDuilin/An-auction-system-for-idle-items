@@ -19,7 +19,7 @@
 					<ul class="nav navbar-nav">
 						<li><a href="/">主页</a></li>
 						<li><a href="#">个人订单</a></li>
-						<li class="dropdown">
+						<li class="dropdown active">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								我的拍品
 								<b class="caret"></b>
@@ -29,7 +29,7 @@
 								<li><a href="#">拍品发货</a></li>
 							</ul>
 						</li>
-						<li><a href="#">我的预约</a></li>
+						<li class="active"><a href="#">我的预约</a></li>
 						<li><a href="#">联系客服</a></li>
 						<li class="dropdown active">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -39,7 +39,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="/user/info/">我的资料</a></li>
 								<li><a href="/user/site/">收货地址</a></li>
-								<li class="active"><a href="/user/history/">浏览记录</a></li>
+								<li><a href="/user/history/">浏览记录</a></li>
 								<li><a href="/user/logout/">退出登录</a></li>
 							</ul>
 						</li>
@@ -47,16 +47,9 @@
 				</div>
 			</div>
 		</nav>
-
-		<div style="height: 10px;width: 100%;"></div>
-
-		<div class="container">
-			<div class="row">
-				<h3>浏览记录</h3>
-			</div>
-			<div style="height: 10px;width: 100%;"></div>
-
-			<div class="row">
+        <div style="height: 15px;"></div>
+        <div class="container">
+            <div class="row">
 				<table class="table">
 					<thead>
 						<tr class="danger">
@@ -64,44 +57,47 @@
 								商品名称
 							</th>
 							<th>
-								商品图片
+								支付状态
 							</th>
 							<th>
-								起拍价
+								成交价格
 							</th>
 							<th>
-
+								买家姓名
 							</th>
+							<th>
+								买家电话号码
+							</th>
+							<th>
+								买家收货地址
+							</th>
+                            <th>
+                                买家邮编
+                            </th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for each in view_list %}
+						{% for each in orders %}
+						<tr  colspan="6">
+							订单号：{{each.auction_id}}
+						</tr>
 						<tr>
-							<td><a href="/{{ each.auction_id }}/">{{ each.product.product_name }}</td>
-							<td><a href="/{{ each.auction_id }}/">
-							{% if each.product.product_img %}
-							    {% with product_img=each.product.product_img.first %}
-							        {% if product_img %}
-							            <img src="{{ product_img.url }}" alt="Product Image" class="img-responsive"  width="60" height="60">
-							        {% endif %}
-							    {% endwith %}
-							{% endif %}
-							</a></td>
-							<td><span class="prize">￥{{ each.product.product_price }}</span></td>
+							<td>{{each.product.product_name}}</td>
 							<td>
-								<button class="btn-primary" id="detail" name="{{each.acution_id}}">前往拍卖</button>
-							</td>
+							{% if each.order_stauts==0 %}
+							<td>买家未支付</a></td>
+							{% else%}
+							<td>买家已支付</td>
+							{% end if %}
+							<td>{{each.userinfo.name}}</td>
+                            <td>{{each.userinfo.pnumber}}</td>
+							<td>{{each.userinfo.address}}</td>
+							<td>{{each.seller.mnumber}}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<script type="text/javascript">
-			$('#detail').click(function() {
-				auction_id = $(this).attr('name')
-				$.get('/'+auction_id+'/', function(data) {});
-			})
-		</script>
+        </div>
 	</body>
 </html>

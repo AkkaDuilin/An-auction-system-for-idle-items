@@ -17,7 +17,7 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#product_img').on('change', function(e) {
-					var img={{}}
+					var img={{auction.product.product_img}}
 					var files = e.target.files; // 获取选中的文件列表
 					for (var i = 0; i < files.length; i++) {
 						var file = files[i];
@@ -54,21 +54,30 @@
 				</div>
 				<div>
 					<ul class="nav navbar-nav">
-						<li><a href="mainpage.html">主页</a></li>
+						<li><a href="/">主页</a></li>
 						<li><a href="#">个人订单</a></li>
+						<li class="dropdown active">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								我的拍品
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="active"><a href="/auction/manage/">拍品管理</a></li>
+								<li><a href="#">拍品发货</a></li>
+							</ul>
+						</li>
+						<li><a href="#">我的预约</a></li>
 						<li><a href="#">联系客服</a></li>
-						<li class="active"><a href="#">我的拍品</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								个人信息
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">我的资料</a></li>
-								<li><a href="#">身份验证</a></li>
-								<li><a href="#">支付设置</a></li>
-								<li><a href="#">收货地址</a></li>
-								<li><a href="#">安全设置</a></li>
+								<li><a href="/user/info/">我的资料</a></li>
+								<li><a href="/user/site/">收货地址</a></li>
+								<li><a href="/user/history/">浏览记录</a></li>
+								<li><a href="/user/logout/">退出登录</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -84,7 +93,7 @@
 								<p class="text-right" style="font-size: 18px;">拍品名称:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_name" value="{{product_name}}">
+								<input type="text" class="form-control" id="product_name" name="product_name" value="{{auction.product_name}}">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -92,8 +101,8 @@
 								<p class="text-right" style="font-size: 18px;">拍品摘要:</p>
 							</label>
 							<div class="col-md-9">
-								<textarea class="form-control" rows="4" aria-valuetext="{{product_abstract}}"
-									id="product_abstract"></textarea>
+								<textarea class="form-control" rows="4" aria-valuetext="{{auction.product_abstract}}"
+									id="product_abstract" name="product_abstract"></textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -103,13 +112,13 @@
 							<div class="col-md-9">
 								<div class="panel panel-default">
 									<div class="panel-heading">
-										<input type="file" class="custom-file-input" id="product_img" accept="image/*"
+										<input type="file" class="custom-file-input" id="product_img" name="product_img" accept="image/*"
 											multiple>
 									</div>
 									<div class="panel-body">
 										<div class="row" id="show_i">
-											{% if product.product_img %}
-											    {% for img in product.product_img %}
+											{% if auction.product_img %}
+											    {% for img in auction.product_img %}
 											        <img class="img-thumbnail col-md-4" decoding="async" src="{{ img.url }}" alt="Product Image">
 											    {% endfor %}
 											{% endif %}
@@ -119,19 +128,11 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="product_unit" class="col-md-3 control-label">
-								<p class="text-right" style="font-size: 18px;">拍品数量:</p>
-							</label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_unit" value="{{product_unit}}">
-							</div>
-						</div>
-						<div class="form-group row">
 							<label for="product_price" class="col-md-3 control-label">
 								<p class="text-right" style="font-size: 18px;">设置价格:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_price" value="{{product_price}}">
+								<input type="text" class="form-control" id="product_price" name="product_price" value="{{auction.product_price}}">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -139,8 +140,8 @@
 								<p class="text-right" style="font-size: 18px;">拍品详述:</p>
 							</label>
 							<div class="col-md-9">
-								<textarea class="form-control" rows="6" aria-valuetext="{{product_content}}"
-									id="product_content"></textarea>
+								<textarea class="form-control" rows="6" aria-valuetext="{{auction_product_content}}"
+									id="product_content" name="product_content"></textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -149,12 +150,12 @@
 							</label>
 							<div class="col-md-9">
 								<select name="product_type" id="product_type" style="height: 35px;width: 60px;">
-									<option value="1" {% if product.product_type == 1 %}selected{% endif %}>书籍</option>
-									<option value="2" {% if product.product_type == 2 %}selected{% endif %}>交通工具</option>
-									<option value="3" {% if product.product_type == 3 %}selected{% endif %}>电子设备</option>
-									<option value="4" {% if product.product_type == 4 %}selected{% endif %}>电子外设</option>
-									<option value="5" {% if product.product_type == 5 %}selected{% endif %}>本地拍品</option>
-									<option value="6" {% if product.product_type == 6 %}selected{% endif %}>其他</option>
+									<option value="1" {% if auction.product_type == 1 %}selected{% endif %}>书籍</option>
+									<option value="2" {% if auction.product_type == 2 %}selected{% endif %}>交通工具</option>
+									<option value="3" {% if auction.product_type == 3 %}selected{% endif %}>电子设备</option>
+									<option value="4" {% if auctiont.product_type == 4 %}selected{% endif %}>电子外设</option>
+									<option value="5" {% if auction.product_type == 5 %}selected{% endif %}>本地拍品</option>
+									<option value="6" {% if auction.product_type == 6 %}selected{% endif %}>其他</option>
 								</select>
 							</div>
 						</div>

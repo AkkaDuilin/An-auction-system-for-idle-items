@@ -1,5 +1,5 @@
 from user_part.models import UserInfo
-from products.models import ProductInfo, ProductType
+from products.models import ProductInfo
 from order.models import OrderInfo
 from auctions.models import AuctionInfo,Bidder,BidderList
 from django.db.models import Count
@@ -117,103 +117,49 @@ def create_test_products():
     # type_names = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
     # for type_name in type_names:
     #     ProductType.objects.create(type_name=type_name)
+    # book_type = ProductType.objects.create(type_name=1)
+    # vehicle_type = ProductType.objects.create(type_name=2)
+    
+    # 创建产品信息
+    product1 = ProductInfo.objects.create(
+        product_name='Book 1',
+        product_img='',
+        product_price=19.99,
+        is_Delete=False,
+        product_click=100,
+        product_unit='Piece',
+        product_abstract='Book 1 Abstract',
+        product_content='Book 1 Content',
+        product_type=book_type
+    )
+    
+    product2 = ProductInfo.objects.create(
+        product_name='Vehicle 1',
+        product_img='',
+        product_price=2999.99,
+        is_Delete=False,
+        product_click=50,
+        product_unit='Piece',
+        product_abstract='Vehicle 1 Abstract',
+        product_content='Vehicle 1 Content',
+        product_type=vehicle_type
+    )
+    
+    # 查找产品
+    product1 = ProductInfo.objects.get(id=1)
+    print(f"Product ID: {product1.id}")
+    print(f"Product Name: {product1.product_name}")
 
-    # 创建十个产品信息
-    products_data = [
-        {
-            'product_name': '产品1',
-            'product_img': '',
-            'product_price': 9.99,
-            'product_unit': '个',
-            'product_abstract': '产品1摘要',
-            'product_content': '<p>产品1内容</p>',
-            'product_type_id': 1,
-        },
-        {
-            'product_name': '产品2',
-            'product_img': '',
-            'product_price': 19.99,
-            'product_unit': '个',
-            'product_abstract': '产品2摘要',
-            'product_content': '<p>产品2内容</p>',
-            'product_type_id': 1,
-        },
-        {
-            'product_name': '产品3',
-            'product_img': '',
-            'product_price': 29.99,
-            'product_unit': '个',
-            'product_abstract': '产品3摘要',
-            'product_content': '<p>产品3内容</p>',
-            'product_type_id': 2,
-        },
-        {
-            'product_name': '产品4',
-            'product_img': '',
-            'product_price': 39.99,
-            'product_unit': '个',
-            'product_abstract': '产品4摘要',
-            'product_content': '<p>产品4内容</p>',
-            'product_type_id': 2,
-        },
-        {
-            'product_name': '产品5',
-            'product_img': '',
-            'product_price': 49.99,
-            'product_unit': '个',
-            'product_abstract': '产品5摘要',
-            'product_content': '<p>产品5内容</p>',
-            'product_type_id': 3,
-        },
-        {
-            'product_name': '产品6',
-            'product_img': '',
-            'product_price': 59.99,
-            'product_unit': '个',
-            'product_abstract': '产品6摘要',
-            'product_content': '<p>产品6内容</p>',
-            'product_type_id': 3,
-        },
-        {
-            'product_name': '产品7',
-            'product_img': '',
-            'product_price': 69.99,
-            'product_unit': '个',
-            'product_abstract': '产品7摘要',
-            'product_content': '<p>产品7内容</p>',
-            'product_type_id': 4,
-        },
-        {
-            'product_name': '产品8',
-            'product_img': '',
-            'product_price': 79.99,
-            'product_unit': '个',
-            'product_abstract': '产品8摘要',
-            'product_content': '<p>产品8内容</p>',
-            'product_type_id': 4,
-        },
-        {
-            'product_name': '产品9',
-            'product_img': '',
-            'product_price': 89.99,
-            'product_unit': '个',
-            'product_abstract': '产品9摘要',
-            'product_content': '<p>产品9内容</p>',
-            'product_type_id': 5,
-        },
-        {
-            'product_name': '产品10',
-            'product_img': '',
-            'product_price': 99.99,
-            'product_unit': '个',
-            'product_abstract': '产品10摘要',
-            'product_content': '<p>产品10内容</p>',
-            'product_type_id': 5,
-        },
-    ]
+    product2 = ProductInfo.objects.get(id=2)
+    print(f"Product ID: {product2.id}")
+    print(f"Product Name: {product2.product_name}")
 
-    for product_data in products_data:
-        ProductInfo.objects.create(**product_data)
+
+
+
+
+
+
 
 def create_test_auctions():
     user1 = UserInfo.objects.get(id=1)  # 假设存在ID为1的用户
@@ -244,16 +190,16 @@ def print_auctions():
 
     # 遍历每个对象并输出其内容
     for auction in auctions:
-        print("Auction ID:", auction.auction_id)
+        print("Auction ID:", auction.id)
         print("Auction Seller:", auction.auction_seller)
         print("Auction Date:", auction.auction_date)
         print("Auction Final Date:", auction.auction_final_date)
-        print("Is Active:", auction.is_Active)
+        print("Is Active:", auction.auction_status)
         print("Starting Price:", auction.starting_price)
-        print("Description:", auction.description)
+        #print("Description:", auction.description)
         print("Product:", auction.product)
         print("Current Bid:", auction.current_bid)
-        print("Bid Count:", auction.bid_count)
+        # print("Bid Count:", auction.bid_count)
         print("Winning Bidder:", auction.winning_bidder)
         
         print("--------------------")
@@ -294,6 +240,7 @@ def test_print_highest():
 # test_output_UserInfo()
 # create_test_products()
 # create_test_auctions()
-# print_auctions()
+print_auctions()
 # test_add_bidder()
 # test_print_highest()
+# create_test_products()

@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from user_part.models import UserInfo
 from products.models import ProductInfo
@@ -50,11 +51,17 @@ class AuctionInfo(models.Model):
     # bidder_list 可以使用两个方法获取最高出价者和出价者数量
     bidder_list = models.ForeignKey(BidderList, on_delete=models.CASCADE, null=True, blank=True)
     # 每次保存模型时，auction_final_date 将会被自动设置为 auction_date 加三个小时的时间。
+    # bid_count = models.IntegerField(default=0)
+    
+    def get_auctions_by_product_ids(product_ids):
+        auctions = AuctionInfo.objects.filter(products__id__in=product_ids).distinct()
+        return auctions
+    
     def save(self, *args, **kwargs):
         self.auction_final_date = self.auction_date + timedelta(hours=3)
         self.deposit_amount = self.starting_price * 0.1
+        self.bid_count = self.bidder_list.get_bidders_count()
         super().save(*args, **kwargs)
-    def __str__(self):
-        return self.auction_id
+    
 
 

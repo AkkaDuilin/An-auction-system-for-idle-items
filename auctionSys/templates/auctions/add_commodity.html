@@ -60,21 +60,30 @@
 				</div>
 				<div>
 					<ul class="nav navbar-nav">
-						<li><a href="mainpage.html">主页</a></li>
+						<li><a href="/">主页</a></li>
 						<li><a href="#">个人订单</a></li>
+						<li class="dropdown active">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								我的拍品
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="active"><a href="/auction/manage/">拍品管理</a></li>
+								<li><a href="#">拍品发货</a></li>
+							</ul>
+						</li>
+						<li><a href="#">我的预约</a></li>
 						<li><a href="#">联系客服</a></li>
-						<li class="active"><a href="#">我的拍品</a></li>
-						<li class="dropdown">
+						<li class="dropdown active">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								个人信息
 								<b class="caret"></b>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">我的资料</a></li>
-								<li><a href="#">身份验证</a></li>
-								<li><a href="#">支付设置</a></li>
-								<li><a href="#">收货地址</a></li>
-								<li><a href="#">安全设置</a></li>
+								<li><a href="/user/info/">我的资料</a></li>
+								<li><a href="/user/site/">收货地址</a></li>
+								<li><a href="/user/history/">浏览记录</a></li>
+								<li><a href="/user/logout/">退出登录</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -84,13 +93,15 @@
 		<div class="container" id="container2">
 			<div class="row">
 				<div class="col-md-6 col-md-push-3">
-					<form role="form" method="post" action="/create/">
+					
+					<form role="form" method="post" action="/auction/create/">
+						{% csrf_token %}
 						<div class="form-group row">
 							<label for="product_name" class="col-md-3 control-label">
 								<p class="text-right" style="font-size: 18px;">拍品名称:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_name" placeholder="请输入拍品名">
+								<input type="text" class="form-control" id="product_name" name="product_name" placeholder="请输入拍品名">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -99,7 +110,7 @@
 							</label>
 							<div class="col-md-9">
 								<textarea class="form-control" rows="4" placeholder="请输入商品摘要"
-									id="product_abstract"></textarea>
+									id="product_abstract" name="product_abstract"></textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -109,7 +120,7 @@
 							<div class="col-md-9">
 								<div class="panel panel-default">
 									<div class="panel-heading">
-										<input type="file" class="custom-file-input" id="product_img" accept="image/*"
+										<input type="file" class="custom-file-input" id="product_img" name="product_img" accept="image/*"
 											multiple>
 									</div>
 									<div class="panel-body">
@@ -120,19 +131,11 @@
 							</div>
 						</div>
 						<div class="form-group row">
-							<label for="product_unit" class="col-md-3 control-label">
-								<p class="text-right" style="font-size: 18px;">拍品数量:</p>
-							</label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_unit" placeholder="请输入拍品数量">
-							</div>
-						</div>
-						<div class="form-group row">
 							<label for="product_price" class="col-md-3 control-label">
 								<p class="text-right" style="font-size: 18px;">设置价格:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="text" class="form-control" id="product_price" placeholder="请输入起拍价">
+								<input type="text" class="form-control" id="product_price" name="product_price" placeholder="请输入起拍价">
 							</div>
 						</div>
 						<div class="form-group row">
@@ -141,7 +144,7 @@
 							</label>
 							<div class="col-md-9">
 								<textarea class="form-control" rows="6" placeholder="请输入商品详述"
-									id="product_content"></textarea>
+									id="product_content" name="product_content"></textarea>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -149,13 +152,13 @@
 								<p class="text-right" style="font-size: 18px;">拍品类型:</p>
 							</label>
 							<div class="col-md-9">
-								<select name="product_type" id="product_type" style="height: 35px;width: 60px;">
-									<option value="1" selected>type1</option>
-									<option value="2">type2</option>
-									<option value="3">type3</option>
-									<option value="4">type4</option>
-									<option value="5">type5</option>
-									<option value="6">type6</option>
+								<select name="product_type" id="product_type" name="product_type" style="height: 35px;width: 60px;">
+									<option value="1" selected>书籍</option>
+									<option value="2">交通工具</option>
+									<option value="3">电子设备</option>
+									<option value="4">电子外设</option>
+									<option value="5">本地拍品</option>
+									<option value="6">其他</option>
 								</select>
 							</div>
 						</div>
@@ -164,7 +167,7 @@
 								<p class="text-right" style="font-size: 18px;">拍卖时间:</p>
 							</label>
 							<div class="col-md-9">
-								<input type="datetime-local" name="datetime" id="datetimePicker">
+								<input type="datetime-local" name="auction_date" id="auction_date">
 							</div>
 						</div>
 						<button type="submit" class="btn btn-primary  btn-block">提交</button>
@@ -183,7 +186,7 @@
 									拍品名称
 								</th>
 								<th>
-									上架时间
+									拍品简介
 								</th>
 								<th>
 									商品类型
@@ -337,11 +340,11 @@
 							</tr>
 							{% for each in product %}
 							<tr>
-								<td>{{product_name}}</td>
-								<td>{{submit_time}}</td>
-								<td>{{ProductType}}</td>
-								<td>{{product_price}}</td>
-								<td>{{product_acution_time}}</td>
+								<td>{{each.product.product_name}}</td>
+								<td>{{each.product.product_abstract}}</td>
+								<td>{{each.Product.product_type}}</td>
+								<td>{{each.product.product_price}}</td>
+								<td>{{each.acution_date}}</td>
 								<td>
 									<div class="row">
 										<div class="col-md-6">

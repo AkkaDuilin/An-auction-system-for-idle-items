@@ -26,10 +26,6 @@
 				background-color: white;
 				float: left;
 			}
-			.lable1
-			{}
-			.lable2
-			{}
 </style>
 {% endblock style %}
 {% block script %} 
@@ -58,10 +54,20 @@
 					</div>
 					<div>
 						<ul class="nav navbar-nav">
-							<li><a href="mainpage.html">主页</a></li>
+							<li><a href="/">主页</a></li>
 							<li><a href="#">个人订单</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									我的拍品
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="/auction/manage/">拍品管理</a></li>
+									<li><a href="#">拍品发货</a></li>
+								</ul>
+							</li>
+							<li><a href="#">我的预约</a></li>
 							<li><a href="#">联系客服</a></li>
-							<li><a href="#">我的拍品</a></li>
 							<li class="dropdown active">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									个人信息
@@ -69,10 +75,9 @@
 								</a>
 								<ul class="dropdown-menu">
 									<li><a href="/user/info/">我的资料</a></li>
-									<li><a href="/user/order/">我的订单</a></li>
-									<li><a href="#">支付设置</a></li>
-									<li><a href="/user/site/">收货地址</a></li>
-									<li><a href="#">安全设置</a></li>
+									<li class="active"><a href="/user/site/">收货地址</a></li>
+									<li><a href="/user/history/">浏览记录</a></li>
+									<li><a href="/user/logout/">退出登录</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -83,29 +88,24 @@
 				<div style="height: 10px;width: 100%;"></div>
 				<div class="row">
 					<div class="col-md-5 col-md-push-7">
-						<a href="#"><button type="button" class="btn-link btn-lg">个人信息</button></a>
+						<a href="/user/info/"><button type="button" class="btn-link btn-lg">个人信息</button></a>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-5 col-md-push-7">
-						<a href="#"><button type="button" class="btn-link btn-lg">身份验证</button></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-5 col-md-push-7">
-						<a href="#"><button type="button" class="btn-link btn-lg">支付设置</button></a>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-5 col-md-push-7">
-						<a href="#"><button type="button" class="btn-link btn-lg">
+						<a href="/user/site/"><button type="button" class="btn-link btn-lg">
 								<p class="text-success">收货地址</p>
 							</button></a>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-5 col-md-push-7">
-						<a href="#"><button type="button" class="btn-link btn-lg">安全设置</button></a>
+						<a href="/user/history/"><button type="button" class="btn-link btn-lg">浏览记录</button></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5 col-md-push-7">
+						<a href="/user/logout/"><button type="button" class="btn-link btn-lg">退出登录</button></a>
 					</div>
 				</div>
 			</div>
@@ -115,38 +115,53 @@
 						<p class="lead" id="reinfo">&nbsp;&nbsp;&nbsp;&nbsp;您当前的收货信息</p>
 					</div>
 					<div class="row">
-						<label for="addr" class="col-md-2 control-label col-md-push-1 lable1">
+						<label for="add" class="col-md-2 control-label col-md-push-1 ">
 							<p class="text-left">
 							<h4>收货地址:</h4>
 							</p>
 						</label>
 						<div class="col-md-10 col-md-push-1">
-							<p id="addr">
+							<p id="add">
 							<h4>{{user.user_address}}</h4>
 							</p>
 						</div>
 					</div>
+					<div style="height: 20px; width: 100%;"></div>
 					<div class="row">
-						<label for="rman" class="col-md-2 control-label col-md-push-1 lable1">
+						<label for="r" class="col-md-2 control-label col-md-push-1 ">
 							<p class="text-left">
 							<h4>收货人:</h4>
 							</p>
 						</label>
 						<div class="col-md-10 col-md-push-1">
-							<p id="rman">
+							<p id="r">
 							<h4>{{ user.user_rman }}</h4>
 							</p>
 						</div>
 					</div>
+					<div style="height: 20px; width: 100%;"></div>
 					<div class="row">
-						<label for="pnumber" class="col-md-2 control-label col-md-push-1 lable1">
+						<label for="number" class="col-md-2 control-label col-md-push-1 ">
 							<p class="text-left">
 							<h4>联系电话:</h4>
 							</p>
 						</label>
 						<div class="col-md-10 col-md-push-1">
-							<p id="pnumber">
+							<p id="number">
 							<h4>{{ user.user_pnumber }}</h4>
+							</p>
+						</div>
+					</div>
+					<div style="height: 20px; width: 100%;"></div>
+					<div class="row">
+						<label for="m_number" class="col-md-2 control-label col-md-push-1 ">
+							<p class="text-left">
+							<h4>邮编:</h4>
+							</p>
+						</label>
+						<div class="col-md-10 col-md-push-1">
+							<p id="m_number">
+							<h4>{{ user.user_mnumber }}</h4>
 							</p>
 						</div>
 					</div>
@@ -158,26 +173,33 @@
 					<form role="form" class="form-horizontal" action="/user/site/" method="POST">
 					       <div class="form-group" style="height: 20px; width: 100%;"></div>
 						<div class="form-group">
-							<label for="caddr" class="col-md-2 control-label lable2">收货地址:</label>
+							<label for="address" class="col-md-2 control-label ">收货地址:</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="caddr" value="{{user.user_address}}">
+								<input type="text" class="form-control" name="address" value="{{user.user_address}}">
 							</div>
 						</div>
 					      <div class="form-group" style="height: 20px; width: 100%;"></div>
 						<div class="form-group">
-							<label for="crman" class="col-md-2 control-label lable2">收货人:</label>
+							<label for="rman" class="col-md-2 control-label ">收货人:</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="crman" value="{{ user.user_rman }}">
+								<input type="text" class="form-control" name="rman" value="{{ user.user_rman }}">
 							</div>
 						</div>
 					     <div class="form-group" style="height: 20px; width: 100%;"></div>
 						<div class="form-group">
-							<label for="cpnumber" class="col-md-2 control-label lable2">联系电话:</label>
+							<label for="pnumber" class="col-md-2 control-label">联系电话:</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="cpnumber" value="{{ user.user_pnumber }}">
+								<input type="text" class="form-control" name="pnumber" value="{{ user.user_pnumber }}">
 							</div>
 						</div>
-					
+						<div class="form-group" style="height: 20px; width: 100%;"></div>
+						<div class="form-group">
+							<label for="pnumber" class="col-md-2 control-label ">邮编:</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" name="mnumber" value="{{ user.user_mnumber }}">
+							</div>
+						</div>
+
 						<div class="form-group" style="height: 25px; width: 100%;"></div>
 					
 						<div class="col-md-5 col-md-push-2">
