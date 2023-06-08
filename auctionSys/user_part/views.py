@@ -185,7 +185,7 @@ class UserHistoryView(View):
             if viewed_auctions:
                 viewed_auctions = viewed_auctions.split(',')
                 for each in viewed_auctions:
-                    view_list.append(AuctionInfo.objects.get(auction_id=int(each)))
+                    view_list.append(AuctionInfo.objects.get(id=int(each)))
             context = {'title':'用户中心-浏览记录',
                     'view_list':view_list}
             return render(request, 'user/b_history.html', context)

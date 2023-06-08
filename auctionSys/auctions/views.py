@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
 import datetime
+from decimal import *
 
 class AuctionManage(View):
     @user_login
@@ -84,7 +85,7 @@ class AuctionManage(View):
         )
         # Url需要修改
         print("创建成功")
-        return render(request, '/auction/manage/')
+        return redirect('/auction/manage/')
 
 # 拍卖详情
 class AuctionDetail(View):
@@ -95,19 +96,29 @@ class AuctionDetail(View):
         auction.auction_date = int(auction.auction_date.timestamp())
         current_time = timezone.now()
         # 时间到时获取出价最高者并且关闭拍卖交易
-        if current_time > auction.auction_final_date:
-            auction.is_Active = False
-            highest_bidder = auction.bidder_list.get_highest_bidder()
-            if highest_bidder:
-                auction.current_bid = highest_bidder.bid_amount
-                auction.winning_bidder = highest_bidder.user
-            auction.save()
+        # if current_time > auction.auction_final_date:
+        #     auction.is_Active = False
+        #     highest_bidder = auction.bidder_list.get_highest_bidder()
+        #     if highest_bidder:
+        #         auction.current_bid = highest_bidder.bid_amount
+        #         auction.winning_bidder = highest_bidder.user
+        #     auction.save()
         # 获取bidder_list的长度
         if auction.bidder_list == None:
             bidder_count = 0
+            reverse_count = 0
         else:
             bidder_count = auction.bidder_list.get_bidders_count()
+            reverse_count = auction.bidder_list.get_reverse_count()
         print(bidder_count)
+        bidders = list(auction.bidder_list.bidders.values_list())
+        Bidder_list = []
+        for i in bidders:
+            Bidder_list.append(Bidder.objects.get(id=i[0]))
+        # bidders = list(auction.bidder_list)
+        print(Bidder_list)
+        # 计算所有if_pay_is_true为false的bidder的总人数
+        
         context = {
             'auction_seller': auction.auction_seller,
             'auction_id': auction_id,
@@ -120,9 +131,12 @@ class AuctionDetail(View):
             'winning_bidder': auction.winning_bidder,
             'bidder_count' : bidder_count,
             'current_time': current_time,
+            'bidder_list': Bidder_list,
+            'reverse_count':reverse_count
         }
-
+        context['errmsg'] = request.session.get('errmsg')
         res =  render(request, 'auctions/detail.html', context)
+        request.session['errmsg'] = None
         viewed_auctions = request.COOKIES.get('viewed_auctions', '')
         if viewed_auctions:
             auctions_list = viewed_auctions.split(',')
@@ -146,60 +160,121 @@ class AuctionDetail(View):
 
         return res
 
+class Auctionreverse(View):
+    @user_login
+    def reverse(request, auction_id):
+        print('reverse')
+        auction = AuctionInfo.objects.get(id=auction_id)
+        user = UserInfo.objects.get(user_name=request.user)
+        url = '/auction/{}/'.format(auction_id)
+        if auction.bidder_list == None:
+            auction.bidder_list = BidderList.objects.create()
+        if BidderList.objects.filter(bidders__user=user).exists() and BidderList.objects.filter(bidders__auction_id=auction_id).exists() :
+            print('have reserve')
+            error_message = "已预约"
+            request.session['errmsg'] = error_message
+            return redirect(url)
+        else:
+            bidder = Bidder.objects.create(
+                auction_id = auction_id,
+                user=user,
+                if_pay_deposit=False,
+                bid_amount=-1
+            )
+            # 更新拍卖信息和用户对象
+            auction.bidder_list.bidders.add(bidder)
+            auction.save()
+            user.save()
+            return redirect(url, auction_id=auction_id)
+
 
 class AuctionDepositPayment(View):
     @user_login
-    def get(self, request, auction_id):
-        auction = AuctionInfo.objects.get(auction_id=auction_id)
-        user = UserInfo.objects.get(user=request.user)
-
+    def deposit(request, auction_id):
+        print('Deposit')
+        auction = AuctionInfo.objects.get(id=auction_id)
+        user = UserInfo.objects.get(user_name=request.user)
+        url = '/auction/{}/'.format(auction_id)
+        # print(auction.bidder_list.bidders.filter(user==user))
         # 检查用户的保证金余额是否足够支付
-        if user.deposit_balance >= auction.deposit_amount:
-            # 创建新的Bidder对象并添加到bidder_list中
-            bidder = Bidder.objects.create(
-                user=user,
-                if_pay_deposit=True,
-                bid_amount=auction.starting_price
-            )
+        #return redirect(url, auction_id=auction_id)
+        # 如果保证金大于starting_price的10%
+        if auction.bidder_list == None:
+            auction.bidder_list = BidderList.objects.create()
+        if BidderList.objects.filter(bidders__user=user).exists() and BidderList.objects.filter(bidders__auction_id=auction_id).exists() :
+            bidder = Bidder.objects.get(user=user, auction_id=auction_id)
+            if  bidder.if_pay_deposit == True:
+                error_message = "已交保证金"
+                print(error_message)
+                request.session['errmsg'] = error_message
+                return redirect(url)
+            else:
+                if user.deposit_balance >= auction.starting_price*Decimal(0.1):
+                    # 创建新的Bidder对象并添加到bidder_list中
+                    print('update bidder')
+                    bidder = Bidder.objects.get(user=user, auction_id=auction_id)
+                    # 更新拍卖信息和用户对象
+                    bidder.bid_amount = 0
+                    bidder.if_pay_deposit = True
+                    user.deposit_balance -= auction.starting_price*Decimal(0.1)
+                    bidder.save()
+                    # auction.save()
+                    user.save()
+                    # 返回拍卖详情页面
+                    return redirect(url, auction_id=auction_id)
 
-            # 更新拍卖信息和用户对象
-            auction.bidder_list.add(bidder)
-            user.deposit_balance -= auction.deposit_amount
-            auction.save()
-            user.save()
-
-            return redirect('auctions:auction_detail', auction_id=auction_id)
+                else:
+                    print('add bidder failed')
+                    error_message = "保证金余额不足"
+                    request.session['errmsg'] = error_message
+                    return redirect(url)
+        
         else:
-            error_message = "保证金余额不足"
-            context = {'error_message': error_message}
-            return render(request, 'auctions/detail.html', context)
-    
+            print('not reserve')
+            error_message = "未预约"
+            request.session['errmsg'] = error_message
+            return redirect(url)
+
+        
+        
+
 class AuctionBid(View):
     @user_login
-    def post(self, request, auction_id):
-        auction = get_object_or_404(AuctionInfo, auction_id=auction_id)
-        bid_amount = request.POST.get('bid_amount')
-        bidder_id = request.user.id
-
-        # Check if user exists in bidder_list
-        bidder_list = auction.bidder_list
-        if not bidder_list.bidders.filter(user=request.user).exists():
+    def bid(request, auction_id):
+        print('Bid')
+        auction = get_object_or_404(AuctionInfo, id=auction_id)
+        url = '/auction/{}/'.format(auction_id)
+        if request.POST.get('bid_amount') == '':
+            bid_amount = auction.current_bid
+        else:
+            bid_amount = request.POST.get('bid_amount')
+        print('Bid',bid_amount)
+        user = request.user
+        user = UserInfo.objects.get(user_name=user)
+        if not Bidder.objects.filter(user=user, auction_id=auction_id).exists():
+            print('bidder not exist')
             error_message = '请先缴纳保证金'
-            return render(request, 'auctions/detail.html', {'errmsg': error_message})
+            request.session['errmsg'] = error_message
+            return redirect(url, {'errmsg': error_message})
+        bidder = Bidder.objects.get(user=user, auction_id=auction_id)
+        
 
         # Calculate minimum bidding increment
+        if auction.current_bid == None:
+            auction.current_bid = auction.starting_price
         initial_price = auction.current_bid
-        min_increment = initial_price * 0.02
+        min_increment = float(initial_price) * 0.02
 
         # Check bid amount against minimum increment and current bid
-        if float(bid_amount) >= (auction.current_bid + min_increment):
+        if float(bid_amount) >= ( float(initial_price) + min_increment):
             # Update current bid and winning bidder
+            print('bid success')
             auction.current_bid = bid_amount
-            auction.winning_bidder = request.user
+            auction.winning_bidder = bidder
             auction.save()
 
             # Create or update bidder
-            bidder = auction.bidder_list.bidders.get(user=request.user)
+            
             bidder.bid_amount = bid_amount
             bidder.save()
 
@@ -210,10 +285,14 @@ class AuctionBid(View):
                 'auction': auction,
                 'current_time': timezone.now(),
             }
-            return render(request, 'auctions/detail.html', context)
+            return redirect(url,context)
         else:
+            print('bid failed')
             error_message = '竞价金额不能低于最小加价幅度'
-            return render(request, 'auctions/detail.html', {'errmsg': error_message})
+            context =  {'errmsg': error_message}
+            request.session['errmsg'] = error_message
+            #return render(request, 'auctions/detail.html', context)
+            return redirect(url,context)
 
 
 class AuctionDelete(View):

@@ -7,13 +7,14 @@ from django.dispatch import receiver
 
 class Bidder(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    auction_id = models.IntegerField(null=True)
     bid_amount = models.DecimalField(max_digits=8, decimal_places=2,null=True)
     if_pay_deposit = models.BooleanField(default=False)
-
+    # 设置一个拍卖id字段 在
     def __str__(self):
         return f"{self.user.user_name} - {self.bid_amount}"
 
-class BidderList(models.Model):
+class BidderList(models.Model):    
     bidders = models.ManyToManyField(Bidder)
     def get_highest_bidder(self):
         if self.bidders.exists():
@@ -26,11 +27,13 @@ class BidderList(models.Model):
          return self.bidders.count()
     def get_all_bidders(self):
         return self.bidders.all()
+    def get_reverse_count(self):
+        return self.bidders.filter(if_pay_deposit=False).count()
 
     def __str__(self):
         if self.bidders:
             bidders_str = ', '.join(str(bidder) for bidder in self.bidders.all())
-            return f"Bidder List: {bidders_str}"
+            return f"Bidder List: {self.id} -  {bidders_str}"
         else:
             return "Bidder List: No bidders"
 
@@ -56,12 +59,15 @@ class AuctionInfo(models.Model):
     # 每次保存模型时，auction_final_date 将会被自动设置为 auction_date 加三个小时的时间。
     # bid_count = models.IntegerField(default=0)
     
+    
+
+
     def get_auctions_by_product_ids(product_ids):
         auctions = AuctionInfo.objects.filter(products__id__in=product_ids).distinct()
         return auctions
     
     def save(self, *args, **kwargs):
-        self.auction_final_date = self.auction_date + timedelta(days=3)
+        self.auction_final_date = self.auction_date + timedelta(hours=1)
         
         # self.bid_count = self.bidder_list.get_bidders_count()
         super().save(*args, **kwargs)

@@ -52,17 +52,13 @@
 </nav>
 <div class="container">
 	<div style="height: 120px; width: 100%;" id="div_background">
-
-		<div style="height: 30px; width: 100%;">
-
-		</div>
 		<div class="row">
-			<div class="col-md-1 col-md-push-2">
-				<img src="https://img0.baidu.com/it/u=3153071016,1285865307&fm=253&fmt=auto&app=138&f=JPEG?w=429&h=499"
-					class="img-circle" alt="Cinque Terre" width="70" height="70">
+			<div class="col-md-1 col-md-push-1">
+				<img src="/static/images/logo.png"
+							class="img-circle" alt="Cinque Terre" width="120" height="120">
 			</div>
 			<div class="col-md-6 col-md-push-2">
-
+				<div style="height: 30px; width: 100%;"></div>
 				<div class="input-group">
 					<input type="text" class="form-control">
 					<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
@@ -114,44 +110,52 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="row">
-				<div class="col-md-2 col-md-push-2">
+				<div class="col-md-2">分类</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-shopping-cart " style="font-size: 25px;"></span>
 				</div>
-				<div class="col-md-6 col-md-push-1">
+				<div class="col-md-6">
 					<a class="btn" href="/list2_1_1/">二手车</a>/<a class="btn" href="/list2_1_1/">自行车</a>
 				</div>
 			</div>
+			<div style="height: 10px;"></div>
 			<div class="row">
-				<div class="col-md-2 col-md-push-2">
+				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-phone " style="font-size: 25px;"></span>
 				</div>
-				<div class="col-md-6 col-md-push-1">
+				<div class="col-md-6">
 					<a class="btn" href="/list3_1_1/">手机</a>/<a class="btn" href="/list3_1_1/">电脑</a>/<a class="btn"
 						href="/list3_1_1/">游戏机</a>
 				</div>
 			</div>
+			<div style="height: 10px;"></div>
 			<div class="row">
-				<div class="col-md-2 col-md-push-2">
+				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-search " style="font-size: 25px;"></span>
 				</div>
-				<div class="col-md-6 col-md-push-1">
+				<div class="col-md-6">
 					<a class="btn" href="/list4_1_1/">键盘</a>/<a class="btn" href="/list4_1_1/">鼠标</a>/<a class="btn"
 						href="/list4_1_1/">外设</a>
 				</div>
 			</div>
+			<div style="height: 10px;"></div>
 			<div class="row">
-				<div class="col-md-2 col-md-push-2">
+				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-map-marker " style="font-size: 25px;"></span>
 				</div>
-				<div class="col-md-6 col-md-push-1">
+				<div class="col-md-6">
 					<a class="btn" href="/list5_1_1/">本地拍品</a>
 				</div>
 			</div>
+			<div style="height: 10px;"></div> 
 			<div class="row">
-				<div class="col-md-2 col-md-push-2">
+				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-pencil " style="font-size: 25px;"></span>
 				</div>
-				<div class="col-md-6 col-md-push-1">
+				<div class="col-md-6">
 					<a class="btn" href="/list6_1_1/">其他</a>
 				</div>
 			</div>
@@ -194,6 +198,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">今日拍品</div>
@@ -202,8 +207,8 @@
 			{% for each in auction_list %}
 			<div class="col-md-4">
 				<div class="row">
-					<div class="col-md-6">
-						<a href="/auction/{{ each.auction_id }}/" class="thumbnail">
+					<div class="col-md-7" >
+						<!-- <a href="/auction/{{ each.auction_id }}/"> -->
 							<!-- {% if each.product.product_img %}
 					{% with product_img=each.product.product_img.first %}
 					{% if product_img %}
@@ -211,20 +216,23 @@
 					{% endif %}
 					{% endwith %}
 					{% endif %} -->
-							<img decoding="async" src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF">
+							<!-- <img  src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF"   width="170" height="122">
+						</a> -->
+						<a href="/auction/{{ each.auction_id }}/" class="thumbnail">
+							<img decoding="async" src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF"
+								style="width: 220px; height: 110px;">
 						</a>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-5">
 						<div class="row">
 							<h5 class="text-left">商品名称:<a href="/auction/{{ each.auction_id }}/">{{ each.product_name}}</a></h5>
 						</div>
 						<div class="row">商品简介：
-							<p>&nbsp;&nbsp;{{each.product_abstract}}</p>
+							<textarea  rows="2" readonly disabled>&nbsp;&nbsp;{{each.product_abstract}}</textarea>
 						</div>
 						<div class="row">
 							<span><span class="prize">￥{{ each.current_bid }}</span></span>
 							<br>
-							<a href="javascript:;" class="add_goods" id="{{ each.auction_id }}" title="预约拍卖">预约拍卖</a>
 						</div>
 					</div>
 				</div>
@@ -245,7 +253,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 {% endblock main %}
 {% block script1 %}
 <script type="text/javascript">
