@@ -169,7 +169,11 @@ class Auctionreverse(View):
         url = '/auction/{}/'.format(auction_id)
         if auction.bidder_list == None:
             auction.bidder_list = BidderList.objects.create()
-        if BidderList.objects.filter(bidders__user=user).exists() and BidderList.objects.filter(bidders__auction_id=auction_id).exists() :
+        bidder_list = auction.bidder_list
+        bidder_exist = bidder_list.bidders.filter(user=user).exists()
+        print(bidder_exist)
+        # print(bidder_list.bidders_set.all())
+        if bidder_exist and bidder_list.bidders.filter(auction_id=auction_id).exists() :
             print('have reserve')
             error_message = "已预约"
             request.session['errmsg'] = error_message

@@ -158,7 +158,7 @@ class Logout(View):
         if request.session.get('is_login', None):
             # 清空session
             request.session.flush()
-
+        auth.logout(request)
         # logout(request)
         return redirect('/')
 
