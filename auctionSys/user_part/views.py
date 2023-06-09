@@ -17,6 +17,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth import login,logout
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 import re
 
@@ -62,7 +64,9 @@ class RegisterView(View):
         user.user_email = user_email
         user.is_active = 0
         user.save()
-
+        User.objects.create_user(user_name,user_email,user_pwd)
+        user_obj = auth.authenticate(username=user_name, password=user_pwd)
+        
         # 4、发送邮件验证 http://127.0.0.1:8000/user/register/active/id
         # 对id进行加密
         # serializer = Serializer(settings.SECRET_KEY, 3600)
@@ -138,6 +142,8 @@ class LoginView(View):
             request.session['is_login'] = True
             request.session['user_id'] = user.id
             request.session['user_name'] = user.user_name
+            user_obj = auth.authenticate(username=user_name, password=user_pwd)
+            auth.login(request, user_obj)
             print(res)
             return res
         else:
