@@ -11,12 +11,15 @@ from  django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
+from django.conf import settings
 import datetime
 from decimal import *
+from django.core.files.storage import FileSystemStorage
+import os
 
 class AuctionManage(View):
     @user_login
-    def detiel(request):
+    def detail(request):
         # 获取当前用户的所有拍卖
         # if not request.user.is_authenticated:
         #     return redirect('/')
@@ -32,19 +35,21 @@ class AuctionManage(View):
         
     @user_login
     def create(request):
-        user = UserInfo.objects.get(user_name="dyl")
+        user = UserInfo.objects.get(user_name=request.user)
         starting_price = request.POST.get('starting_price')
         # description = request.POST.get('description') 
         product_name = request.POST.get('product_name')
-        product_img = request.FILES.get('product_img')
+        product_img = request.FILES['product_img']
         product_price = request.POST.get('product_price')
         auction_date = request.POST.get('auction_date')
         product_abstract = request.POST.get('product_abstract')
         product_content = request.POST.get('product_content')
         # 写一个选择框
         product_type = int(request.POST.get('product_type'))
-        print(type(product_type))
-        print(product_type,product_name,product_img,product_price,product_abstract,product_content)
+        print(product_img)
+        print(type(product_img))
+        # print(product_type,product_name,product_img,product_price,product_abstract,product_content)
+        # return redirect('/auction/manage/')
         # 数据完整性校验
         if not product_name or not product_price  or not product_abstract or not product_content or not product_type:
             print("请填写所有必填字段")
@@ -65,9 +70,12 @@ class AuctionManage(View):
 
         # 创建商品
         bidder_list = BidderList.objects.create()
+
+
+
         product = ProductInfo.objects.create(
             product_name=product_name,
-            product_img=product_img,
+            # product_img=product_img,
             product_price=product_price,
             product_abstract=product_abstract,
             product_content=product_content,
@@ -81,8 +89,24 @@ class AuctionManage(View):
             # description=description,
             product=product,
             bidder_list = bidder_list
-            
         )
+       # 存储上传的图片
+        if product_img:
+            # 构建目标存储路径
+            destination_path = os.path.join(
+                settings.BASE_DIR,
+                'static',
+                'product_img',
+                str(auction.id)  # 使用拍卖的id作为目录名
+            )
+            os.makedirs(destination_path, exist_ok=True)
+
+            # 使用FileSystemStorage进行文件存储
+            fs = FileSystemStorage(location=destination_path)
+            filename = fs.save(product_img.name, product_img)
+            product.product_img = os.path.join('/static/product_img', str(auction.id), filename)
+            product.save()
+
         # Url需要修改
         print("创建成功")
         return redirect('/auction/manage/')
@@ -169,7 +193,12 @@ class Auctionreverse(View):
         url = '/auction/{}/'.format(auction_id)
         if auction.bidder_list == None:
             auction.bidder_list = BidderList.objects.create()
-        if BidderList.objects.filter(bidders__user=user).exists() and BidderList.objects.filter(bidders__auction_id=auction_id).exists() :
+        bidder_list = auction.bidder_list
+        # ManyToManyField 查询
+        bidder_exist = bidder_list.bidders.filter(user=user).exists()
+        print(bidder_exist)
+        # print(bidder_list.bidders_set.all())
+        if bidder_exist and bidder_list.bidders.filter(auction_id=auction_id).exists() :
             print('have reserve')
             error_message = "已预约"
             request.session['errmsg'] = error_message
@@ -201,7 +230,8 @@ class AuctionDepositPayment(View):
         # 如果保证金大于starting_price的10%
         if auction.bidder_list == None:
             auction.bidder_list = BidderList.objects.create()
-        if BidderList.objects.filter(bidders__user=user).exists() and BidderList.objects.filter(bidders__auction_id=auction_id).exists() :
+        bidder_list = auction.bidder_list
+        if bidder_list.bidders.filter(user=user).exists() and bidder_list.bidders.filter(auction_id=auction_id).exists() :
             bidder = Bidder.objects.get(user=user, auction_id=auction_id)
             if  bidder.if_pay_deposit == True:
                 error_message = "已交保证金"
@@ -332,7 +362,7 @@ class AuctionUpdate(View):
 
         # 获取商品信息的字段
         product_name = request.POST.get('product_name')
-        product_img = request.FILES.get('product_img')
+        # product_img = request.FILES.get('product_img')
         product_price = request.POST.get('product_price')
         product_abstract = request.POST.get('product_abstract')
         product_content = request.POST.get('product_content')

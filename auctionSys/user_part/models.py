@@ -43,6 +43,7 @@ class UserInfo(models.Model):
     user_pnumber = models.CharField(max_length=11, default='')
     deposit_balance = models.IntegerField(default=0)
     last_login = models.DateTimeField(auto_now_add=True)
+    # avatar = models.ImageField(upload_to='users', max_length=100, blank=True, null=True, verbose_name='用户头像')
 
     def generate_reset_token(self, expiration=3600):
         s = Serializer(SECRET_KEY, expiration)
