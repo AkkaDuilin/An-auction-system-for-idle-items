@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{tittle}}</title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+		</script>
+		<script>
+			$(document).ready(function() {
+				// 绑定按钮点击事件
+				$('#pay').click(function() {
+					// 弹出提示框
+					alert('您以支付！将在三秒后跳转到产品页面！');
+
+					// 3 秒后跳转到另一个网页
+					setTimeout(function() {
+						window.location.href = '/order/list/'; // 目标网页的 URL
+					}, 3000);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div style="height: 200px;width: 100%;"></div>
+		<div class="container">
+			<div class="row">
+				<h3 class="col-md-4 col-md-push-3">选择支付方式:</h3>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-md-push-4">
+					<div class="row">
+						<label for="zfb" class="col-md-8"><img
+								src="https://www.caijingwo.com/uploads/20220901/12583050c3e658734c5ab56455b1676f.jpg"
+								width="240" height="100"></label>
+						<div class="row col-md-4">
+							<div style="height: 40px; " class="col-md-12"></div>
+							<input type="radio" id="zfb" name="drone" class="col-md-2 col-md-push-2" value="支付宝支付"
+								checked>
+						</div>
+					</div>
+					<div style="height: 10px;"></div>
+					<div class="row">
+						<label for="zfb" class="col-md-8"><img
+								src="https://img0.baidu.com/it/u=780452209,3810317789&fm=253&fmt=auto&app=120&f=JPEG?w=600&h=325"
+								width="240" height="100"></label>
+						<div class="row col-md-4">
+							<div style="height: 40px; " class="col-md-12"></div>
+							<input type="radio" id="zfb" name="drone" class="col-md-2 col-md-push-2" value="微信支付">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="height: 10px;"></div>
+			<div class="row">
+				<div class="col-md-3 col-md-push-4">
+					<button type="submit" class="btn btn-primary  btn-block " id="pay">支付</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,70 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<title>{{ title }}</title>
-	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
-	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript">
-
-		$(function(){
-			if($('.login_btn').text().indexOf('欢迎') >= 0){
-				$.get('/cart/count_judge/', function (data){
-					$('#show_count').text(data.count);
-				});
-			}
-		})
-
+	<meta charset="UTF-8">
+	<title>{{tittle}}</title>
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
 	</script>
-	{% block head %} {% endblock head %}
-</head>
-<body>
-	<div class="header_con">
-		<div class="header">
-			<div class="welcome fl">欢迎您：!</div>
-			<div class="fr">
-				<div class="login_btn fl">
-					{% if request.session.user_name|default:'' != '' %}
-					欢迎您：<em>{{ request.session.user_name }}</em>
-					<span>|</span>
-					<a href="/user/logout/">退出</a>
-					{% else %}
-					<a href="/user/login/">登录</a>
-					<span>|</span>
-					<a href="/user/register/">注册</a>
-					{% endif %}
-				</div>
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="/user/info/">用户中心</a>
-					<span>|</span>
-					<a href="/cart/">我的购物车</a>
-					<span>|</span>
-					<a href="/user/order/">我的订单</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="search_bar clearfix">
-		
-		<div class="search_con fl">
-			<form role="search" method="get" id="searchform" action="/search/">
-				<input type="text" class="input_text fl" name="q" placeholder="搜索商品" requeired>
-				<button type="summit" class="input_btn fr">搜索</button>
-			</form>
-		</div>
-		<div class="guest_cart fr">
-			<a href="/cart/" class="cart_name fl">我的购物车</a>
-			<div class="goods_count fl" id="show_count">0</div>
-		</div>
-	</div>
-
-	{% block main %} {% endblock main %}
-
-
-	
-    {% block script %} {% endblock script %}
-</body>
+	{% block style %} {% endblock style %}
+	{% block script %} {% endblock script %}
+	</head>
+	<body>
+		{% block main %} {% endblock main %}
+		{% block script1 %} {% endblock script1 %}
+	</body>
 </html>

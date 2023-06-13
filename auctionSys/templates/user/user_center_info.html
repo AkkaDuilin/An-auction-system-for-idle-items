@@ -1,51 +1,208 @@
 {% extends 'base.html' %}
+{% block style %}
+<style>
+	.left-column {
+		background-image: url("/static/login/QQ图片20230610164243.jpg");
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+	.container1 {
+		width: 100%;
+		height: 90vh;
+	}
 
-{% block body %}
-	<div class="search_bar clearfix">
-		<a href="/" class="logo fl"><img src="/static/images/logo.png"></a>
-		<div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
-		<div class="search_con fr">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>		
-	</div>
+	.left-column {
+		width: 30%;
+		height: 100%;
+		background-color: #aaffff;
+		float: left;
+	}
 
-	<div class="main_con clearfix">
-		<div class="left_menu_con clearfix">
-			<h3>用户中心</h3>
-			<ul>
-				<li><a href="/user/info/" class="active">· 个人信息</a></li>
-				<li><a href="/user/order/">· 全部订单</a></li>
-				<li><a href="/user/site/">· 收货地址</a></li>
-			</ul>
-		</div>
-		<div class="right_content clearfix">
-			<div class="info_con clearfix">
-			<h3 class="common_title2">基本信息</h3>
-					<ul class="user_info_list">
-						<li><span>用户名：</span>{{ user_name }}</li>
-						<li><span>邮箱：</span>{{ user_email }}</li>
-					</ul>
+	.right-column {
+		width: 70%;
+		height: 100%;
+		background-color: white;
+		float: left;
+	}
+</style>
+{% endblock style %}
+{% block script %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("div#container1").hide();
+		$("#show").click(function () {
+			$("div#container2").hide();
+			$("#show").hide();
+			$("#dd").hide();
+			$("div#container1").show();
+		});
+		$("#hide").click(function () {
+			$("div#container2").show();
+			$("#show").show();
+			$("#dd").show();
+			$("div#container1").hide();
+		});
+	});
+</script>
+{% endblock script %}
+{% block main %}
+<div class="container1">
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">拍卖网站</a>
 			</div>
-
-			{% if view_list %}
-			<h3 class="common_title2">最近浏览</h3>
-			<div class="has_view_list">
-				<ul class="goods_type_list clearfix">
-					{% for each in view_list %}
-					<li>
-						<a href="/{{ each.id }}/"><img src="/static/{{ each.product_img }}"></a>
-						<h4><a href="/{{ each.id }}/">{{ each.product_name }}</a></h4>
-						<div class="operate">
-							<span class="prize">￥{{ each.product_price }}</span>
-							<span class="unit">{{ each.product_unit }}</span>
-							<a href="#" class="add_goods" title="加入购物车"></a>
-						</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="/index/">主页</a></li>
+					<li><a href="/order/list/">个人订单</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							我的拍品
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/auction/manage/">拍品管理</a></li>
+							<li><a href="/order/deliver/">拍品发货</a></li>
+						</ul>
 					</li>
-					{% endfor %}
+					<li><a href="/auction/reverse/">我的预约</a></li>
+					<li><a href="/user/service/">联系客服</a></li>
+					<li class="dropdown active">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							个人信息
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li  class="active"><a href="/user/info/">我的资料</a></li>
+							<li><a href="/user/site/">收货地址</a></li>
+							<li><a href="/user/history/">浏览记录</a></li>
+							<li><a href="/user/logout/">退出登录</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
-			{% endif %}
+		</div>
+	</nav>
+	<div class="left-column" style="margin-top: -20px;">
+		<div style="height: 10px;width: 100%;"></div>
+		<div class="row">
+			<div class="col-md-5 col-md-push-7">
+				<a href="/user/info/"><button type="button" class="btn-link btn-lg"><p class="text-success">个人信息</p></button></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5 col-md-push-7">
+				<a href="/user/site/"><button type="button" class="btn-link btn-lg">
+						<p>收货地址</p>
+					</button></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5 col-md-push-7">
+				<a href="/user/history/"><button type="button" class="btn-link btn-lg"><p>浏览记录</p></button></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5 col-md-push-7">
+				<a href="/user/logout/"><button type="button" class="btn-link btn-lg"><p>退出登录</p></button></a>
+			</div>
 		</div>
 	</div>
-{% endblock body %}
+	<div class="right-column container">
+		<div id="container2">
+			<div class="row">
+				<div class="col-md-6 col-md-push-1">
+					<h3>个人信息</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-md-push-2">
+					<label for="pic1">
+						<p class="text-right">
+						<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</h4>
+						</p>
+					</label>
+					<img src="https://img95.699pic.com/xsj/14/qu/q9.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast"
+								class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
+				</div>
+			</div>
+			<div class="row" style="height: 20px;"></div>
+			<div class="row">
+				<label for="uname" class="col-md-2 control-label col-md-push-2">
+					<p class="text-left">
+					<h4>用户名</h4>
+					</p>
+				</label>
+				<div class="col-md-5 col-md-push-1">
+					<p id="uname">
+					<h4>{{ user_name }}</h4>
+					</p>
+				</div>
+			</div>
+			<div class="row" style="height: 20px;"></div>
+			<div class="row">
+				<label for="uemail" class="col-md-2 control-label col-md-push-2 ">
+					<p class="text-left">
+					<h4>邮&nbsp;&nbsp;&nbsp;箱</h4>
+					</p>
+				</label>
+				<div class="col-md-5 col-md-push-1">
+					<p id="uemail">
+					<h4>{{ user_email }}</h4>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="container1">
+			<form role="form" action="/user/info/" method="POST">
+				<div class="row">
+					<div class="col-md-6 col-md-push-2">
+						<label for="pic1">
+							<p class="text-right">
+							<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</h4>
+							</p>
+						</label>
+						<img src="https://img95.699pic.com/xsj/14/qu/q9.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast"
+								class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
+					</div>
+				</div>
+				<div class="form-group" style="height: 20px;"></div>
+				<div class="form-group row">
+					<label for="cname" class="col-md-2 control-label col-md-push-2">
+						<h4>用户名</h4>
+					</label>
+					<div class="col-md-4 col-md-push-1">
+						<input type="text" class="form-control" id="cname" value="{{ user_name }}">
+					</div>
+				</div>
+				<div class="form-group" style="height: 20px;"></div>
+				<div class="form-group row">
+					<label for="uemail" class="col-md-2 control-label col-md-push-2 ">
+						<p class="text-left">
+						<h4>邮&nbsp;&nbsp;&nbsp;箱</h4>
+						</p>
+					</label>
+					<div class="col-md-4 col-md-push-1">
+						<input type="text" class="form-control" id="cemail" value="{{ user_email }}">
+					</div>
+				</div>
+				<div style="height: 280px;"></div>
+				<div class="form-group row">
+					<div class=" col-md-2 col-md-push-8">
+						<button type="submit" class="btn btn-primary  btn-block btn-lg" id="hide">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div style="height: 320px;" id="dd"></div>
+		<div class="row">
+			<div class="col-md-2 col-md-push-8">
+				<a href="#"><button type="button" class="btn-primary btn-lg" id="show">修改</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock main %}

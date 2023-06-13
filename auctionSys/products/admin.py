@@ -1,16 +1,8 @@
 from django.contrib import admin
-from products.models import ProductType, ProductInfo
+from products.models import  ProductInfo
 
 
-class ProductTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'type_name']
 
+admin.site.register(ProductInfo)
 
-class ProductInfoAdmin(admin.ModelAdmin):
-    list_per_page = 10
-    list_display = ['id', 'product_name', 'product_price', 'product_click', 'product_unit',
-                    'product_stock', 'product_type']
-
-
-admin.site.register(ProductType, ProductTypeAdmin)
 
