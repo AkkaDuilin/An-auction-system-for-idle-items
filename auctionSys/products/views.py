@@ -1,11 +1,12 @@
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.views import View
 from django.core.paginator import Paginator
 from .models import *
 from auctions.models import *
 from user_part.models import *
+from user_part.decorator import login as user_login
 
 class Index(View):
     
@@ -21,15 +22,18 @@ class Index(View):
         
         for auction in auction_products:
             product = ProductInfo.objects.get(id=auction.product.id)
+            product_img = product.product_img
+            # print(product_img)
             auction = {
                 'auction_id': auction.id,
                 'product_name': product.product_name,
-                'img_url': product.product_img,
+                'img_url': product_img,
                 'product_abstract': product.product_abstract,
                 'auction_date' : auction.auction_date,
                 'auction_final_date': auction.auction_final_date,
                 'current_bid': product.product_price,
                 'auction_status': auction.auction_status,
+                'is_list':False
             }
             auction_list.append(auction)
             # print(auction.current_bid)
@@ -44,65 +48,48 @@ class Index(View):
 
 
 class ProductListView(View):
-    def get(self, request, type_id, page, sort):
-        
 
+    def get(self,request,type_id):
+        print('list')
         product_type = ['书籍', '交通工具', '电子设备', '电子外设', '本地拍品', '其他']
+        
         # 返回对应type的所有Product_id
+        url = '{}/'.format(type_id)
         product_ids = ProductInfo.objects.filter(product_type=type_id).values('id')
+        product_ids = [product_id['id'] for product_id in product_ids]
+        print(product_ids)
         # 获取所有对应商品的拍卖详情
         auction_products = AuctionInfo.get_auctions_by_product_ids(product_ids)
-        if sort == '1':
-            auction_products = AuctionInfo.get_auctions_by_product_ids(product_ids)
-        elif sort == '2':
-            auction_products = AuctionInfo.get_auctions_by_product_ids(product_ids).order_by('-current_price')
-        elif sort == '3':
-            auction_products = AuctionInfo.get_auctions_by_product_ids(product_ids).order_by('-bid_count')
+        print(auction_products)
+        # print(auction_products)
 
-        paginator = Paginator(auction_products, 10)
-        page = paginator.page(int(page))
+        # paginator = Paginator(auction_products, 10)
+        # page = paginator.page(int(page))
         
+        auction_list =[]       
+        for auction in auction_products:
+            product = ProductInfo.objects.get(id=auction.product.id)
+            product_img = product.product_img
+            # print(product_img)
+            auction = {
+                'auction_id': auction.id,
+                'product_name': product.product_name,
+                'img_url': product_img,
+                'product_abstract': product.product_abstract,
+                'auction_date' : auction.auction_date,
+                'auction_final_date': auction.auction_final_date,
+                'current_bid': product.product_price,
+                'auction_status': auction.auction_status,
+                'is_list':True
+            }
+            auction_list.append(auction)
+            # print(auction.current_bid)
+
         context = {
-            'title': f'{product_type[product_ids]}-商品列表',
-            'product_type': product_type,
-            'auction_products': auction_products,
-            'sort': sort,
-            'paginator': paginator,
-            'page': page
+            'title': '首页',
+            'auction_list': auction_list,
         }
-        return render(request, 'product/list.html', context)
 
+        return render(request, 'product/index.html',context)
+        # return redirect(url,context)
 
-class ProductDetailView(View):
-    def get(self, request, id):
-        product = ProductInfo.objects.get(pk=id)
-        product.product_click += 1
-        product.save()
-
-        latest_products = ProductInfo.objects.filter(product_type_id=product.product_type_id).order_by('-id')[:2]
-        
-        context = {
-            'title': '商品详情',
-            'product': product,
-            'latest_products': latest_products
-        }
-        res = render(request, 'product/detail.html', context)
-
-        # view_products = request.COOKIES.get('view_products', '')
-        # product_id = str(product.id)
-
-        # if view_products:
-        #     products_list = view_products.split(',')
-        #     if len(products_list) == 5:
-        #         del products_list[4]
-
-        #     if products_list.count(product_id) == 1:
-        #         products_list.remove(product_id)
-
-        #     products_list.insert(0, product_id)
-        #     view_products = ','.join(products_list)
-        # else:
-        #     view_products = product_id
-
-        # res.set_cookie('view_products', view_products)
-        return res
