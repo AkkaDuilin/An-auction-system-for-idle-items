@@ -10,7 +10,7 @@
 		</script>
 	</head>
 	<body>
-		<nav class="navbar navbar-default"  role="navigation">
+		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">拍卖网站</a>
@@ -29,9 +29,9 @@
 								<li><a href="/order/deliver/">拍品发货</a></li>
 							</ul>
 						</li>
-						<li><a href="/auction/reverse/">我的预约</a></li>
+						<li class="active"><a href="/auction/reverse/">我的预约</a></li>
 						<li><a href="/user/service/">联系客服</a></li>
-						<li class="dropdown active">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								个人信息
 								<b class="caret"></b>
@@ -39,7 +39,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="/user/info/">我的资料</a></li>
 								<li><a href="/user/site/">收货地址</a></li>
-								<li class="active"><a href="/user/history/">浏览记录</a></li>
+								<li><a href="/user/history/">浏览记录</a></li>
 								<li><a href="/user/logout/">退出登录</a></li>
 							</ul>
 						</li>
@@ -47,15 +47,9 @@
 				</div>
 			</div>
 		</nav>
-
 		<div style="height: 10px;width: 100%;"></div>
 
 		<div class="container">
-			<div class="row">
-				<h3>浏览记录</h3>
-			</div>
-			<div style="height: 10px;width: 100%;"></div>
-
 			<div class="row">
 				<table class="table">
 					<thead>
@@ -64,30 +58,40 @@
 								商品名称
 							</th>
 							<th>
-								商品简介
+								拍卖时间
 							</th>
 							<th>
 								起拍价
 							</th>
 							<th>
-								拍卖时间
+								拍卖状态
 							</th>
 							<th>
-
+								取消预约
+							</th>
+							<th>
+								前往拍卖
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for each in view_list %}
+						{% for each in auction_list %}
 						<tr>
-							<td><a href="/auction/{{ each.id }}/">{{ each.product.product_name }}</td>
-							<td><a href="/auction/{{ each.id }}/">
-									{{ each.product.product_abstract }}
-							</a></td>
-							<td><span class="prize">￥{{ each.product.product_price }}</span></td>
-							<td>{{ each.auction_date }}</td>
+							<td><a href="/auction/{{ each.id }}/">{{each.product.product_name}}</a></td>
+							<td>{{each.auction_date}}</td>
+							<td>{{each.starting_price}}</td>
+							{% if each.auction_status == 1 %}
+								<td>未开始</td>
+							{% elif each.auction_status == 2 %}
+								<td>进行中</td>
+							{% else %}
+								<td>已结束</td>
+							{% endif %}
 							<td>
-								<a href="/auction/{{ each.id }}/"><button class="btn-primary" id="detail" name="/auction/{{ each.auction_id }}/">前往拍卖</button></a>
+								<button class="btn-danger" name="{{each.acution_id}}" id="del">取消预约</button>
+							</td>
+							<td>
+								<a href="/auction/{{ each.id }}/"><button class="btn-primary" id="detail" name="/auction/{{ each.id }}/">前往拍卖</button></a>
 							</td>
 						</tr>
 						{% endfor %}

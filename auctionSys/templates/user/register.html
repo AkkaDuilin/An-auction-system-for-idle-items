@@ -2,87 +2,95 @@
 {% block style%}
 <style>
 			body {
-				background-image: url("https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF");
+				background-image: url("/static/login/5e4cbd5f70b7b.jpg");
 				background-size: cover;
 				background-repeat: no-repeat;
 			}
 		</style>
 {% endblock style%}
+{% block script %} 
+<script>
+$(document).ready(function () {
+	// 判断错误信息是否存在
+	var errmsg = "{{ errmsg }}"; // 这里假设错误信息通过模板变量传递到前端，具体根据实际情况进行修改
+	if ( errmsg != "None") {
+		// 弹窗提示错误信息
+		alert(errmsg);
+	}
+});
+</script>
+{% endblock script %}
 {% block main %}
 <div class="container">
 
-			<div style="height: 200px; width: 100%;"></div>
+			<div style="height: 100px; width: 100%;"></div>
 			<!--占位-->
 
-			<div class="row">
-				<div class="col-md-5"></div>
-				<div class="col-md-6">
-					<div class="col-md-2"></div>
-					<div class="col-md-5">
-						<span>
-							<font size="4px" color="">用户注册</font>
-						</span>
-					</div>
-					<div class="col-md-5 text-right">
-						<a href="help"><span>
-								<font size="4px" color="blue">帮助</font>
-							</span></a>
-					</div>
-				</div>
-			</div>
 
 
 
 			<div class="row">
-				<div class="col-md-6 col-md-push-5">
-
-					<form role="form" class="form-horizontal" action="/user/register/" method="post">
-						{% csrf_token %}
-						<div class="form-group">
-							<label for="name" class="col-md-2 control-label">用户名</label>
-							<div class="col-md-10">
-								<input type="text" class="form-control" id="user_name"  name="user_name" placeholder="请输入用户名">
+				<div class="col-md-5 col-md-push-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<span class="col-md-6">
+									<font size="4px" color="">用户注册</font>
+								</span>
+								<span style="color: blue;" class="text-right col-md-6">
+									<font size="4px" color="">帮助</font>
+								</span>
 							</div>
 						</div>
-
-						<div class="form-group">
-							<label for="pwd1" class="col-md-2 control-label">密码</label>
-							<div class="col-md-10">
-								<input type="password" class="form-control" id="pwd" name="pwd" placeholder="请输入密码">
-							</div>
+						<div class="panel-body">
+							<form role="form" class="form-horizontal" action="/user/register/" method="post">
+								{% csrf_token %}
+								<div class="form-group">
+									<label for="name" class="col-md-3 control-label">用&nbsp;&nbsp;户&nbsp;&nbsp;名:</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" id="user_name"  name="user_name" placeholder="请输入用户名">
+									</div>
+								</div>
+								<div class="form-group" style="height:8px;"></div>
+								<div class="form-group">
+									<label for="pwd1" class="col-md-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" id="pwd" name="pwd" placeholder="请输入密码">
+									</div>
+								</div>
+								<div class="form-group" style="height:8px;"></div>
+								<div class="form-group">
+									<label for="pwd2" class="col-md-3 control-label">确认密码:</label>
+									<div class="col-md-9">
+										<input type="password" class="form-control" name="cpwd" id="cpwd" placeholder="请输入密码">
+									</div>
+								</div>
+								<div class="form-group" style="height:8px;"></div>
+								<div class="form-group">
+									<label for="email" class="col-md-3 control-label">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱:</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="email" id="email" placeholder="请输入邮箱">
+									</div>
+								</div>
+								<div class="form-group" style="height:8px;"></div>
+								<div class="form-group">
+									<label for="email" class="col-md-3 control-label col-md-pus">同意使用协议</label>
+									<div class="col-md-2">
+										<input type="checkbox" class="form-control" name="allow" id="allow" checked="checked">
+									</div>
+								</div>
+		
+								<div class="form-group" style="height: 8px; width: 100%;"></div>
+		
+								<div class="col-md-8 col-md-push-2">
+									<button type="submit" class="btn btn-primary  btn-block">提交</button>
+								</div>
+							</form>
 						</div>
-
-						<div class="form-group">
-							<label for="pwd2" class="col-md-2 control-label">确认密码</label>
-							<div class="col-md-10">
-								<input type="password" class="form-control" name="cpwd" id="cpwd" placeholder="请输入密码">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="email" class="col-md-2 control-label">邮箱</label>
-							<div class="col-md-10">
-								<input type="text" class="form-control" name="email" id="email" placeholder="请输入邮箱">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-md-2 col-md-push-2">
-								<input type="checkbox" class="form-control" name="allow" id="allow" checked="checked">
-							</div>
-							<label for="email" class="col-md-2 control-label col-md-pus">同意使用协议</label>
-						</div>
-
-						<div class="form-group" style="height: 15px; width: 100%;"></div>
-
-						<div class="col-md-10 col-md-push-2">
-							<button type="submit" class="btn btn-primary  btn-block">提交</button>
-						</div>
-							{{ errmsg }}
-					</form>
+					</div>
 					<div class="row">
-						<div class="col-md-6 col-md-push-4 text-center">
-							<a href="/user/login" id="login"><span style="color: antiquewhite;"> 已有账户？点击登录</span></a>
+						<div class="col-md-6 col-md-push-3 text-center">
+							<a href="/user/login/" id="login"><span style="color: antiquewhite;"> 已有账户？点击登录</span></a>
 						</div>
 					</div>
 				</div>

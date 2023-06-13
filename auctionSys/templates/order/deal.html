@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{tittle}}</title>
+		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('.deliver_number').hide();
+				$('.info').hide();
+		
+				$(".fill").click(function () {
+					var index = $(this).data('index');
+					$(this).hide();
+					$('.deliver_number' + index).show();
+				});
+		
+				$(".submit").click(function () {
+					var index = $(this).data('index');
+					var inputElement = $('#number' + index);
+					var infoElement = $('.info' + index);
+		
+					var number = inputElement.val();
+					infoElement.text(number);
+		
+					$(this).parent('.row').hide();
+					infoElement.show();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default"  role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">拍卖网站</a>
+				</div>
+				<div>
+					<ul class="nav navbar-nav">
+						<li><a href="/index/">主页</a></li>
+						<li><a href="/order/list/">个人订单</a></li>
+						<li class="dropdown active">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								我的拍品
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/auction/manage/">拍品管理</a></li>
+								<li class="active"><a href="/order/deliver/">拍品发货</a></li>
+							</ul>
+						</li>
+						<li><a href="/auction/reverse/">我的预约</a></li>
+						<li><a href="/user/service/">联系客服</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								个人信息
+								<b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/user/info/">我的资料</a></li>
+								<li><a href="/user/site/">收货地址</a></li>
+								<li><a href="/user/history/">浏览记录</a></li>
+								<li><a href="/user/logout/">退出登录</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+        <div style="height: 15px;"></div>
+        <div class="container">
+            <div class="row">
+				<table class="table">
+					<thead>
+						<tr class="danger">
+							<th>
+								商品名称
+							</th>
+							<th>
+								支付状态
+							</th>
+							<th>
+								成交价格
+							</th>
+							<th>
+								买家姓名
+							</th>
+							<th>
+								买家电话号码
+							</th>
+							<th>
+								买家收货地址
+							</th>
+                            <th>
+                                买家邮编
+                            </th>
+                            <th>
+                                快递单号
+                            </th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for each in order_list %}
+						<tr  colspan="6">
+							<td>订单号：{{each.order_id}}</td>
+						</tr>
+						<tr>
+							<td>{{each.product_name}}</td>
+							<td>
+							{% if each.order_status == 0 %}
+							<td>买家未支付</a></td>
+							{% else%}
+							<td>买家已支付</td>
+							{% endif %}
+							<td>{{each.user_name}}</td>
+                            <td>{{each.user_pnumber}}</td>
+							<td>{{each.user_address}}</td>
+							<td>{{each.user_mnumber}}</td>
+							<td>
+								<button class="btn-primary fill" data-index="{{ forloop.counter }}">填写快递单号</button>
+								<div class="deliver_number{{ forloop.counter }} deliver_number">
+									<div class="row">
+										<input type="text" class="col-md-8 number" id="number{{ forloop.counter }}"
+											placeholder="请输入快递单号">
+										<button class="col-md-3 submit" data-index="{{ forloop.counter }}">提交</button>
+									</div>
+								</div>
+								<p class="info{{ forloop.counter }} info"></p>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+        </div>
+	</body>
+</html>

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^update(\d+)/update/$', AuctionUpdate.update, name='auction_update_handler'),
     url(r'(\d+)/$', AuctionDetail.detail, name='auction_detail'),
     url(r'(\d+)/deposit/$', AuctionDepositPayment.deposit, name='auction_deposit'),
-    url(r'(\d+)/reverse/$', Auctionreverse.reverse, name='auction_reverse'),
+    url(r'(\d+)/reverse/$', AuctionReverse.reverse, name='auction_reverse'),
     url(r'(\d+)/bid/$', AuctionBid.bid, name='auction_bid'),
+    url(r'reverse/$', AuctionReverseDetail.detail, name='auction_reverse'),
 ]

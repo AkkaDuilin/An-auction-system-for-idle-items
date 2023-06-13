@@ -16,6 +16,7 @@ import datetime
 from decimal import *
 from django.core.files.storage import FileSystemStorage
 import os
+from dateutil.parser import parse
 
 class AuctionManage(View):
     @user_login
@@ -51,7 +52,7 @@ class AuctionManage(View):
         # print(product_type,product_name,product_img,product_price,product_abstract,product_content)
         # return redirect('/auction/manage/')
         # 数据完整性校验
-        if not product_name or not product_price  or not product_abstract or not product_content or not product_type:
+        if not product_name or not product_price  or not product_abstract or not product_content or not product_type or not product_img:
             print("请填写所有必填字段")
             error_message = "请填写所有必填字段"
             # 返回原来的页面
@@ -134,14 +135,30 @@ class AuctionDetail(View):
         else:
             bidder_count = auction.bidder_list.get_bidders_count()
             reverse_count = auction.bidder_list.get_reverse_count()
-        print(bidder_count)
+        # print(bidder_count)
         bidders = list(auction.bidder_list.bidders.values_list())
         Bidder_list = []
         for i in bidders:
             Bidder_list.append(Bidder.objects.get(id=i[0]))
         # bidders = list(auction.bidder_list)
-        print(Bidder_list)
+        # print(Bidder_list)
         # 计算所有if_pay_is_true为false的bidder的总人数
+        # 获取static/product_img/下的图片
+        directory = 'static/product_img/{}/'.format(auction_id)
+        file_paths = []
+
+        print(directory)
+        for root, directories, files in os.walk(directory):
+            # print(root,directories,files)
+            for filename in files:
+                # 将文件路径添加到列表中
+                file_paths.append(os.path.join(root, filename))
+        # print(file_paths)
+        print(auction.auction_date,auction.auction_final_date)
+        # auction_date = parse(str(auction.auction_date)).replace(tzinfo=None)
+        # print(timezone.make_aware(auction_date))
+        datetime_obj = datetime.datetime.fromtimestamp(auction.auction_date) 
+        auction_date_show = datetime_obj.strftime("%Y-%m-%d %H:%M:%S")
         
         context = {
             'auction_seller': auction.auction_seller,
@@ -156,7 +173,9 @@ class AuctionDetail(View):
             'bidder_count' : bidder_count,
             'current_time': current_time,
             'bidder_list': Bidder_list,
-            'reverse_count':reverse_count
+            'reverse_count':reverse_count,
+            'file_paths':file_paths,
+            'auction_date_show':auction_date_show
         }
         context['errmsg'] = request.session.get('errmsg')
         res =  render(request, 'auctions/detail.html', context)
@@ -184,7 +203,7 @@ class AuctionDetail(View):
 
         return res
 
-class Auctionreverse(View):
+class AuctionReverse(View):
     @user_login
     def reverse(request, auction_id):
         print('reverse')
@@ -196,13 +215,27 @@ class Auctionreverse(View):
         bidder_list = auction.bidder_list
         # ManyToManyField 查询
         bidder_exist = bidder_list.bidders.filter(user=user).exists()
+        current_time = timezone.now()
         print(bidder_exist)
+        # 如果卖家是自己报错
+        if auction.auction_seller == user:
+            print('seller')
+            error_message = "不能预约自己的拍卖"
+            request.session['errmsg'] = error_message
+            return redirect(url)
         # print(bidder_list.bidders_set.all())
         if bidder_exist and bidder_list.bidders.filter(auction_id=auction_id).exists() :
             print('have reserve')
             error_message = "已预约"
             request.session['errmsg'] = error_message
             return redirect(url)
+        elif current_time > auction.auction_final_date:
+            #当前时间大于结束时间，不能预约   
+            print('time out')
+            error_message = "已过拍卖时间"
+            request.session['errmsg'] = error_message
+            return redirect(url)
+        
         else:
             bidder = Bidder.objects.create(
                 auction_id = auction_id,
@@ -231,6 +264,14 @@ class AuctionDepositPayment(View):
         if auction.bidder_list == None:
             auction.bidder_list = BidderList.objects.create()
         bidder_list = auction.bidder_list
+        current_time = timezone.now()
+        
+        if current_time > auction.auction_final_date:
+            #当前时间大于结束时间，不能拍卖  
+            print('time out')
+            error_message = "已过拍卖时间"
+            request.session['errmsg'] = error_message
+            return redirect(url)
         if bidder_list.bidders.filter(user=user).exists() and bidder_list.bidders.filter(auction_id=auction_id).exists() :
             bidder = Bidder.objects.get(user=user, auction_id=auction_id)
             if  bidder.if_pay_deposit == True:
@@ -273,12 +314,14 @@ class AuctionBid(View):
     def bid(request, auction_id):
         print('Bid')
         auction = get_object_or_404(AuctionInfo, id=auction_id)
+        current_time = timezone.now()
         url = '/auction/{}/'.format(auction_id)
         if request.POST.get('bid_amount') == '':
             bid_amount = auction.current_bid
         else:
             bid_amount = request.POST.get('bid_amount')
         print('Bid',bid_amount)
+
         user = request.user
         user = UserInfo.objects.get(user_name=user)
         if not Bidder.objects.filter(user=user, auction_id=auction_id).exists():
@@ -294,6 +337,18 @@ class AuctionBid(View):
             auction.current_bid = auction.starting_price
         initial_price = auction.current_bid
         min_increment = float(initial_price) * 0.02
+        if current_time > auction.auction_final_date:
+            #当前时间大于结束时间，不能拍卖  
+            print('time out')
+            error_message = "已过拍卖时间"
+            request.session['errmsg'] = error_message
+            return redirect(url)      
+        if current_time < auction.auction_date:
+            #当前时间小于开始时间，不能拍卖  
+            print('time out')
+            error_message = "未到拍卖时间"
+            request.session['errmsg'] = error_message
+            return redirect(url)
 
         # Check bid amount against minimum increment and current bid
         if float(bid_amount) >= ( float(initial_price) + min_increment):
@@ -316,6 +371,7 @@ class AuctionBid(View):
                 'current_time': timezone.now(),
             }
             return redirect(url,context)
+        
         else:
             print('bid failed')
             error_message = '竞价金额不能低于最小加价幅度'
@@ -375,7 +431,7 @@ class AuctionUpdate(View):
 
         # 更新商品信息
         product.product_name = product_name
-        product.product_img = product_img
+        #product.product_img = product_img
         product.product_price = product_price
         product.product_abstract = product_abstract
         product.product_content = product_content
@@ -388,3 +444,28 @@ class AuctionUpdate(View):
             'message': '拍卖信息和商品信息已成功更新'
         }
         return redirect('/auction/manage/')
+
+class AuctionReverseDetail(View):
+    @user_login
+    def detail(request):
+        print('reverse detail')
+        user = UserInfo.objects.get(user_name = request.user)
+        # 找到这个user对应的所有bidder
+        bidder_list = Bidder.objects.filter(user=user)
+        # 找到所有bidder对应的auction
+        auction_list = []
+        print(bidder_list)
+        for bidder in bidder_list:
+            #print(auction.auction_date)
+             #print(auction)
+            auction = AuctionInfo.objects.get(id = bidder.auction_id)
+            print(auction.auction_date)
+            print(auction)
+            auction_list.append(auction)
+        print(auction_list)
+        context = {
+            'auction_list': auction_list,
+        }
+
+        return render(request, 'order/order.html',context)
+

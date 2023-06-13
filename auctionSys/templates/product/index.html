@@ -10,17 +10,22 @@
 </style>
 {% endblock style %}
 {% block script %} 
+<script type="text/javascript">
+	$(document).ready(function () {
+
+		});
+</script>
 {% endblock script %}
 {% block main %}
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/">拍卖网站</a>
+			<a class="navbar-brand" href="/index/">拍卖网站</a>
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="/">主页</a></li>
-				<li><a href="#">个人订单</a></li>
+				<li class="active"><a href="/index/">主页</a></li>
+				<li><a href="/order/list/">个人订单</a></li>
 
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -29,11 +34,11 @@
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="/auction/manage/">拍品管理</a></li>
-						<li><a href="#">拍品发货</a></li>
+						<li><a href="/order/deliver/">拍品发货</a></li>
 					</ul>
 				</li>
-				<li><a href="#">我的预约</a></li>
-				<li><a href="#">联系客服</a></li>
+				<li><a href="/auction/reverse/">我的预约</a></li>
+				<li><a href="/user/service/">联系客服</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						个人信息
@@ -67,35 +72,35 @@
 				<div class="row">
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="colth">
-							<a href="/list6_1_1/">
+							<a href="/list/6/1/">
 								<font style="color: black;">服装</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="watch">
-							<a href="/list3_1_1/">
+							<a href="/list/3/1/">
 								<font style="color: black;">手表</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="food">
-							<a href="/list6_1_1/">
+							<a href="/list/6/1/">
 								<font style="color: black;">食品</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="phone">
-							<a href="/list3_1_1/">
+							<a href="/list/3/1/">
 								<font style="color: black;">手机</font>
 							</a>
 						</button>
 					</div>
 					<div class="col-md-1 col-md-push-1">
 						<button type="button" class="btn btn-link" id="computer">
-							<a href="/list3_1_1/">
+							<a href="/list/3/1/">
 								<font style="color: black;">电脑</font>
 							</a>
 						</button>
@@ -110,15 +115,24 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="row">
-				<div class="col-md-2">分类</div>
+				<div class="col-md-2"><h4>分类</h4></div>
 			</div>
 
+			<div class="row">
+				<div class="col-md-2 col-md-push-1">
+					<span class="glyphicon glyphicon-book " style="font-size: 25px;"></span>
+				</div>
+				<div class="col-md-6">
+					<a class="btn" href="/list/1/1/">图书</a>/<a class="btn" href="/list/1/1/">教辅</a>
+				</div>
+			</div>
+			<div style="height: 10px;"></div>
 			<div class="row">
 				<div class="col-md-2 col-md-push-1">
 					<span class="glyphicon glyphicon-shopping-cart " style="font-size: 25px;"></span>
 				</div>
 				<div class="col-md-6">
-					<a class="btn" href="/list2_1_1/">二手车</a>/<a class="btn" href="/list2_1_1/">自行车</a>
+					<a class="btn" href="/list/2/1/">二手车</a>/<a class="btn" href="/list/2/1/">自行车</a>
 				</div>
 			</div>
 			<div style="height: 10px;"></div>
@@ -127,8 +141,8 @@
 					<span class="glyphicon glyphicon-phone " style="font-size: 25px;"></span>
 				</div>
 				<div class="col-md-6">
-					<a class="btn" href="/list3_1_1/">手机</a>/<a class="btn" href="/list3_1_1/">电脑</a>/<a class="btn"
-						href="/list3_1_1/">游戏机</a>
+					<a class="btn" href="/list/3/1/">手机</a>/<a class="btn" href="/list/3/1/">电脑</a>/<a class="btn"
+						href="/list/3/1/">游戏机</a>
 				</div>
 			</div>
 			<div style="height: 10px;"></div>
@@ -137,8 +151,8 @@
 					<span class="glyphicon glyphicon-search " style="font-size: 25px;"></span>
 				</div>
 				<div class="col-md-6">
-					<a class="btn" href="/list4_1_1/">键盘</a>/<a class="btn" href="/list4_1_1/">鼠标</a>/<a class="btn"
-						href="/list4_1_1/">外设</a>
+					<a class="btn" href="/list/4/1/">键盘</a>/<a class="btn" href="/list/4/1/">鼠标</a>/<a class="btn"
+						href="/list/4/1/">外设</a>
 				</div>
 			</div>
 			<div style="height: 10px;"></div>
@@ -147,7 +161,7 @@
 					<span class="glyphicon glyphicon-map-marker " style="font-size: 25px;"></span>
 				</div>
 				<div class="col-md-6">
-					<a class="btn" href="/list5_1_1/">本地拍品</a>
+					<a class="btn" href="/list/5/1/">本地拍品</a>
 				</div>
 			</div>
 			<div style="height: 10px;"></div> 
@@ -156,7 +170,7 @@
 					<span class="glyphicon glyphicon-pencil " style="font-size: 25px;"></span>
 				</div>
 				<div class="col-md-6">
-					<a class="btn" href="/list6_1_1/">其他</a>
+					<a class="btn" href="/list/6/1/">其他</a>
 				</div>
 			</div>
 		</div>
@@ -171,19 +185,19 @@
 				<!-- 轮播（Carousel）项目 -->
 				<div class="carousel-inner">
 					<div class="item active">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="First slide"
-							class="img-responsive" width="560" height="350">
-						<div class="carousel-caption"></div>
+						<img src="https://img2.baidu.com/it/u=2565362953,3043166123&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500" alt="First slide"
+							class="img-responsive" style="width: 585px; height: 285px;">
+						<div class="carousel-caption">女士手表</div>
 					</div>
 					<div class="item">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Second slide"
-							class="img-responsive" width="560" height="350">
-						<div class="carousel-caption"></div>
+						<img src="https://img.zcool.cn/community/012a5c5c74acf7a801203d226c61d0.jpg@1280w_1l_2o_100sh.jpg" alt="Second slide"
+							class="img-responsive" style="width: 585px; height: 285px;" >
+						<div class="carousel-caption">牛奶</div>
 					</div>
 					<div class="item">
-						<img src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF" alt="Third slide"
-							class="img-responsive" width="560" height="350">
-						<div class="carousel-caption"></div>
+						<img src="https://www.ourqm.com/upload/2020/09/09/20200909111157705.jpg" alt="Third slide"
+							class="img-responsive" style="width: 585px; height: 285px;">
+						<div class="carousel-caption">哈密瓜</div>
 					</div>
 				</div>
 				<!-- 轮播（Carousel）导航 -->
@@ -201,27 +215,18 @@
 </div>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-2">今日拍品</div>
+			<div class="col-md-2"><h4>今日推荐<h4></div>
 		</div>
+		<div class="row" style="height: 10px;"><div>
 		<div class="row">
 			{% for each in auction_list %}
 			<div class="col-md-4">
 				<div class="row">
 					<div class="col-md-7" >
-						<!-- <a href="/auction/{{ each.auction_id }}/"> -->
-							<!-- {% if each.product.product_img %}
-					{% with product_img=each.product.product_img.first %}
-					{% if product_img %}
-					<img src="{{ product_img.url }}" class="thumbnail" decoding="async">
-					{% endif %}
-					{% endwith %}
-					{% endif %} -->
-							<!-- <img  src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF"   width="170" height="122">
-						</a> -->
-						<a href="/auction/{{ each.auction_id }}/" class="thumbnail">
-							<img decoding="async" src="https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF"
-								style="width: 220px; height: 110px;">
-						</a>
+						{% if each.img_url %}
+								<a href="/auction/{{ each.auction_id }}/" id="move"><img decoding="async" src="{{ each.img_url}}"
+									style="width: 205px; height: 110px;"></a>
+						{% endif %}
 					</div>
 					<div class="col-md-5">
 						<div class="row">
@@ -234,6 +239,7 @@
 							<span><span class="prize">￥{{ each.current_bid }}</span></span>
 							<br>
 						</div>
+						<div class="row" style="height: 10px;"></div>
 					</div>
 				</div>
 			</div>
@@ -254,12 +260,3 @@
 		</div>
 	</div>
 {% endblock main %}
-{% block script1 %}
-<script type="text/javascript">
-	$('.add_goods').click(function () {
-		product_id = $(this).attr('id')
-		$.get('/cart/add' + product_id + '_1/', function (data) {
-		});
-	})
-</script>
-{% endblock script1 %}

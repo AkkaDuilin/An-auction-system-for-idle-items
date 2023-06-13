@@ -26,7 +26,9 @@ class RegisterView(View):
     '''注册类视图'''
     def get(self, request):
         '''注册页面'''
-        return render(request, 'user/register.html')
+        context = {'errmsg':request.session.get('errmsg')} 
+        request.session['errmsg'] = None
+        return render(request, 'user/register.html',context)
     @csrf_exempt
     def post(self, request):
         '''注册处理'''
@@ -37,6 +39,8 @@ class RegisterView(View):
         user_cpwd = request.POST.get('cpwd')
         allow = request.POST.get('allow')
         if user_pwd != user_cpwd:
+            error_message = "请输入相同的两次密码"
+            request.session['errmsg'] = error_message
             return redirect('/user/register/', {'errmsg': '请输入相同的两次密码'})
 
         # 校验user_name在数据库中是否存在
@@ -45,17 +49,25 @@ class RegisterView(View):
         except Exception as e:
             user = None
         if user:
+            error_message = "用户已存在"
+            request.session['errmsg'] = error_message
             # 用户名存在
-            return render(request, 'user/register.html', {'errmsg': '用户已存在'})
+            return redirect('/user/register/', {'errmsg': '用户已存在'})
 
         # 2、校验数据
         if not all([user_name, user_pwd, user_email]):
             # 数据不完整
-            return render(request, 'user/register.html', {'errmsg': '数据不完整'})
+            error_message = "数据不完整"
+            request.session['errmsg'] = error_message
+            return redirect('/user/register/', {'errmsg': '数据不完整'})
         if not re.match('^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', user_email):
-            return render(request, 'user/register.html', {'errmsg': '邮箱格式不正确'})
+            error_message = "邮箱格式不正确"
+            request.session['errmsg'] = error_message
+            return redirect('/user/register/', {'errmsg': '邮箱格式不正确'})
         if allow != 'on':
-            return render(request, 'user/register.html', {'errmsg': '请同意协议'})
+            error_message = "请同意协议"
+            request.session['errmsg'] = error_message
+            return redirect('/user/register/', {'errmsg': '请同意协议'})
 
         # 3、保存进数据库
         user = UserInfo()
@@ -105,6 +117,8 @@ class LoginView(View):
     def login(request):
         username = request.COOKIES.get('username', '')
         context = {'title':'用户登录', 'username':username, 'error_pwd':0}
+        context['errmsg'] = request.session.get('errmsg')
+        request.session['errmsg'] = None
         return render(request, 'user/login.html', context)
     # def get(self, request):
     #     ##  判断是否记住密码
@@ -132,13 +146,13 @@ class LoginView(View):
         #user = UserInfo.objects.get(user_name=user_name)
         if user:
             # login(request, user_obj)
-            url = request.COOKIES.get('url', '/')
-            res = redirect("/")
+            url = request.COOKIES.get('url', '/index/')
+            res = redirect("/index/")
             res.set_signed_cookie("is_login","1",salt="auctionSys")
-            # if remember:
-            #     res.set_cookie('username', user_name)
-            # else:
-            #     res.set_cookie('username', '', max_age=-1)
+            if remember:
+                res.set_cookie('username', user_name)
+            else:
+                res.set_cookie('username', '', max_age=-1)
             request.session['is_login'] = True
             request.session['user_id'] = user.id
             request.session['user_name'] = user.user_name
@@ -149,18 +163,21 @@ class LoginView(View):
         else:
             print("the user is not exist")
             context = {'title':'用户登录', 'username':user_name, 'userpwd':user_pwd, 'error_pwd':1}
-            return render(request, 'user/login.html', context)
+            error_message = "用户名或密码错误"
+            request.session['errmsg'] = error_message
+            return redirect( '/user/login/', context)
         
 
 class Logout(View):
     def get(self, request):
-        print("the user is logout")
-        if request.session.get('is_login', None):
+        
+        if request.session.get('is_login', True):
+            print("the user is logout")
             # 清空session
             request.session.flush()
         auth.logout(request)
         # logout(request)
-        return redirect('/')
+        return redirect('/index/')
 
 
 class UserInfoView(View):
@@ -191,7 +208,8 @@ class UserHistoryView(View):
             if viewed_auctions:
                 viewed_auctions = viewed_auctions.split(',')
                 for each in viewed_auctions:
-                    view_list.append(AuctionInfo.objects.get(id=int(each)))
+                    if AuctionInfo.objects.filter(id=int(each)).exists():
+                        view_list.append(AuctionInfo.objects.get(id=int(each)))
             context = {'title':'用户中心-浏览记录',
                     'view_list':view_list}
             return render(request, 'user/b_history.html', context)
@@ -249,4 +267,7 @@ class SiteView(View):
         context = {'title':'收货地址', 'user':user}
         return render(request, 'user/user_center_site.html', context)
 
-
+class ServiceView(View):
+    # @user_login
+    def get(self, request):
+        return render(request, 'user/service.html', {'title':'服务中心'})

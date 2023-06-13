@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^auction/', include('auctions.urls')),
     url(r'^user/', include('user_part.urls')),
     url(r'^', include('products.urls')),
-    url(r'^cart/', include('carts.urls')),
+    url(r'^order/', include('order.urls')),
+    
 ]

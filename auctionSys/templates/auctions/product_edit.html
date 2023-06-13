@@ -6,14 +6,6 @@
 		<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<style>
-			.navbar-default .navbar-nav>.active>a,
-			.navbar-default .navbar-nav>.active>a:focus,
-			.navbar-default .navbar-nav>.active>a:hover {
-				background-color: blue;
-				color: white;
-			}
-		</style>
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('#product_img').on('change', function(e) {
@@ -46,15 +38,15 @@
 		</script>
 	</head>
 	<body>
-		<nav class="navbar navbar-default" style="background-color: #ffa75e;" role="navigation">
+		<nav class="navbar navbar-default" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="#">拍卖网站</a>
 				</div>
 				<div>
 					<ul class="nav navbar-nav">
-						<li><a href="/">主页</a></li>
-						<li><a href="#">个人订单</a></li>
+						<li><a href="/index/">主页</a></li>
+						<li><a href="/order/list/">个人订单</a></li>
 						<li class="dropdown active">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								我的拍品
@@ -62,11 +54,11 @@
 							</a>
 							<ul class="dropdown-menu">
 								<li class="active"><a href="/auction/manage/">拍品管理</a></li>
-								<li><a href="#">拍品发货</a></li>
+								<li><a href="/order/deliver/">拍品发货</a></li>
 							</ul>
 						</li>
-						<li><a href="#">我的预约</a></li>
-						<li><a href="#">联系客服</a></li>
+						<li><a href="/auction/reverse/">我的预约</a></li>
+						<li><a href="/user/service/">联系客服</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								个人信息
@@ -116,11 +108,6 @@
 									</div>
 									<div class="panel-body">
 										<div class="row" id="show_i">
-											{% if auction.product.product_img %}
-											    {% for img in auction.product.product_img %}
-											        <img class="img-thumbnail col-md-4" decoding="async" src="{{ img.url }}" alt="Product Image">
-											    {% endfor %}
-											{% endif %}
 										</div>
 									</div>
 								</div>

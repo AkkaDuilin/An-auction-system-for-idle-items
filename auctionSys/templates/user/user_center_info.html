@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 {% block style %}
 <style>
-	.navbar-default .navbar-nav>.active>a,
-	.navbar-default .navbar-nav>.active>a:focus,
-	.navbar-default .navbar-nav>.active>a:hover {
-		background-color: blue;
-		color: white;
+	.left-column {
+		background-image: url("/static/login/QQ图片20230610164243.jpg");
+		background-size: cover;
+		background-repeat: no-repeat;
 	}
-
 	.container1 {
 		width: 100%;
 		height: 90vh;
@@ -49,15 +47,15 @@
 {% endblock script %}
 {% block main %}
 <div class="container1">
-	<nav class="navbar navbar-default" style="background-color: #ffa75e;" role="navigation">
+	<nav class="navbar navbar-default" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">拍卖网站</a>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
-					<li><a href="/">主页</a></li>
-					<li><a href="#">个人订单</a></li>
+					<li><a href="/index/">主页</a></li>
+					<li><a href="/order/list/">个人订单</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							我的拍品
@@ -65,18 +63,18 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a href="/auction/manage/">拍品管理</a></li>
-							<li><a href="#">拍品发货</a></li>
+							<li><a href="/order/deliver/">拍品发货</a></li>
 						</ul>
 					</li>
-					<li><a href="#">我的预约</a></li>
-					<li><a href="#">联系客服</a></li>
+					<li><a href="/auction/reverse/">我的预约</a></li>
+					<li><a href="/user/service/">联系客服</a></li>
 					<li class="dropdown active">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							个人信息
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="/user/info/">我的资料</a></li>
+							<li  class="active"><a href="/user/info/">我的资料</a></li>
 							<li><a href="/user/site/">收货地址</a></li>
 							<li><a href="/user/history/">浏览记录</a></li>
 							<li><a href="/user/logout/">退出登录</a></li>
@@ -86,28 +84,28 @@
 			</div>
 		</div>
 	</nav>
-	<div class="left-column">
+	<div class="left-column" style="margin-top: -20px;">
 		<div style="height: 10px;width: 100%;"></div>
 		<div class="row">
 			<div class="col-md-5 col-md-push-7">
-				<a href="/user/info/"><button type="button" class="btn-link btn-lg">个人信息</button></a>
+				<a href="/user/info/"><button type="button" class="btn-link btn-lg"><p class="text-success">个人信息</p></button></a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-5 col-md-push-7">
 				<a href="/user/site/"><button type="button" class="btn-link btn-lg">
-						<p class="text-success">收货地址</p>
+						<p>收货地址</p>
 					</button></a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-5 col-md-push-7">
-				<a href="/user/history/"><button type="button" class="btn-link btn-lg">浏览记录</button></a>
+				<a href="/user/history/"><button type="button" class="btn-link btn-lg"><p>浏览记录</p></button></a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-5 col-md-push-7">
-				<a href="/user/logout/"><button type="button" class="btn-link btn-lg">退出登录</button></a>
+				<a href="/user/logout/"><button type="button" class="btn-link btn-lg"><p>退出登录</p></button></a>
 			</div>
 		</div>
 	</div>
@@ -122,12 +120,12 @@
 				<div class="col-md-6 col-md-push-2">
 					<label for="pic1">
 						<p class="text-right">
-						<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</h4>
 						</p>
 					</label>
-					<img src="https://img0.baidu.com/it/u=3153071016,1285865307&fm=253&fmt=auto&app=138&f=JPEG?w=429&h=499"
-						class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
+					<img src="https://img95.699pic.com/xsj/14/qu/q9.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast"
+								class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
 				</div>
 			</div>
 			<div class="row" style="height: 20px;"></div>
@@ -163,12 +161,12 @@
 					<div class="col-md-6 col-md-push-2">
 						<label for="pic1">
 							<p class="text-right">
-							<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<h4>头&nbsp;&nbsp;&nbsp;像&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							</h4>
 							</p>
 						</label>
-						<img src="https://img0.baidu.com/it/u=3153071016,1285865307&fm=253&fmt=auto&app=138&f=JPEG?w=429&h=499"
-							class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
+						<img src="https://img95.699pic.com/xsj/14/qu/q9.jpg%21/fw/700/watermark/url/L3hzai93YXRlcl9kZXRhaWwyLnBuZw/align/southeast"
+								class="img-circle" alt="Cinque Terre" width="70" height="70" id="pic1">
 					</div>
 				</div>
 				<div class="form-group" style="height: 20px;"></div>

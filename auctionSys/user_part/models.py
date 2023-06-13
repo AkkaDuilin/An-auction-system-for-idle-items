@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 SECRET_KEY = d_set.SECRET_KEY
 
-
+## 继承AbstractUser，添加额外字段方法
 # class UserInfo(AbstractUser):
 #     user_rman = models.CharField(max_length=20, default='')
 #     user_address = models.CharField(max_length=100, default='')

@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^site/$', SiteView.site, name='site'),  # 地址页
     url(r'^login/$', LoginView.login),
     url(r'^login_handler/$', LoginView.login_handler),
+    url(r'^service/$', ServiceView.as_view(), name='service'),
 ]

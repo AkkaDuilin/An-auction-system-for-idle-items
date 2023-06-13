@@ -1,10 +1,12 @@
-from django.urls import path
-from .views import OrderCreate, OrderDelete, OrderDetail
+from django.conf.urls import url
+from .views import *
 
-app_name = 'orders'
 
 urlpatterns = [
-    path('/create/<str:auction_id>/', OrderCreate.as_view(), name='order_create'),
-    path('delete/<str:order_id>/', OrderDelete.as_view(), name='order_delete'),
-    path('detail/<str:order_id>/', OrderDetail.as_view(), name='order_detail'),
+    # ...
+    url(r'^create/$', OrderCreate.create, name='order_create'),
+    url(r'^list/', OrderList.list, name='order_list'),
+    url(r'^deliver/', OrderDeliver.deliver, name='order_list'),
+    url(r'^pay/',OrderPayment.pay,name='order_pay'),
+    # ...
 ]

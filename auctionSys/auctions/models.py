@@ -4,6 +4,8 @@ from user_part.models import UserInfo
 from products.models import ProductInfo
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.utils import timezone
+from dateutil.parser import parse
 
 class Bidder(models.Model):
     user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
@@ -12,7 +14,7 @@ class Bidder(models.Model):
     if_pay_deposit = models.BooleanField(default=False)
     # 设置一个拍卖id字段 在
     def __str__(self):
-        return f"{self.user.user_name} - {self.bid_amount}"
+        return f"{self.id} - {self.bid_amount}"
 
 class BidderList(models.Model):    
     bidders = models.ManyToManyField(Bidder)
@@ -22,8 +24,7 @@ class BidderList(models.Model):
             return highest_bidder
         else:
             return None
-    def get_bidders_count(self):
-         
+    def get_bidders_count(self):       
          return self.bidders.count()
     def get_all_bidders(self):
         return self.bidders.all()
@@ -64,13 +65,15 @@ class AuctionInfo(models.Model):
 
 
     def get_auctions_by_product_ids(product_ids):
-        auctions = AuctionInfo.objects.filter(products__id__in=product_ids).distinct()
+        auctions = []
+        for id in product_ids:
+            auctions.append(AuctionInfo.objects.get(product_id=id))
         return auctions
     
     def save(self, *args, **kwargs):
         #auction_final_date = timezone.make_aware()
-        self.auction_final_date = timezone.make_aware(self.auction_date + timedelta(hours=1))
-        
+        auction_date = parse(str(self.auction_date)).replace(tzinfo=None)
+        self.auction_final_date = timezone.make_aware(auction_date + timedelta(hours=1))
         # self.bid_count = self.bidder_list.get_bidders_count()
         super().save(*args, **kwargs)
 
