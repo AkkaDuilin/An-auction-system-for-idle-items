@@ -1,7 +1,11 @@
+
+
+
 # An-auction-system-for-idle-items
 An auction system for idle items web based on Django Bootstrap、
 
 ![](/image/Pasted image 20230614193313.png)
+[![pCnXvZR.png](https://s1.ax1x.com/2023/06/14/pCnXvZR.png)](https://imgse.com/i/pCnXvZR)
 ## 环境
 - Python: 3.6
 - Django: 3.2.19
@@ -85,14 +89,14 @@ python manage.py migrate
 
 - 以下是用户管理模块的主要使用方法：
     - 用户注册：通过访问`/user/register/`路径可以访问注册页面，填写必要的注册信息并提交表单进行注册。
-    ![[Pasted image 20230614193456.png]]
+    [![pCnXLM4.png](https://s1.ax1x.com/2023/06/14/pCnXLM4.png)](https://imgse.com/i/pCnXLM4)
     - 用户登录：通过访问`/user/login/`路径可以访问登录页面，输入用户名和密码进行登录。
-    ![[Pasted image 20230614193445.png]]
+    [![pCnXOsJ.png](https://s1.ax1x.com/2023/06/14/pCnXOsJ.png)](https://imgse.com/i/pCnXOsJ)
     - 用户退出：通过访问`/user/logout/`路径可以退出当前登录状态。
-    - 用户信息：通过访问`/user/info/`路径可以查看和修改个人信息。![[Pasted image 20230614193418.png]]
-    - 浏览记录：通过访问`/user/history/`路径可以查看最近浏览的拍卖记录。![[Pasted image 20230614193553.png]]
-    - 收货地址：通过访问`/user/site/`路径可以查看和修改收货地址信息。![[Pasted image 20230614193643.png]]
-    - 服务中心：通过访问`/user/service/`路径可以获取用户相关的服务和帮助信息。![[Pasted image 20230614194049.png]]
+    - 用户信息：通过访问`/user/info/`路径可以查看和修改个人信息。[![pCnjVeA.png](https://s1.ax1x.com/2023/06/14/pCnjVeA.png)](https://imgse.com/i/pCnjVeA)
+    - 浏览记录：通过访问`/user/history/`路径可以查看最近浏览的拍卖记录。[![pCnXbzF.png](https://s1.ax1x.com/2023/06/14/pCnXbzF.png)](https://imgse.com/i/pCnXbzF)
+    - 收货地址：通过访问`/user/site/`路径可以查看和修改收货地址信息。[![pCnj9JK.png](https://s1.ax1x.com/2023/06/14/pCnj9JK.png)](https://imgse.com/i/pCnj9JK)
+    - 服务中心：通过访问`/user/service/`路径可以获取用户相关的服务和帮助信息。[![pCnjCRO.png](https://s1.ax1x.com/2023/06/14/pCnjCRO.png)](https://imgse.com/i/pCnjCRO)
 
 ### 注意事项
 1. 用户名和密码在注册和登录时需要进行合法性校验，确保输入的数据符合要求。
@@ -145,7 +149,7 @@ python manage.py migrate
 
 - 主页列表：通过访问`/index/`路径可以返回网站主页，列出最近15个商品信息。
 - 商品搜索：通过在商品列表页面输入关键字进行搜索，系统将返回与关键字匹配的商品列表。(Todo)
-- 商品分类：在商品列表页面或导航栏中选择不同的商品类别，系统将展示对应类别的商品信息。访问路径`/list/(\d+)/1/`![[Pasted image 20230614194034.png]]
+- 商品分类：在商品列表页面或导航栏中选择不同的商品类别，系统将展示对应类别的商品信息。访问路径`/list/(\d+)/1/`[![pCnjALd.png](https://s1.ax1x.com/2023/06/14/pCnjALd.png)](https://imgse.com/i/pCnjALd)
 - 商品添加：管理员可以通过访问`/admin/products/add/`路径添加新的商品信息，并上传商品图片。
 - 商品编辑：管理员可以通过访问`/admin/products/<product_id>/edit/`路径编辑已有商品的信息。
 - 商品删除：管理员可以通过访问`/admin/products/<product_id>/delete/`路径删除指定商品。
@@ -203,18 +207,18 @@ python manage.py migrate
     - templates/auctions：存放商品相关的HTML模板文件，用于展示商品信息和页面。
 ### 使用方法
 
-  - 拍卖管理详情页面,显示拍卖管理的详细信息,访问路径：manage/ ![[Pasted image 20230614193753.png]]
-  - 创建新拍卖,处理创建新拍卖的请求,访问路径：create/![[Pasted image 20230614193811.png]]
+  - 拍卖管理详情页面,显示拍卖管理的详细信息,访问路径：manage/ [![pCnXXL9.png](https://s1.ax1x.com/2023/06/14/pCnXXL9.png)](https://imgse.com/i/pCnXXL9)[![pCnXxd1.png](https://s1.ax1x.com/2023/06/14/pCnXxd1.png)](https://imgse.com/i/pCnXxd1)
+  - 创建新拍卖,处理创建新拍卖的请求,访问路径：create/
   - 删除指定拍卖,处理删除指定拍卖的请求,访问路径：delete(\d+)/
   - 更新指定拍卖的详情页面,显示更新指定拍卖的详细信息,访问路径：update(\d+)/，
   - 处理更新指定拍卖的请求,处理更新指定拍卖的请求,访问路径：update(\d+)/update/，
-  - 显示指定拍卖的详情页面,显示指定拍卖的详细信息,访问路径：(\d+)/，![[Pasted image 20230614193728.png]]
+  - 显示指定拍卖的详情页面,显示指定拍卖的详细信息,访问路径：(\d+)/，[![pCnjpi6.png](https://s1.ax1x.com/2023/06/14/pCnjpi6.png)](https://imgse.com/i/pCnjpi6)
   - 为指定拍卖支付定金,处理为指定拍卖支付定金的请求,访问路径：(\d+)/deposit/，
-  - 处理指定拍卖的撤销请求,处理指定拍卖的撤销请求,访问路径：(\d+)/reverse/，![[Pasted image 20230614193838.png]]
+  - 处理指定拍卖的预约请求,处理指定拍卖的预约请求,访问路径：(\d+)/reverse/，![![pCnXzIx.png](https://s1.ax1x.com/2023/06/14/pCnXzIx.png)](https://imgse.com/i/pCnXzIx)
   - 为指定拍卖进行竞拍,处理为指定拍卖进行竞拍的请求,访问路径：(\d+)/bid/，![[Pasted image 20230614193958.png]]
 
 ### 注意事项
-- 拍卖流程说明![[H[JMU6I[[BKN6ELUC28CQKH.png]]
+- 拍卖流程说明[![pCnXHRU.jpg](https://s1.ax1x.com/2023/06/14/pCnXHRU.jpg)](https://imgse.com/i/pCnXHRU)
 - 拍卖时间默认设置为一个小时，当一个auction修改并保存后，model中自定义save保存结束时间为当前时间加一个小时
 - 前端代码实现为读取当前时间(current_time)和拍卖时间(auction_data)、结束时间(auction_final_data)大小来判断拍卖是否进行,有需要可以在后端定义一个计时任务并且自动修改拍卖状态字段，前端可以直接调用拍卖状态来判断当前拍卖是否进行
 ### Q&A

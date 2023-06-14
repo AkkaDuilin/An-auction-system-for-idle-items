@@ -131,10 +131,10 @@ class AuctionDetail(View):
         # 获取bidder_list的长度
         if auction.bidder_list == None:
             bidder_count = 0
-            reverse_count = 0
+            reserve_count = 0
         else:
             bidder_count = auction.bidder_list.get_bidders_count()
-            reverse_count = auction.bidder_list.get_reverse_count()
+            reserve_count = auction.bidder_list.get_reserve_count()
         # print(bidder_count)
         bidders = list(auction.bidder_list.bidders.values_list())
         Bidder_list = []
@@ -173,7 +173,7 @@ class AuctionDetail(View):
             'bidder_count' : bidder_count,
             'current_time': current_time,
             'bidder_list': Bidder_list,
-            'reverse_count':reverse_count,
+            'reserve_count':reserve_count,
             'file_paths':file_paths,
             'auction_date_show':auction_date_show
         }
@@ -203,10 +203,10 @@ class AuctionDetail(View):
 
         return res
 
-class AuctionReverse(View):
+class Auctionreserve(View):
     @user_login
-    def reverse(request, auction_id):
-        print('reverse')
+    def reserve(request, auction_id):
+        print('reserve')
         auction = AuctionInfo.objects.get(id=auction_id)
         user = UserInfo.objects.get(user_name=request.user)
         url = '/auction/{}/'.format(auction_id)
@@ -445,10 +445,10 @@ class AuctionUpdate(View):
         }
         return redirect('/auction/manage/')
 
-class AuctionReverseDetail(View):
+class AuctionreserveDetail(View):
     @user_login
     def detail(request):
-        print('reverse detail')
+        print('reserve detail')
         user = UserInfo.objects.get(user_name = request.user)
         # 找到这个user对应的所有bidder
         bidder_list = Bidder.objects.filter(user=user)

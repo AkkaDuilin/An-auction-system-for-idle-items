@@ -28,7 +28,7 @@ class BidderList(models.Model):
          return self.bidders.count()
     def get_all_bidders(self):
         return self.bidders.all()
-    def get_reverse_count(self):
+    def get_reserve_count(self):
         return self.bidders.filter(if_pay_deposit=False).count()
 
     def __str__(self):

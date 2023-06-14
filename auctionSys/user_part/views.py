@@ -12,7 +12,6 @@ from django.views.generic import View
 from itsdangerous import TimedSerializer as Serializer
 from django.contrib.auth import authenticate,logout
 from django.conf import settings
-from django.urls import reverse
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth import login,logout
@@ -107,7 +106,7 @@ class RegisterView(View):
 #             user.save()
 
 #             # 跳转到首页
-#             return redirect(reverse('user:login'))
+#             return redirect(reserve('user:login'))
 #         except SignatureExpired as e:
 #             return HttpResponse('验证过期')
 
