@@ -76,10 +76,6 @@ class AuctionInfo(models.Model):
         self.auction_final_date = timezone.make_aware(auction_date + timedelta(hours=1))
         # self.bid_count = self.bidder_list.get_bidders_count()
         super().save(*args, **kwargs)
-
-@receiver(pre_save, sender=AuctionInfo)
-def calculate_deposit_amount(sender, instance, **kwargs):
-    instance.deposit_amount = float(instance.starting_price) * 0.1
     
 
 

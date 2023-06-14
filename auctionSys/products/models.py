@@ -18,8 +18,6 @@ class ProductInfo(models.Model):
     product_img = models.ImageField(upload_to='static/product_img/',max_length=100, blank=True, null=True, verbose_name='商品图片')
     product_price = models.DecimalField(max_digits=6, decimal_places=2)
     is_Delete = models.BooleanField(default=False)
-    product_click = models.IntegerField(default=0)
-    # product_unit = models.CharField(max_length=20)
     product_abstract = models.CharField(max_length=120)
     product_content = HTMLField()
     product_type = models.IntegerField(choices=TYPE_CHOICES)

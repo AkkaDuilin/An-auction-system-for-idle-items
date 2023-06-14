@@ -1,0 +1,4 @@
+Django==3.2.19
+django_tinymce==2.7.0
+itsdangerous==0.24
+python_dateutil==2.8.2
