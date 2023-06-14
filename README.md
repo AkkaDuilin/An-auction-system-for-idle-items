@@ -211,11 +211,11 @@ python manage.py migrate
   - 创建新拍卖,处理创建新拍卖的请求,访问路径：create/
   - 删除指定拍卖,处理删除指定拍卖的请求,访问路径：delete(\d+)/
   - 更新指定拍卖的详情页面,显示更新指定拍卖的详细信息,访问路径：update(\d+)/，
-  - 处理更新指定拍卖的请求,处理更新指定拍卖的请求,访问路径：update(\d+)/update/，
   - 显示指定拍卖的详情页面,显示指定拍卖的详细信息,访问路径：(\d+)/，[![pCnjpi6.png](https://s1.ax1x.com/2023/06/14/pCnjpi6.png)](https://imgse.com/i/pCnjpi6)
   - 为指定拍卖支付定金,处理为指定拍卖支付定金的请求,访问路径：(\d+)/deposit/，
-  - 处理指定拍卖的预约请求,处理指定拍卖的预约请求,访问路径：(\d+)/reverse/，![![pCnXzIx.png](https://s1.ax1x.com/2023/06/14/pCnXzIx.png)](https://imgse.com/i/pCnXzIx)
-  - 为指定拍卖进行竞拍,处理为指定拍卖进行竞拍的请求,访问路径：(\d+)/bid/，![[Pasted image 20230614193958.png]]
+  - 处理指定拍卖的预约请求,处理指定拍卖的预约请求,访问路径：(\d+)/reserve/，
+ [![pCnXzIx.png](https://s1.ax1x.com/2023/06/14/pCnXzIx.png)](https://imgse.com/i/pCnXzIx)
+  - 为指定拍卖进行竞拍,处理为指定拍卖进行竞拍的请求,访问路径：(\d+)/bid/，[![pCnjFQe.png](https://s1.ax1x.com/2023/06/14/pCnjFQe.png)](https://imgse.com/i/pCnjFQe)
 
 ### 注意事项
 - 拍卖流程说明[![pCnXHRU.jpg](https://s1.ax1x.com/2023/06/14/pCnXHRU.jpg)](https://imgse.com/i/pCnXHRU)
@@ -233,13 +233,14 @@ python manage.py migrate
 ### 功能：
 
 - 订单管理模块提供以下功能：
+[![pCnjPzD.png](https://s1.ax1x.com/2023/06/14/pCnjPzD.png)](https://imgse.com/i/pCnjPzD)
   - 创建订单：根据拍卖信息生成订单，并保存相关信息，包括订单号、下单用户、下单日期等。
   - 支付订单：执行订单支付的相关操作，并修改订单状态为已支付。
   - 删除订单：删除指定的订单信息，从数据库中移除相关数据。
   - 查看订单详情：查看单个订单的详细信息，包括订单号、商品名称、订单状态、总价格等。
   - 查看订单列表：展示当前用户的订单列表，包括订单号、商品名称、订单状态、总价格等。
   - 查看待发货订单：展示当前用户作为卖家的待发货订单列表，包括订单号、商品名称、订单状态、总价格、买家姓名、买家电话、买家地址等。
-
+![Alt text](/image/image.png)
 ### Database
 - order_id (CharField)：订单的唯一标识符。最大长度为 20 个字符，作为模型的主键。
 - order_user (ForeignKey)：与 user_part.UserInfo 模型的外键关系。表示下订单的用户。如果关联的用户被删除，订单也将被删除。
