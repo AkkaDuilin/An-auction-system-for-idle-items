@@ -1,0 +1,164 @@
+{
+  "main": {
+    "id": "6f52461be95ac63c",
+    "type": "split",
+    "children": [
+      {
+        "id": "278f4e71dd582c5a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5eecf132f64941bb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3ababaa078e1d95e",
+    "type": "split",
+    "children": [
+      {
+        "id": "b36756f6aa527bcb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e5626583b9b7b7de",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "f8ad02fec44c300b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "22764d579056b9a9",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "160367199e343c6d",
+    "type": "split",
+    "children": [
+      {
+        "id": "44150fa08f564d1e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b3a5acf64d7098cc",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "535e441efc53591e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "aed49cd110cad6e2",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "a165634877ecab18",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "README.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "5eecf132f64941bb",
+  "lastOpenFiles": [
+    "image/Pasted image 20230614194222.png",
+    "image/H[JMU6I[[BKN6ELUC28CQKH.png",
+    "image/Pasted image 20230614194049.png",
+    "image/Pasted image 20230614194034.png",
+    "image/Pasted image 20230614193958.png",
+    "image/Pasted image 20230614193838.png",
+    "image/Pasted image 20230614193811.png",
+    "image/Pasted image 20230614193753.png",
+    "image/Pasted image 20230614193728.png",
+    "image/Pasted image 20230614193643.png",
+    "image/Pasted image 20230614193553.png",
+    "auctionSys/db.sqlite3-journal"
+  ]
+}
